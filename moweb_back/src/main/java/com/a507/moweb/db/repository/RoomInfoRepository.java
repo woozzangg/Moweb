@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RoomInfoRepository extends JpaRepository<RoomInfo, Long> {
-    RoomInfo findByUrlAndIs_activeTrue(String url);     // url을 기준으로 룸 정보를 반환
+    RoomInfo findByUrlAndIs_active(String url, boolean is_active);     // url을 기준으로 활성화된 룸 정보를 반환
 }
