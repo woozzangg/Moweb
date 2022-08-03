@@ -13,4 +13,5 @@ public class RoomInfo {
 
     private String url;             //방의 url
     private boolean is_active;      //방의 유효 상태 기본은 true
+
 }

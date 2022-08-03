@@ -1,6 +1,7 @@
 package com.a507.moweb.common.model;
 import lombok.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -8,7 +9,15 @@ import java.util.Map;
  */
 @Data
 public class Room {
-    Map<String, User> users;    // 키 : 유저 닉네임, 밸류 : 유저정보
-    int room_no;                // 방 번호
-    String room_url;            // 방 url
+    private Map<String, User> users;    // 키 : 유저 닉네임, 밸류 : 유저정보
+    private int room_no;                // 방 번호
+    private String room_url;            // 방 url
+
+    public Room(User user) {
+        super();
+        this.users = new HashMap<>();
+        users.put(user.getUser_name(), user);
+        this.room_no = 0;
+        this.room_url = "http://localhost:8080/room";
+    }
 }
