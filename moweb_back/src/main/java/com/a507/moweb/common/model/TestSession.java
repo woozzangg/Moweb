@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class TestSession {
-    private String id;
+    private String user_name;
     private String sessionId;
 }
