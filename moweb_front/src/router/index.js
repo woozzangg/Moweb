@@ -2,8 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 // import store from '../store'
 
-// import HomeView from '@/views/Homeview'
-// import EnterView from '@/views/EnterView'
+import EnterView from "@/views/EnterView";
 // import WaitingView from '@/views/WaitingView'
 // import ShotView from '@/views/ShotView'
 // import ResultView from '@/views/ResultView'
@@ -18,11 +17,11 @@ const routes = [
     name: "home",
     component: HomeView,
   },
-  // {
-  //   path: "/enter",
-  //   name: "enter",
-  //   component: EnterView,
-  // },
+  {
+    path: "/enter",
+    name: "enter",
+    component: EnterView,
+  },
   // {
   //   path: "/waiting",
   //   name: "waiting",
