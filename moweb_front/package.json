@@ -11,7 +11,12 @@
     "core-js": "^3.8.3",
     "vue": "^2.6.14",
     "vue-router": "^3.5.1",
-    "vuex": "^3.6.2"
+    "vuex": "^3.6.2",
+    "@mediapipe/camera_utils": "^0.3.1640029074",
+    "@mediapipe/selfie_segmentation": "^0.1.1632777926",
+    "peerjs": "^1.4.6",
+    "sockjs-client": "^1.6.1",
+    "webstomp-client": "^1.2.6"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
@@ -41,7 +46,14 @@
     "parserOptions": {
       "parser": "@babel/eslint-parser"
     },
-    "rules": {}
+    "rules": {
+      "prettier/prettier": [
+        "error",
+        {
+          "endOfLine": "auto"
+        }
+      ]
+    }
   },
   "browserslist": [
     "> 1%",
