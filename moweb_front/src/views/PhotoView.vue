@@ -10,6 +10,9 @@
     <button @click="cameraBtnHandler">
       {{ cameraBtnTxt }}
     </button>
+    <button @click="micBtnHandler">
+      {{ micBtnTxt }}
+    </button>
     <WebrtcVideo ref="my"></WebrtcVideo>
     <WebrtcVideo ref="join_user"> </WebrtcVideo>
 
@@ -49,7 +52,9 @@ export default {
       room_no: 0,
       camera: null,
       cameraOn: "true",
-      cameraBtnTxt: "cameraOff",
+      cameraBtnTxt: "camera off",
+      micOn: "true",
+      micBtnTxt: "mic off",
     };
   },
   mounted() {
@@ -74,15 +79,15 @@ export default {
       await this.removeBG();
       await navigator.mediaDevices
         .getUserMedia({
-          video: true,
           audio: true,
         })
-        .then(() => {
+        .then((stream) => {
           let canvas = document.getElementById("output_canvas");
           let canvasStream = canvas.captureStream(30);
           let videoStream = new MediaStream(canvasStream.getVideoTracks());
-          this.callerStream = canvasStream;
-          this.$refs["my"].$refs["video"].srcObject = videoStream;
+          videoStream.addTrack(stream.getAudioTracks()[0]);
+          this.callerStream = videoStream;
+          this.$refs["my"].$refs["video"].srcObject = this.canvasStream;
         });
     },
     // socket stomp 연결
@@ -273,6 +278,9 @@ export default {
     },
     cameraBtnHandler() {
       this.cameraOn = !this.cameraOn;
+      this.callerStream.getVideoTracks().forEach((track) => {
+        track.enabled = !track.enabled;
+      });
       if (this.cameraOn) {
         this.cameraBtnTxt = "camera off";
         this.camera.start();
@@ -281,12 +289,19 @@ export default {
         this.camera.stop();
       }
     },
+    micBtnHandler() {
+      this.micOn = !this.micOn;
+      this.callerStream.getAudioTracks().forEach((track) => {
+        track.enabled = !track.enabled;
+      });
+      if (this.micOn) {
+        this.micBtnTxt = "mic off";
+      } else {
+        this.micBtnTxt = "mic on";
+      }
+    },
   },
 };
 </script>
 
-<style>
-body {
-  background-color: aqua;
-}
-</style>
+<style></style>
