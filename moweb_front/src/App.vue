@@ -1,19 +1,28 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view />
+  <div id="app">
+    <!-- <nav>
+      <router-link to="/">Home</router-link> |
+      <router-link to="/about">About</router-link>
+    </nav> -->
+    <router-view />
+  </div>
 </template>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+/* #app { */
+/* font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-}
+  color: #2c3e50; */
+/* height: 100vh;
+  overflow: hidden;
+  margin: 0; */
+/* background-image: url("./assets/background.jpg"); */
+/* background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center; */
+/* } */
 
 nav {
   padding: 30px;

@@ -1,18 +1,27 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
-  </div>
+  <div class="background"></div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
-
 export default {
   name: "HomeView",
-  components: {
-    HelloWorld,
-  },
 };
 </script>
+
+<style>
+.mint {
+  background-color: #12d3a9;
+}
+.choco {
+  background-color: #563d34;
+}
+.background {
+  height: 500vh;
+  overflow: hidden;
+  margin: 0;
+  background-image: url("@/assets/mainpage.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+</style>
