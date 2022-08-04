@@ -19,6 +19,12 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
   },
+  {
+    path: "/remove-background",
+    name: "remove-background",
+    component: () =>
+      import("../views/RemoveBackgroundView.vue"),
+  }
 ];
 
 const router = new VueRouter({
