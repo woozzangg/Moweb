@@ -1,6 +1,7 @@
 package com.a507.moweb.db.entity;
 
 import lombok.*;
+import org.springframework.data.jpa.repository.Query;
 
 import javax.persistence.*;
 
@@ -12,6 +13,8 @@ public class RoomInfo {
     private int room_no;            //방번호
 
     private String url;             //방의 url
-    private boolean is_active;      //방의 유효 상태 기본은 true
+    private String create_time;     //방 생성 시간
+    @Column(name = "is_active")
+    private boolean active;      //방의 유효 상태 기본은 true
 
 }

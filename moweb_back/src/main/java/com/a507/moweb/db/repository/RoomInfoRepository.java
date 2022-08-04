@@ -3,9 +3,13 @@ package com.a507.moweb.db.repository;
 import com.a507.moweb.db.entity.RoomInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface RoomInfoRepository extends JpaRepository<RoomInfo, Integer> {
-    //RoomInfo findByUrlAndIs_active(String url, boolean is_active);     // url을 기준으로 활성화된 룸 정보를 반환
+    RoomInfo findRoomInfoByUrlAndActive(String url, boolean is_active);
 }
