@@ -1,37 +1,21 @@
 package com.a507.moweb.common.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ChatMessage {
-    private MessageType type;
-    private String content;
-    private String sender;
+    private String roomId; //방번호
+    private MessageType type; //메시지 종류
+    private String sender; //보내는 사람
+    private String message; //메시지 내용
 
     public enum MessageType {
-        CHAT,
-        JOIN,
-        LEAVE
-    }
-
-    public MessageType getType() {
-        return type;
-    }
-
-    public void setType(MessageType type) {
-        this.type = type;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getSender() {
-        return sender;
-    }
-
-    public void setSender(String sender) {
-        this.sender = sender;
+        CHAT, ENTER, LEAVE
     }
 }

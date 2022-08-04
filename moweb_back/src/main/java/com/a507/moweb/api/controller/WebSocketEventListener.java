@@ -13,7 +13,6 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 @Component
 public class WebSocketEventListener {
-
     private static final Logger logger = LoggerFactory.getLogger(WebSocketEventListener.class);
 
     @Autowired
@@ -21,8 +20,7 @@ public class WebSocketEventListener {
 
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectedEvent event) {
-        // ChatController의 addUser()에서 사용자 참여 이벤트를 처리했기 때문에
-        // handleWebSocketConnectListener()에서는 별다른 동작 없이 log만 남김
+        // ChatController에서 사용자 참여 이벤트를 처리했기 때문에 별다른 동작 없이 log만 남김
         logger.info("Received a new web socket connection");
     }
 
@@ -32,14 +30,14 @@ public class WebSocketEventListener {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
 
         String username = (String) headerAccessor.getSessionAttributes().get("username");
+        logger.info("User Disconnected : " + username);
         if(username != null) {
-            logger.info("User Disconnected : " + username);
+            ChatMessage message = new ChatMessage();
+            message.setType(ChatMessage.MessageType.LEAVE);
+            message.setSender(username);
+            message.setMessage(username+"님이 퇴장하였습니다.");
 
-            ChatMessage chatMessage = new ChatMessage();
-            chatMessage.setType(ChatMessage.MessageType.LEAVE);
-            chatMessage.setSender(username);
-
-            messagingTemplate.convertAndSend("/topic/public", chatMessage);
+            messagingTemplate.convertAndSend("/topic/chat/room/"+message.getRoomId(),message);
         }
     }
 }
