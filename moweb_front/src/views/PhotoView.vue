@@ -6,6 +6,7 @@
       id="output_canvas"
       :width="width"
       :height="height"
+      style="transform: rotateY(180deg)"
     ></canvas>
     <button @click="cameraBtnHandler">
       {{ cameraBtnTxt }}
@@ -45,8 +46,8 @@ export default {
       peers: [],
       users: [],
       ctx: null,
-      width: 400,
-      height: 400,
+      width: 0,
+      height: 0,
       peer: new Peer(),
       signal: "",
       room_no: 0,
@@ -238,8 +239,8 @@ export default {
         onFrame: async () => {
           await selfieSegmentation.send({ image: this.inputVideo });
         },
-        width: 400,
-        height: 400,
+        width: 320,
+        height: 240,
       });
       this.camera.start();
       return 1;
@@ -259,13 +260,8 @@ export default {
         results.image.height
       );
 
-      // Only overwrite existing pixels.
-      this.ctx.globalCompositeOperation = "source-out";
-      this.ctx.fillStyle = "rgba(0,255,0,1)";
-      this.ctx.fillRect(0, 0, results.image.width, results.image.height);
-
       // Only overwrite missing pixels.
-      this.ctx.globalCompositeOperation = "source-out";
+      this.ctx.globalCompositeOperation = "source-in";
       this.ctx.drawImage(
         results.image,
         0,
@@ -304,4 +300,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+video {
+  transform: rotateY(180deg);
+}
+</style>
