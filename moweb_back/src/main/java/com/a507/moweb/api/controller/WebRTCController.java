@@ -59,6 +59,7 @@ public class WebRTCController {
         Map<String, Object> data = new HashMap<>();
         data.put("user_name", ob.get("user_name"));
         data.put("signal",ob.get("signal"));
+        data.put("from",ob.get("from"));
         data.put("action",12);
         template.convertAndSend("/topic/room/"+room_no,data);
     }
