@@ -14,10 +14,12 @@
     <button @click="micBtnHandler">
       {{ micBtnTxt }}
     </button>
-    <WebrtcVideo ref="my"></WebrtcVideo>
-    <WebrtcVideo ref="join_user"> </WebrtcVideo>
+    <div v-for="(user, index) in users" :key="index">
+      <WebrtcVideo :ref="user" :msg="user"></WebrtcVideo>
+    </div>
+    <!-- <WebrtcVideo ref="join_user"> </WebrtcVideo> -->
 
-    <input v-model="myId" />
+    <input v-model="user_name" />
 
     <button @click="connect()">방입장</button>
   </div>
@@ -41,7 +43,7 @@ export default {
   },
   data() {
     return {
-      myId: "",
+      user_name: "",
       callerStream: "",
       peers: [],
       users: [],
@@ -56,6 +58,7 @@ export default {
       cameraBtnTxt: "camera off",
       micOn: "true",
       micBtnTxt: "mic off",
+      streams: [],
     };
   },
   mounted() {
@@ -88,7 +91,7 @@ export default {
           let videoStream = new MediaStream(canvasStream.getVideoTracks());
           videoStream.addTrack(stream.getAudioTracks()[0]);
           this.callerStream = videoStream;
-          this.$refs["my"].$refs["video"].srcObject = this.canvasStream;
+          // this.$refs["my"].$refs["video"].srcObject = this.canvasStream;
         });
     },
     // socket stomp 연결
@@ -119,31 +122,31 @@ export default {
             }
           });
 
-          //close session event
-          stomp.subscribe("/topic/video/close-session", (data) => {
-            // 세션을 나갔을때 관련된 peer을 다 remove해준다.
-            let closedUser = String(JSON.parse(data.body));
-            this.connectingState[closedUser] = "before";
-            // peers 목록에서 삭제.
-            let i = 0;
-            while (i < this.peers.length) {
-              if (
-                this.peers[i][1] === closedUser ||
-                this.peers[i][2] === closedUser
-              ) {
-                this.peers[i][0].destroy();
-                this.peers.splice(i, 1);
-              } else {
-                i++;
-              }
-            }
-          });
+          // //close session event
+          // stomp.subscribe("/topic/video/close-session", (data) => {
+          //   // 세션을 나갔을때 관련된 peer을 다 remove해준다.
+          //   let closedUser = String(JSON.parse(data.body));
+          //   this.connectingState[closedUser] = "before";
+          //   // peers 목록에서 삭제.
+          //   let i = 0;
+          //   while (i < this.peers.length) {
+          //     if (
+          //       this.peers[i][1] === closedUser ||
+          //       this.peers[i][2] === closedUser
+          //     ) {
+          //       this.peers[i][0].destroy();
+          //       this.peers.splice(i, 1);
+          //     } else {
+          //       i++;
+          //     }
+          //   }
+          // });
           // socket join send
           stomp.send(
             "/app/video/joined-room-info",
             JSON.stringify({
               room_no: this.room_no,
-              user_name: this.myId,
+              user_name: this.user_name,
             })
           );
         },
@@ -155,26 +158,31 @@ export default {
     },
 
     joinedRoom(datas) {
-      console.log(datas);
-      if (datas[datas.length - 1].user_name != this.myId) return;
+      let joinUser = datas[datas.length - 1].user_name;
+      if (joinUser != this.user_name) {
+        this.users.push(joinUser);
+        return;
+      }
 
       // 새로 입장한 사람이 본인이면 기존 참가자들에게 sinal정보를 보냄.
       for (let data of datas) {
-        if (data.user_name == this.myId) continue;
+        if (data.user_name == this.user_name) continue;
+        this.users.push(data.user_name);
         this.sendSignal();
       }
     },
 
     // 새로운 유저에게 스트림 요청
     newUserJoin(data) {
-      if (this.users.includes(data.user_name)) return;
+      if (this.user_name == data.user_name) return;
       // 연결한 유저가 아닐경우
-      console.log("newUser", data);
       this.initCall(data);
     },
 
     callAnswer(data) {
-      if (data.user_name != this.myId || data.signal == this.signal) return;
+      //송신자가 자신이거나, 자신에게 오는 요청이 아니면 리턴.
+      if (data.user_name != this.user_name || data.signal == this.signal)
+        return;
       console.log("call-answer", data);
       this.returnCall(data);
     },
@@ -184,7 +192,7 @@ export default {
       stomp.send(
         "/app/video/signal",
         JSON.stringify({
-          user_name: this.myId,
+          user_name: this.user_name,
           signal: this.signal,
           room_no: this.room_no,
         })
@@ -195,7 +203,10 @@ export default {
       const peer = this.peer;
       const call = peer.call(data.signal, this.callerStream);
       call.on("stream", (stream) => {
-        this.$refs["join_user"].$refs["video"].srcObject = stream;
+        if (this.streams.includes(stream.id)) return;
+        this.streams.push(stream.id);
+        console.log("initcall", this.streams, stream, data.user_name);
+        this.$refs[data.user_name][0].$refs["video"].srcObject = stream;
       });
 
       stomp.send(
@@ -204,20 +215,23 @@ export default {
           user_name: data.user_name,
           room_no: this.room_no,
           signal: this.signal,
+          from: this.user_name,
         })
       );
-      this.users.push(data.user_name);
+      // this.users.push(data.user_name);
     },
 
     // caller에게 요청을 받은 상태에서 connect answer을 보냄.
     returnCall(data) {
-      console.log("return call", data);
       const peer = this.peer;
 
       peer.on("call", (call) => {
         call.answer(this.callerStream);
         call.on("stream", (stream) => {
-          this.$refs["join_user"].$refs["video"].srcObject = stream;
+          if (this.streams.includes(stream.id)) return;
+          this.streams.push(stream.id);
+          console.log("returncall", this.streams, stream, data.user_name);
+          this.$refs[data.from][0].$refs["video"].srcObject = stream;
         });
       });
     },
