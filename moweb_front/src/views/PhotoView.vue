@@ -1,242 +1,293 @@
 <template>
-  <div>
-    <video v-show="false" ref="input_video"></video>
-    <canvas
-      class="output_canvas"
-      id="output_canvas"
-      :width="width"
-      :height="height"
-      style="transform: rotateY(180deg)"
-    ></canvas>
-    <button @click="cameraBtnHandler">
-      {{ cameraBtnTxt }}
-    </button>
-    <button @click="micBtnHandler">
-      {{ micBtnTxt }}
-    </button>
-    <div v-for="(user, index) in users" :key="index">
-      <WebrtcVideo :ref="user" :msg="user"></WebrtcVideo>
+  <div id="main-container" class="container">
+    <div id="join" v-if="!session">
+      <div id="img-div">
+        <img src="resources/images/openvidu_grey_bg_transp_cropped.png" />
+      </div>
+      <div id="join-dialog" class="jumbotron vertical-center">
+        <h1>Join a video session</h1>
+        <div class="form-group">
+          <p>
+            <label>Participant</label>
+            <input
+              v-model="myUserName"
+              class="form-control"
+              type="text"
+              required
+            />
+          </p>
+          <p>
+            <label>Session</label>
+            <input
+              v-model="mySessionId"
+              class="form-control"
+              type="text"
+              required
+            />
+          </p>
+          <p class="text-center">
+            <button class="btn btn-lg btn-success" @click="joinSession()">
+              Join!
+            </button>
+          </p>
+        </div>
+      </div>
     </div>
-    <!-- <WebrtcVideo ref="join_user"> </WebrtcVideo> -->
 
-    <input v-model="user_name" />
-
-    <button @click="connect()">방입장</button>
+    <div id="session" v-if="session">
+      <video v-show="false" ref="input_video"></video>
+      <canvas
+        v-show="false"
+        class="output_canvas"
+        id="output_canvas"
+        :width="width"
+        :height="height"
+        style="transform: rotateY(180deg)"
+      ></canvas>
+      <div id="session-header">
+        <h1 id="session-title">{{ mySessionId }}</h1>
+        <input
+          class="btn btn-large btn-danger"
+          type="button"
+          id="buttonLeaveSession"
+          @click="leaveSession"
+          value="Leave session"
+        />
+      </div>
+      <!-- <div id="main-video" class="col-md-6">
+        <user-video :stream-manager="mainStreamManager" />
+      </div> -->
+      <button @click="cameraBtnHandler">
+        {{ cameraBtnTxt }}
+      </button>
+      <button @click="micBtnHandler">
+        {{ micBtnTxt }}
+      </button>
+      <div id="video-container" class="col-md-6">
+        <user-video
+          :stream-manager="publisher"
+          @click.native="updateMainVideoStreamManager(publisher)"
+        />
+        <user-video
+          v-for="sub in subscribers"
+          :key="sub.stream.connection.connectionId"
+          :stream-manager="sub"
+          @click.native="updateMainVideoStreamManager(sub)"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import WebrtcVideo from "@/components/WebrtcVideo.vue";
-import SockJS from "sockjs-client";
-import Stomp from "webstomp-client";
-import Peer from "peerjs";
+import axios from "axios";
+import { OpenVidu } from "openvidu-browser";
+import UserVideo from "../components/UserVideo";
 import { Camera } from "@mediapipe/camera_utils";
 import { SelfieSegmentation } from "@mediapipe/selfie_segmentation";
 
-let socket;
-let stomp;
+axios.defaults.headers.post["Content-Type"] = "application/json";
+
+const OPENVIDU_SERVER_URL = "https://localhost:4443";
+const OPENVIDU_SERVER_SECRET = "MY_SECRET";
 
 export default {
-  name: "HomeView",
+  name: "photoView",
+
   components: {
-    WebrtcVideo,
-  },
-  data() {
-    return {
-      user_name: "",
-      callerStream: "",
-      peers: [],
-      users: [],
-      ctx: null,
-      width: 0,
-      height: 0,
-      peer: new Peer(),
-      signal: "",
-      room_no: 0,
-      camera: null,
-      cameraOn: "true",
-      cameraBtnTxt: "camera off",
-      micOn: "true",
-      micBtnTxt: "mic off",
-      streams: [],
-    };
-  },
-  mounted() {
-    this.init();
+    UserVideo,
   },
   computed: {
     inputVideo() {
       return this.$refs.input_video;
     },
   },
+  data() {
+    return {
+      OV: undefined,
+      session: undefined,
+      mainStreamManager: undefined,
+      publisher: undefined,
+      subscribers: [],
+
+      mySessionId: "SessionA",
+      myUserName: "Participant" + Math.floor(Math.random() * 100),
+
+      width: 0,
+      height: 0,
+      camera: undefined,
+      cameraOn: "true",
+      cameraBtnTxt: "camera off",
+      micOn: "true",
+      micBtnTxt: "mic off",
+    };
+  },
+
   methods: {
-    init() {
-      this.peer.on("open", (signal) => {
-        this.signal = signal;
-        console.log("mysignal : ", signal);
+    joinSession() {
+      // --- Get an OpenVidu object ---
+      this.OV = new OpenVidu();
+
+      // --- Init a session ---
+      this.session = this.OV.initSession();
+
+      // --- Specify the actions when events take place in the session ---
+
+      // On every new Stream received...
+      this.session.on("streamCreated", ({ stream }) => {
+        const subscriber = this.session.subscribe(stream);
+        this.subscribers.push(subscriber);
       });
-      this.userSet();
+
+      // On every Stream destroyed...
+      this.session.on("streamDestroyed", ({ stream }) => {
+        const index = this.subscribers.indexOf(stream.streamManager, 0);
+        if (index >= 0) {
+          this.subscribers.splice(index, 1);
+        }
+      });
+
+      // On every asynchronous exception...
+      this.session.on("exception", ({ exception }) => {
+        console.warn(exception);
+      });
+
+      // --- Connect to the session with a valid user token ---
+
+      // 'getToken' method is simulating what your server-side should do.
+      // 'token' parameter should be retrieved and returned by your own backend
+      this.getToken(this.mySessionId).then((token) => {
+        this.session
+          .connect(token, { clientData: this.myUserName })
+          .then(async () => {
+            // --- Get your own camera stream with the desired properties ---
+            await this.removeBG();
+            let canvas = document.getElementById("output_canvas");
+            let canvasStream = canvas.captureStream(30);
+            let videoTracks = canvasStream.getVideoTracks();
+            let publisher = this.OV.initPublisher(undefined, {
+              audioSource: undefined, // The source of audio. If undefined default microphone
+              videoSource: videoTracks[0], // The source of video. If undefined default webcam
+              publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+              publishVideo: true, // Whether you want to start publishing with your video enabled or not
+              resolution: "640x480", // The resolution of your video
+              frameRate: 30, // The frame rate of your video
+              insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
+              mirror: false, // Whether to mirror your local video or not
+            });
+
+            this.mainStreamManager = publisher;
+            this.publisher = publisher;
+
+            // --- Publish your stream ---
+
+            this.session.publish(this.publisher);
+          })
+          .catch((error) => {
+            console.log(
+              "There was an error connecting to the session:",
+              error.code,
+              error.message
+            );
+          });
+      });
+
+      window.addEventListener("beforeunload", this.leaveSession);
     },
 
-    // 스트림 생성
-    async userSet() {
-      await this.removeBG();
-      await navigator.mediaDevices
-        .getUserMedia({
-          audio: true,
-        })
-        .then((stream) => {
-          let canvas = document.getElementById("output_canvas");
-          let canvasStream = canvas.captureStream(30);
-          let videoStream = new MediaStream(canvasStream.getVideoTracks());
-          videoStream.addTrack(stream.getAudioTracks()[0]);
-          this.callerStream = videoStream;
-          // this.$refs["my"].$refs["video"].srcObject = this.canvasStream;
-        });
+    leaveSession() {
+      // --- Leave the session by calling 'disconnect' method over the Session object ---
+      if (this.session) this.session.disconnect();
+
+      this.session = undefined;
+      this.mainStreamManager = undefined;
+      this.publisher = undefined;
+      this.subscribers = [];
+      this.OV = undefined;
+
+      window.removeEventListener("beforeunload", this.leaveSession);
     },
-    // socket stomp 연결
-    connect() {
-      socket = new SockJS("http://localhost:9999/socket");
-      stomp = Stomp.over(socket);
-      stomp.debug = function () {};
-      stomp.connect(
-        {},
-        // connectCallback
-        () => {
-          stomp.subscribe("/topic/room/" + this.room_no, (jsonData) => {
-            let data = JSON.parse(jsonData.body);
-            let action = data.action;
-            switch (action) {
-              case 10:
-                // 누군가 join 했을때
-                this.joinedRoom(data.sessionIdList);
-                break;
-              case 11:
-                // 소켓으로 caller의 연락을 받은 시점에 caller의 정보를 저장한다.
-                this.newUserJoin(data);
-                break;
-              case 12:
-                // acceptCall을 받은 시점에서 caller와 callee를 연결.
-                this.callAnswer(data);
-                break;
+
+    updateMainVideoStreamManager(stream) {
+      if (this.mainStreamManager === stream) return;
+      this.mainStreamManager = stream;
+    },
+
+    /**
+     * --------------------------
+     * SERVER-SIDE RESPONSIBILITY
+     * --------------------------
+     * These methods retrieve the mandatory user token from OpenVidu Server.
+     * This behavior MUST BE IN YOUR SERVER-SIDE IN PRODUCTION (by using
+     * the API REST, openvidu-java-client or openvidu-node-client):
+     *   1) Initialize a Session in OpenVidu Server	(POST /openvidu/api/sessions)
+     *   2) Create a Connection in OpenVidu Server (POST /openvidu/api/sessions/<SESSION_ID>/connection)
+     *   3) The Connection.token must be consumed in Session.connect() method
+     */
+
+    getToken(mySessionId) {
+      return this.createSession(mySessionId).then((sessionId) =>
+        this.createToken(sessionId)
+      );
+    },
+
+    // See https://docs.openvidu.io/en/stable/reference-docs/REST-API/#post-session
+    createSession(sessionId) {
+      return new Promise((resolve, reject) => {
+        axios
+          .post(
+            `${OPENVIDU_SERVER_URL}/openvidu/api/sessions`,
+            JSON.stringify({
+              customSessionId: sessionId,
+            }),
+            {
+              auth: {
+                username: "OPENVIDUAPP",
+                password: OPENVIDU_SERVER_SECRET,
+              },
+            }
+          )
+          .then((response) => response.data)
+          .then((data) => resolve(data.id))
+          .catch((error) => {
+            if (error.response.status === 409) {
+              resolve(sessionId);
+            } else {
+              console.warn(
+                `No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_SERVER_URL}`
+              );
+              if (
+                window.confirm(
+                  `No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_SERVER_URL}\n\nClick OK to navigate and accept it. If no certificate warning is shown, then check that your OpenVidu Server is up and running at "${OPENVIDU_SERVER_URL}"`
+                )
+              ) {
+                location.assign(`${OPENVIDU_SERVER_URL}/accept-certificate`);
+              }
+              reject(error.response);
             }
           });
-
-          // //close session event
-          // stomp.subscribe("/topic/video/close-session", (data) => {
-          //   // 세션을 나갔을때 관련된 peer을 다 remove해준다.
-          //   let closedUser = String(JSON.parse(data.body));
-          //   this.connectingState[closedUser] = "before";
-          //   // peers 목록에서 삭제.
-          //   let i = 0;
-          //   while (i < this.peers.length) {
-          //     if (
-          //       this.peers[i][1] === closedUser ||
-          //       this.peers[i][2] === closedUser
-          //     ) {
-          //       this.peers[i][0].destroy();
-          //       this.peers.splice(i, 1);
-          //     } else {
-          //       i++;
-          //     }
-          //   }
-          // });
-          // socket join send
-          stomp.send(
-            "/app/video/joined-room-info",
-            JSON.stringify({
-              room_no: this.room_no,
-              user_name: this.user_name,
-            })
-          );
-        },
-        // onErrorCallback
-        () => {
-          console.log("ws error");
-        }
-      );
-    },
-
-    joinedRoom(datas) {
-      let joinUser = datas[datas.length - 1].user_name;
-      if (joinUser != this.user_name) {
-        this.users.push(joinUser);
-        return;
-      }
-
-      // 새로 입장한 사람이 본인이면 기존 참가자들에게 sinal정보를 보냄.
-      for (let data of datas) {
-        if (data.user_name == this.user_name) continue;
-        this.users.push(data.user_name);
-        this.sendSignal();
-      }
-    },
-
-    // 새로운 유저에게 스트림 요청
-    newUserJoin(data) {
-      if (this.user_name == data.user_name) return;
-      // 연결한 유저가 아닐경우
-      this.initCall(data);
-    },
-
-    callAnswer(data) {
-      //송신자가 자신이거나, 자신에게 오는 요청이 아니면 리턴.
-      if (data.user_name != this.user_name || data.signal == this.signal)
-        return;
-      console.log("call-answer", data);
-      this.returnCall(data);
-    },
-
-    // 자신의 signal을 보냄
-    sendSignal() {
-      stomp.send(
-        "/app/video/signal",
-        JSON.stringify({
-          user_name: this.user_name,
-          signal: this.signal,
-          room_no: this.room_no,
-        })
-      );
-    },
-
-    initCall(data) {
-      const peer = this.peer;
-      const call = peer.call(data.signal, this.callerStream);
-      call.on("stream", (stream) => {
-        if (this.streams.includes(stream.id)) return;
-        this.streams.push(stream.id);
-        console.log("initcall", this.streams, stream, data.user_name);
-        this.$refs[data.user_name][0].$refs["video"].srcObject = stream;
-      });
-
-      stomp.send(
-        "/app/video/callAnswer",
-        JSON.stringify({
-          user_name: data.user_name,
-          room_no: this.room_no,
-          signal: this.signal,
-          from: this.user_name,
-        })
-      );
-      // this.users.push(data.user_name);
-    },
-
-    // caller에게 요청을 받은 상태에서 connect answer을 보냄.
-    returnCall(data) {
-      const peer = this.peer;
-
-      peer.on("call", (call) => {
-        call.answer(this.callerStream);
-        call.on("stream", (stream) => {
-          if (this.streams.includes(stream.id)) return;
-          this.streams.push(stream.id);
-          console.log("returncall", this.streams, stream, data.user_name);
-          this.$refs[data.from][0].$refs["video"].srcObject = stream;
-        });
       });
     },
 
-    // 배경제거 해서 그리기
+    // See https://docs.openvidu.io/en/stable/reference-docs/REST-API/#post-connection
+    createToken(sessionId) {
+      return new Promise((resolve, reject) => {
+        axios
+          .post(
+            `${OPENVIDU_SERVER_URL}/openvidu/api/sessions/${sessionId}/connection`,
+            {},
+            {
+              auth: {
+                username: "OPENVIDUAPP",
+                password: OPENVIDU_SERVER_SECRET,
+              },
+            }
+          )
+          .then((response) => response.data)
+          .then((data) => resolve(data.token))
+          .catch((error) => reject(error.response));
+      });
+    },
     async removeBG() {
       this.ctx = document.getElementById("output_canvas").getContext("2d");
       const selfieSegmentation = new SelfieSegmentation({
@@ -274,8 +325,13 @@ export default {
         results.image.height
       );
 
+      // Only overwrite existing pixels.
+      this.ctx.globalCompositeOperation = "source-out";
+      this.ctx.fillStyle = "#009933";
+      this.ctx.fillRect(0, 0, results.image.width, results.image.height);
+
       // Only overwrite missing pixels.
-      this.ctx.globalCompositeOperation = "source-in";
+      this.ctx.globalCompositeOperation = "destination-atop";
       this.ctx.drawImage(
         results.image,
         0,
@@ -288,9 +344,6 @@ export default {
     },
     cameraBtnHandler() {
       this.cameraOn = !this.cameraOn;
-      this.callerStream.getVideoTracks().forEach((track) => {
-        track.enabled = !track.enabled;
-      });
       if (this.cameraOn) {
         this.cameraBtnTxt = "camera off";
         this.camera.start();
@@ -301,9 +354,7 @@ export default {
     },
     micBtnHandler() {
       this.micOn = !this.micOn;
-      this.callerStream.getAudioTracks().forEach((track) => {
-        track.enabled = !track.enabled;
-      });
+      this.publisher.publishAudio(this.micOn);
       if (this.micOn) {
         this.micBtnTxt = "mic off";
       } else {
@@ -313,7 +364,6 @@ export default {
   },
 };
 </script>
-
 <style>
 video {
   transform: rotateY(180deg);
