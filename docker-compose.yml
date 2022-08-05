@@ -17,6 +17,5 @@ services:
       context: ./moweb_front
     container_name: moweb_front
     ports:
-      - 80:80
-      - 443:443
+      - 8000:80
     network_mode: "host"
