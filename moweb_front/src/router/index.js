@@ -2,19 +2,11 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 // import store from '../store'
 
-<<<<<<< Updated upstream
 import MainView from "../views/MainView.vue";
 import EnterView from "@/views/EnterView";
 import WaitingView from "@/views/WaitingView";
 import ShotView from "@/views/ShotView";
 import ResultView from "@/views/ResultView";
-=======
-import HomeView from "../views/HomeView.vue";
-import EnterView from "@/views/EnterView";
-// import WaitingView from '@/views/WaitingView'
-// import ShotView from '@/views/ShotView'
-// import ResultView from '@/views/ResultView'
->>>>>>> Stashed changes
 
 Vue.use(VueRouter);
 
