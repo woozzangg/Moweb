@@ -1,28 +1,22 @@
 <template>
-  <v-container class="grey lighten-5">
-    <v-row rows="12">
-      <!-- no-gutters -->
-      <v-col cols="9">
-        <v-card class="pa-2" outlined tile height="60vh"> 컴포 </v-card>
-      </v-col>
-      <v-col cols="3">
-        <v-row class="pa-2" rows="6" cols="3">
-          <v-card class="ma-2" outlined tile height="25vh" weight="10vh">
-            참여자
-          </v-card>
-        </v-row>
-        <v-row rows="7">
-          <v-card class="pa-0" outlined tile height="35vh"> 채팅창</v-card>
-        </v-row>
-        <!-- <v-card class="pa-2" outlined tile height="70vh">
-          <v-row rows="9">123</v-row>
-          <v-row rows="3">11</v-row>
-        </v-card> -->
-      </v-col>
-    </v-row>
-  </v-container>
-</template>
+  <div class="maincon">
+    <div class="leftcon">
+      <div class="webrtc1">webrtc</div>
+      <div class="btnzip">
+        버튼모음
+        <div id="app">
+          <router-link to="/shot">shot으로</router-link>
 
+          <router-view />
+        </div>
+      </div>
+    </div>
+    <div class="rightcon">
+      <div class="members">참여자</div>
+      <div class="chattt">채팅창</div>
+    </div>
+  </div>
+</template>
 <script>
 export default {
   name: "WaitingView",
@@ -30,19 +24,62 @@ export default {
 </script>
 
 <style>
-.mint {
-  background-color: #12d3a9;
+.maincon {
+  background-color: rgb(204, 198, 198);
+  width: 1500px;
+  height: 700px;
+  float: left;
+  border: 2px solid rgb(0, 0, 0);
+  padding: 3px;
 }
-.choco {
-  background-color: #563d34;
+.leftcon {
+  background-color: rgb(213, 238, 168);
+  width: 1040px;
+  height: 690px;
+  float: left;
+  border: 2px solid rgb(0, 0, 0);
+  padding: 3px;
 }
-.background {
-  height: 500vh;
-  overflow: hidden;
-  margin: 0;
-  background-image: url("@/assets/mainpage.png");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
+.rightcon {
+  background-color: rgb(118, 132, 216);
+  width: 440px;
+  height: 690px;
+  float: right;
+  border: 2px solid rgb(0, 0, 0);
+  padding: 3px;
+}
+.webrtc1 {
+  background-color: rgb(204, 157, 87);
+  width: 1000px;
+  height: 450px;
+  float: center;
+  border: 2px solid rgb(0, 0, 0);
+  padding: 3px;
+}
+.btnzip {
+  background-color: rgb(202, 81, 186);
+  width: 1000px;
+  height: 150px;
+  float: center;
+  border: 2px solid rgb(0, 0, 0);
+  padding: 3px;
+}
+.members {
+  background-color: rgb(3, 209, 54);
+  width: 420px;
+  height: 250px;
+  float: top;
+  border: 2px solid rgb(0, 0, 0);
+  border-style: dotted;
+  padding: 3px;
+}
+.chattt {
+  background-color: rgb(57, 195, 230);
+  width: 420px;
+  height: 400px;
+  float: bottom;
+  border: 2px solid rgb(0, 0, 0);
+  border-style: dashed;
+  padding: 3px;
 }
 </style>

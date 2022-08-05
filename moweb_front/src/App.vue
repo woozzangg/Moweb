@@ -2,7 +2,10 @@
   <div id="app">
     <!-- <nav> -->
     <router-link to="/">Home</router-link> |
-    <router-link to="/enter">enter</router-link>
+    <router-link to="/enter">enter</router-link> |
+    <router-link to="/waiting">waiting</router-link> |
+    <router-link to="/shot">shot</router-link> |
+    <router-link to="/result">result</router-link>
     <!-- </nav> -->
     <router-view />
   </div>
