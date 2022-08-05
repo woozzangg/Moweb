@@ -15,6 +15,7 @@ public class ChatRoom {
 
     public static ChatRoom create(String name) {
         ChatRoom room = new ChatRoom();
+        //UUID.randomUUID()로 중복 없는 고유값 설정
         room.roomId = UUID.randomUUID().toString();
         room.roomName = name;
         return room;

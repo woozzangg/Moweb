@@ -16,6 +16,6 @@ public class ChatMessage {
     private String message; //메시지 내용
 
     public enum MessageType {
-        CHAT, ENTER, LEAVE
+        CHAT, ENTER, LEAVE //채팅, 입장, 퇴장
     }
 }
