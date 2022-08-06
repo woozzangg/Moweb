@@ -50,7 +50,6 @@
     var ws = Stomp.over(sock);
     var reconnect = 0;
     // vue.js
-    var username = null;
     var vm = new Vue({
         el: '#app',
         data: {
@@ -61,9 +60,8 @@
             messages: []
         },
         created() {
-            this.roomId = localStorage.getItem('wschat.roomId');
-            this.sender = localStorage.getItem('wschat.sender');
-            username = localStorage.getItem('wschat.sender');
+            this.roomId = localStorage.getItem('roomId');
+            this.sender = localStorage.getItem('sender');
             this.findRoom();
         },
         methods: {
