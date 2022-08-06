@@ -36,14 +36,6 @@
 
     <div id="session" v-if="session">
       <video v-show="false" ref="input_video"></video>
-      <canvas
-        v-show="false"
-        class="output_canvas"
-        id="output_canvas"
-        :width="width"
-        :height="height"
-        style="transform: rotateY(180deg)"
-      ></canvas>
       <div id="session-header">
         <h1 id="session-title">{{ mySessionId }}</h1>
         <input
@@ -64,15 +56,20 @@
         {{ micBtnTxt }}
       </button>
       <div id="video-container" class="col-md-6">
-        <user-video
-          :stream-manager="publisher"
-          @click.native="updateMainVideoStreamManager(publisher)"
-        />
+        <canvas
+          v-show="false"
+          class="output_canvas"
+          id="output_canvas"
+          :width="width"
+          :height="height"
+          style="transform: rotateY(180deg)"
+        ></canvas>
+        <user-video v-if="videoSetting" :stream-manager="publisher" />
+
         <user-video
           v-for="sub in subscribers"
           :key="sub.stream.connection.connectionId"
           :stream-manager="sub"
-          @click.native="updateMainVideoStreamManager(sub)"
         />
       </div>
     </div>
@@ -106,7 +103,7 @@ export default {
     return {
       OV: undefined,
       session: undefined,
-      mainStreamManager: undefined,
+      // mainStreamManager: undefined,
       publisher: undefined,
       subscribers: [],
 
@@ -120,6 +117,7 @@ export default {
       cameraBtnTxt: "camera off",
       micOn: "true",
       micBtnTxt: "mic off",
+      videoSetting: false,
     };
   },
 
@@ -156,12 +154,12 @@ export default {
 
       // 'getToken' method is simulating what your server-side should do.
       // 'token' parameter should be retrieved and returned by your own backend
-      this.getToken(this.mySessionId).then((token) => {
+      this.getToken(this.mySessionId).then(async (token) => {
+        await this.removeBG();
         this.session
           .connect(token, { clientData: this.myUserName })
           .then(async () => {
             // --- Get your own camera stream with the desired properties ---
-            await this.removeBG();
             let canvas = document.getElementById("output_canvas");
             let canvasStream = canvas.captureStream(30);
             let videoTracks = canvasStream.getVideoTracks();
@@ -175,13 +173,15 @@ export default {
               insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
               mirror: false, // Whether to mirror your local video or not
             });
-
-            this.mainStreamManager = publisher;
+            // this.mainStreamManager = publisher;
             this.publisher = publisher;
 
             // --- Publish your stream ---
 
             this.session.publish(this.publisher);
+          })
+          .then(() => {
+            this.videoSetting = true;
           })
           .catch((error) => {
             console.log(
@@ -208,10 +208,10 @@ export default {
       window.removeEventListener("beforeunload", this.leaveSession);
     },
 
-    updateMainVideoStreamManager(stream) {
-      if (this.mainStreamManager === stream) return;
-      this.mainStreamManager = stream;
-    },
+    // updateMainVideoStreamManager(stream) {
+    //   if (this.mainStreamManager === stream) return;
+    //   this.mainStreamManager = stream;
+    // },
 
     /**
      * --------------------------
@@ -325,9 +325,9 @@ export default {
         results.image.height
       );
 
-      // Only overwrite existing pixels.
+      // 배경 그리기
       this.ctx.globalCompositeOperation = "source-out";
-      this.ctx.fillStyle = "#009933";
+      this.ctx.fillStyle = "#009933"; // 배경색 부분
       this.ctx.fillRect(0, 0, results.image.width, results.image.height);
 
       // Only overwrite missing pixels.
@@ -342,16 +342,23 @@ export default {
 
       this.ctx.restore();
     },
+    // 카메라 on/off
     cameraBtnHandler() {
       this.cameraOn = !this.cameraOn;
+
       if (this.cameraOn) {
         this.cameraBtnTxt = "camera off";
         this.camera.start();
       } else {
         this.cameraBtnTxt = "camera on";
         this.camera.stop();
+        // this.ctx.clearRect(0, 0, this.width, this.height);
+        // this.ctx.fillStyle = "#009933";
+        // this.ctx.fillRect(0, 0, this.width, this.height);
+        // this.ctx.restore();
       }
     },
+    // 마이크 on/off
     micBtnHandler() {
       this.micOn = !this.micOn;
       this.publisher.publishAudio(this.micOn);
@@ -367,5 +374,8 @@ export default {
 <style>
 video {
   transform: rotateY(180deg);
+}
+body {
+  background-color: rgb(255, 255, 255);
 }
 </style>
