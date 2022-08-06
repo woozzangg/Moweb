@@ -16,5 +16,4 @@ public class RoomInfo {
     private String create_time;     //방 생성 시간
     @Column(name = "is_active")
     private boolean active;      //방의 유효 상태 기본은 true
-
 }
