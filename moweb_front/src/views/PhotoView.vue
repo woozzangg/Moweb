@@ -64,7 +64,13 @@
           :height="height"
           style="transform: rotateY(180deg)"
         ></canvas>
-        <user-video v-if="videoSetting" :stream-manager="publisher" />
+
+        <!-- <user-video v-if="videoSetting" :stream-manager="publisher" /> -->
+        <my-video
+          v-if="videoSetting"
+          :myUserName="myUserName"
+          :stream="canvasStream"
+        />
 
         <user-video
           v-for="sub in subscribers"
@@ -82,6 +88,7 @@ import { OpenVidu } from "openvidu-browser";
 import UserVideo from "../components/UserVideo";
 import { Camera } from "@mediapipe/camera_utils";
 import { SelfieSegmentation } from "@mediapipe/selfie_segmentation";
+import MyVideo from "@/components/MyVideo.vue";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
@@ -93,6 +100,7 @@ export default {
 
   components: {
     UserVideo,
+    MyVideo,
   },
   computed: {
     inputVideo() {
@@ -118,6 +126,7 @@ export default {
       micOn: "true",
       micBtnTxt: "mic off",
       videoSetting: false,
+      canvasStream: undefined,
     };
   },
 
@@ -161,8 +170,8 @@ export default {
           .then(async () => {
             // --- Get your own camera stream with the desired properties ---
             let canvas = document.getElementById("output_canvas");
-            let canvasStream = canvas.captureStream(30);
-            let videoTracks = canvasStream.getVideoTracks();
+            this.canvasStream = canvas.captureStream(30);
+            let videoTracks = this.canvasStream.getVideoTracks();
             let publisher = this.OV.initPublisher(undefined, {
               audioSource: undefined, // The source of audio. If undefined default microphone
               videoSource: videoTracks[0], // The source of video. If undefined default webcam
@@ -332,7 +341,7 @@ export default {
 
       // Only overwrite missing pixels.
       this.ctx.globalCompositeOperation = "destination-atop";
-      this.ctx.drawImage(
+      await this.ctx.drawImage(
         results.image,
         0,
         0,
@@ -341,9 +350,15 @@ export default {
       );
 
       this.ctx.restore();
+      if (!this.cameraOn) {
+        this.ctx.clearRect(0, 0, this.width, this.height);
+        this.ctx.fillStyle = "#009933";
+        this.ctx.fillRect(0, 0, this.width, this.height);
+        this.ctx.restore();
+      }
     },
     // 카메라 on/off
-    cameraBtnHandler() {
+    async cameraBtnHandler() {
       this.cameraOn = !this.cameraOn;
 
       if (this.cameraOn) {
