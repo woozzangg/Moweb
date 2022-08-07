@@ -24,62 +24,125 @@ export default {
 </script>
 
 <style>
+/* 메인페이지 */
+/* .maincon { 
+  background-color: rgb(204, 198, 198);
+  width: 1600px;
+  height: 700px;
+  float: center;
+  border: 2px solid rgb(0, 0, 0);
+  margin: 90px 0px 0px 160px;
+} */
 .maincon {
   background-color: rgb(204, 198, 198);
   width: 1500px;
-  height: 700px;
-  float: left;
+  height: 800px;
+  float: center;
   border: 2px solid rgb(0, 0, 0);
-  padding: 3px;
+  margin: 50px 0px 0px 220px;
 }
-.leftcon {
+/* 왼쪽 영역 */
+/* .leftcon {
   background-color: rgb(213, 238, 168);
-  width: 1040px;
+  width: 1150px;
   height: 690px;
   float: left;
   border: 2px solid rgb(0, 0, 0);
-  padding: 3px;
+  margin: 3px;
+} */
+.leftcon {
+  background-color: rgb(213, 238, 168);
+  width: 1080px;
+  height: 790px;
+  float: left;
+  border: 2px solid rgb(0, 0, 0);
+  margin: 3px;
 }
-.rightcon {
+/* .rightcon {
   background-color: rgb(118, 132, 216);
-  width: 440px;
+  width: 430px;
   height: 690px;
   float: right;
   border: 2px solid rgb(0, 0, 0);
-  padding: 3px;
+  margin: 3px;
+} */
+
+.rightcon {
+  background-color: rgb(118, 132, 216);
+  width: 400px;
+  height: 790px;
+  float: right;
+  border: 2px solid rgb(0, 0, 0);
+  margin: 3px;
 }
+/* .webrtc1 {
+  background-color: rgb(204, 157, 87);
+  width: 1130px;
+  height: 500px;
+  float: center;
+  border: 2px solid rgb(0, 0, 0);
+
+  margin: 5px;
+} */
 .webrtc1 {
   background-color: rgb(204, 157, 87);
-  width: 1000px;
-  height: 450px;
+  width: 1060px;
+  height: 550px;
   float: center;
   border: 2px solid rgb(0, 0, 0);
-  padding: 3px;
+
+  margin: 5px;
 }
+/* .btnzip {
+  background-color: rgb(202, 81, 186);
+  width: 1130px;
+  height: 170px;
+  float: center;
+  border: 2px solid rgb(0, 0, 0);
+  margin: 5px;
+} */
 .btnzip {
   background-color: rgb(202, 81, 186);
-  width: 1000px;
-  height: 150px;
+  width: 1060px;
+  height: 220px;
   float: center;
   border: 2px solid rgb(0, 0, 0);
-  padding: 3px;
+  margin: 5px;
 }
-.members {
+/* .members {
   background-color: rgb(3, 209, 54);
-  width: 420px;
+  width: 410px;
   height: 250px;
   float: top;
   border: 2px solid rgb(0, 0, 0);
   border-style: dotted;
-  padding: 3px;
+  margin: 5px;
+} */
+.members {
+  background-color: rgb(3, 209, 54);
+  width: 385px;
+  height: 250px;
+  float: top;
+  border: 2px solid rgb(0, 0, 0);
+  border-style: dotted;
+  margin: 5px;
 }
-.chattt {
+/* .chattt {
   background-color: rgb(57, 195, 230);
-  width: 420px;
-  height: 400px;
+  width: 410px;
+  height: 420px;
   float: bottom;
   border: 2px solid rgb(0, 0, 0);
   border-style: dashed;
-  padding: 3px;
+  margin: 5px;
+} */
+.chattt {
+  background-color: rgb(57, 195, 230);
+  width: 385px;
+  height: 520px;
+  float: bottom;
+  border: 2px solid rgb(0, 0, 0);
+  border-style: dashed;
+  margin: 5px;
 }
 </style>

@@ -1,8 +1,9 @@
 <template>
   <div class="maincon">
     <div class="leftcon">
-      <div class="webrtc1">webrtc</div>
-      <div class="btnzip">
+      <div class="selecttheme">테마선택</div>
+      <div class="webrtc2">webrtc</div>
+      <div class="btnzip2">
         버튼모음
         <div id="app">
           <router-link to="/result">result 화면</router-link>
@@ -25,61 +26,30 @@ export default {
 </script>
 
 <style>
-.maincon {
-  background-color: rgb(204, 198, 198);
-  width: 1500px;
-  height: 700px;
-  float: left;
-  border: 1px solid rgb(0, 0, 0);
-  float: left;
-  padding: 1px;
-}
-.leftcon {
-  background-color: rgb(213, 238, 168);
-  width: 900px;
-  height: 700px;
-  float: left;
-  border: 1px solid rgb(0, 0, 0);
-  padding: 1px;
-}
-.rightcon {
-  background-color: rgb(118, 132, 216);
-  width: 400px;
-  height: 700px;
+.selecttheme {
+  background-color: rgb(214, 24, 24);
+  width: 200px;
+  height: 775px;
   float: right;
-  border: 1px solid rgb(0, 0, 0);
-  padding: 1px;
+  border: 2px solid rgb(0, 0, 0);
+  margin: 5px;
 }
-.webrtc1 {
+.webrtc2 {
   background-color: rgb(204, 157, 87);
-  width: 900px;
-  height: 450px;
+  width: 860px;
+  height: 550px;
   float: center;
-  border: 1px solid rgb(0, 0, 0);
-  padding: 1px;
+  border: 2px solid rgb(0, 0, 0);
+
+  margin: 5px;
 }
-.btnzip {
+
+.btnzip2 {
   background-color: rgb(202, 81, 186);
-  width: 900px;
-  height: 150px;
+  width: 860px;
+  height: 220px;
   float: center;
-  border: 1px solid rgb(0, 0, 0);
-  padding: 1px;
-}
-.members {
-  background-color: rgb(3, 209, 54);
-  width: 350px;
-  height: 250px;
-  float: top;
-  border: 1px solid rgb(0, 0, 0);
-  padding: 1px;
-}
-.chattt {
-  background-color: rgb(57, 195, 230);
-  width: 350px;
-  height: 400px;
-  float: bottom;
-  border: 1px solid rgb(0, 0, 0);
-  padding: 1px;
+  border: 2px solid rgb(0, 0, 0);
+  margin: 5px;
 }
 </style>
