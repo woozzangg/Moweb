@@ -23,7 +23,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 /* 메인페이지 */
 /* .maincon { 
   background-color: rgb(204, 198, 198);

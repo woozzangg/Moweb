@@ -25,7 +25,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .selecttheme {
   background-color: rgb(214, 24, 24);
   width: 200px;

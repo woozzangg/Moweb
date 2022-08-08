@@ -1,6 +1,6 @@
 <template>
   <div>
-    <video autoplay :ref="client" :id="client" />
+    <video autoplay :ref="client" :id="client" v-show="false" />
     <canvas :width="width" :height="height" :id="canvasId" />
     <!-- <div>
       <p>{{ client }}</p>
@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     async init() {
-      // console.log(this.client, this.streamManager.stream.mediaStream);
+      console.log(this.client, this.streamManager);
       //video에 추가
       this.streamManager.addVideoElement(this.$refs[this.client]);
       // this.$refs[this.client].srcObject = this.streamManager.stream.mediaStream;
