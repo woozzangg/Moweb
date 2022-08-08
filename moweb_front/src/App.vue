@@ -5,7 +5,8 @@
     <router-link to="/enter">enter</router-link> |
     <router-link to="/waiting">waiting</router-link> |
     <router-link to="/shot">shot</router-link> |
-    <router-link to="/result">result</router-link>
+    <router-link to="/result">result</router-link> |
+    <router-link to="/webrtc">WebRTC</router-link>
     <!-- </nav> -->
     <router-view />
   </div>

@@ -7,7 +7,7 @@ import EnterView from "@/views/EnterView";
 import WaitingView from "@/views/WaitingView";
 import ShotView from "@/views/ShotView";
 import ResultView from "@/views/ResultView";
-
+import PhotoView from "../views/PhotoView.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -35,6 +35,11 @@ const routes = [
     path: "/result",
     name: "result",
     component: ResultView,
+  },
+  {
+    path: "/webrtc",
+    name: "webrtc",
+    component: PhotoView,
   },
 ];
 
