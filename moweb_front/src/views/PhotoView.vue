@@ -211,7 +211,7 @@ export default {
       this.publisher = undefined;
       this.subscribers = [];
       this.OV = undefined;
-
+      this.videoSetting = false;
       window.removeEventListener("beforeunload", this.leaveSession);
     },
 
