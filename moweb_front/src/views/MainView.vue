@@ -1,10 +1,14 @@
 <template>
-  <div class="background"></div>
+  <div class="background">
+    <body>
+      홈 화면
+    </body>
+  </div>
 </template>
 
 <script>
 export default {
-  name: "HomeView",
+  name: "MainView",
 };
 </script>
 
