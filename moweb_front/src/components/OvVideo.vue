@@ -1,6 +1,5 @@
 <template>
   <div>
-    <video ref="input_video" />
     <video autoplay :ref="client" :id="client" v-show="false" />
     <canvas :width="width" :height="height" :id="canvasId" />
     <!-- <div>
@@ -10,9 +9,6 @@
 </template>
 
 <script>
-// import { Camera } from "@mediapipe/camera_utils";
-import { SelfieSegmentation } from "@mediapipe/selfie_segmentation";
-
 export default {
   name: "OvVideo",
 
@@ -29,11 +25,7 @@ export default {
     streamManager: Object,
     client: String,
   },
-  computed: {
-    inputVideo() {
-      return this.$refs.input_video;
-    },
-  },
+
   mounted() {
     this.init();
   },
@@ -47,71 +39,32 @@ export default {
       this.videoElement = document.getElementById(this.client);
       this.ctx = canvas.getContext("2d");
 
-      this.videoElement.addEventListener("canplay", this.removeBG);
+      this.videoElement.addEventListener("canplay", this.chromaKey);
     },
 
     // 배경 색 제거
-    async removeBG() {
-      this.ctx = document.getElementById(this.canvasId).getContext("2d");
-      const selfieSegmentation = new SelfieSegmentation({
-        locateFile: (file) => {
-          return `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`;
-        },
-      });
-      selfieSegmentation.setOptions({
-        modelSelection: 1,
-      });
-      selfieSegmentation.onResults(this.onResults);
-      const selfieSend = () => {
-        setTimeout(async () => {
-          // console.log(this);
-          await selfieSegmentation.send({ image: this.videoElement });
-          selfieSend();
-        }, 1000 / 30);
-      };
-      selfieSend();
-      // this.camera = new Camera(this.inputVideo, {
-      //   onFrame: async () => {
-      //     console.log(this.inputVideo);
-      //     await selfieSegmentation.send({ image: this.inputVideo });
-      //   },
-      //   width: 320,
-      //   height: 240,
-      // });
-      // this.camera.start();
-      return 1;
-    },
+    chromaKey() {
+      this.ctx.clearRect(0, 0, this.width, this.height);
+      this.ctx.scale(-1, 1);
+      this.ctx.translate(-1 * this.width, 0);
+      this.ctx.drawImage(this.videoElement, 0, 0, this.width, this.height);
+      let frame = this.ctx.getImageData(0, 0, this.width, this.height);
+      let l = frame.data.length / 4;
 
-    // 배경제거 옵션
-    async onResults(results) {
-      this.width = results.image.width;
-      this.height = results.image.height;
-      this.ctx.save();
-      this.ctx.clearRect(0, 0, results.image.width, results.image.height);
-      this.ctx.drawImage(
-        results.segmentationMask,
-        0,
-        0,
-        results.image.width,
-        results.image.height
-      );
-
-      // 배경 그리기
-      // this.ctx.globalCompositeOperation = "source-out";
-      // this.ctx.fillStyle = "#009933"; // 배경색 부분
-      // this.ctx.fillRect(0, 0, results.image.width, results.image.height);
-
-      // Only overwrite missing pixels.
-      this.ctx.globalCompositeOperation = "source-in";
-      await this.ctx.drawImage(
-        results.image,
-        0,
-        0,
-        results.image.width,
-        results.image.height
-      );
-
-      this.ctx.restore();
+      // 녹색 배경 제거부분
+      for (let i = 0; i < l; i++) {
+        let r = frame.data[i * 4 + 0];
+        let g = frame.data[i * 4 + 1];
+        let b = frame.data[i * 4 + 2];
+        if (g > 120 && r < 80 && b < 120) {
+          // if (r == 0 && g == 158 && b == 43) { // 기준 색상
+          frame.data[i * 4 + 3] = 0;
+        }
+      }
+      this.ctx.putImageData(frame, 0, 0);
+      this.ctx.scale(-1, 1);
+      this.ctx.translate(-1 * this.width, 0);
+      requestAnimationFrame(this.chromaKey);
     },
   },
 };

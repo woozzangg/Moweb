@@ -33,7 +33,7 @@
     </div>
 
     <div id="session" v-if="session">
-      <!-- <video v-show="false" ref="input_video"></video> -->
+      <video v-show="false" ref="input_video"></video>
       <div id="session-header">
         <h1 id="session-title">{{ mySessionId }}</h1>
         <v-btn id="buttonLeaveSession" @click="leaveSession">
@@ -50,23 +50,23 @@
         {{ micBtnTxt }}
       </v-btn>
       <v-container>
-        <!-- <canvas
+        <canvas
           v-show="false"
           class="output_canvas"
           id="output_canvas"
           :width="width"
           :height="height"
           style="transform: rotateY(180deg)"
-        ></canvas> -->
+        ></canvas>
 
+        <!-- <user-video v-if="videoSetting" :stream-manager="publisher" /> -->
         <v-row>
           <v-col>
-            <user-video v-if="videoSetting" :stream-manager="publisher" />
-            <!-- <my-video
+            <my-video
               v-if="videoSetting"
               :myUserName="myUserName"
               :stream="canvasStream"
-            /> -->
+            />
           </v-col>
           <v-col
             v-for="sub in subscribers"
@@ -84,8 +84,9 @@
 import axios from "axios";
 import { OpenVidu } from "openvidu-browser";
 import UserVideo from "../components/UserVideo";
-
-// import MyVideo from "@/components/MyVideo.vue";
+import { Camera } from "@mediapipe/camera_utils";
+import { SelfieSegmentation } from "@mediapipe/selfie_segmentation";
+import MyVideo from "@/components/MyVideo.vue";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
@@ -97,12 +98,12 @@ export default {
 
   components: {
     UserVideo,
-    // MyVideo,
+    MyVideo,
   },
   computed: {
-    // inputVideo() {
-    //   return this.$refs.input_video;
-    // },
+    inputVideo() {
+      return this.$refs.input_video;
+    },
   },
   data() {
     return {
@@ -115,12 +116,15 @@ export default {
       mySessionId: "SessionA",
       myUserName: "Participant" + Math.floor(Math.random() * 100),
 
+      width: 0,
+      height: 0,
+      camera: undefined,
       cameraOn: "true",
       cameraBtnTxt: "camera off",
       micOn: "true",
       micBtnTxt: "mic off",
       videoSetting: false,
-      // canvasStream: undefined,
+      canvasStream: undefined,
     };
   },
 
@@ -158,13 +162,17 @@ export default {
       // 'getToken' method is simulating what your server-side should do.
       // 'token' parameter should be retrieved and returned by your own backend
       this.getToken(this.mySessionId).then(async (token) => {
+        await this.removeBG();
         this.session
           .connect(token, { clientData: this.myUserName })
           .then(async () => {
             // --- Get your own camera stream with the desired properties ---
+            let canvas = document.getElementById("output_canvas");
+            this.canvasStream = canvas.captureStream(30);
+            let videoTracks = this.canvasStream.getVideoTracks();
             let publisher = this.OV.initPublisher(undefined, {
               audioSource: undefined, // The source of audio. If undefined default microphone
-              videoSource: undefined, // The source of video. If undefined default webcam
+              videoSource: videoTracks[0], // The source of video. If undefined default webcam
               publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
               publishVideo: true, // Whether you want to start publishing with your video enabled or not
               resolution: "640x480", // The resolution of your video
@@ -287,15 +295,76 @@ export default {
           .catch((error) => reject(error.response));
       });
     },
+    async removeBG() {
+      this.ctx = document.getElementById("output_canvas").getContext("2d");
+      const selfieSegmentation = new SelfieSegmentation({
+        locateFile: (file) => {
+          return `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`;
+        },
+      });
+      selfieSegmentation.setOptions({
+        modelSelection: 1,
+      });
+      selfieSegmentation.onResults(this.onResults);
 
+      this.camera = new Camera(this.inputVideo, {
+        onFrame: async () => {
+          await selfieSegmentation.send({ image: this.inputVideo });
+        },
+        width: 320,
+        height: 240,
+      });
+      this.camera.start();
+      return 1;
+    },
+
+    // 배경제거 옵션
+    async onResults(results) {
+      this.width = results.image.width;
+      this.height = results.image.height;
+      this.ctx.save();
+      this.ctx.clearRect(0, 0, results.image.width, results.image.height);
+      this.ctx.drawImage(
+        results.segmentationMask,
+        0,
+        0,
+        results.image.width,
+        results.image.height
+      );
+
+      // 배경 그리기
+      this.ctx.globalCompositeOperation = "source-out";
+      this.ctx.fillStyle = "#009933"; // 배경색 부분
+      this.ctx.fillRect(0, 0, results.image.width, results.image.height);
+
+      // Only overwrite missing pixels.
+      this.ctx.globalCompositeOperation = "destination-atop";
+      await this.ctx.drawImage(
+        results.image,
+        0,
+        0,
+        results.image.width,
+        results.image.height
+      );
+
+      this.ctx.restore();
+    },
     // 카메라 on/off
     async cameraBtnHandler() {
       this.cameraOn = !this.cameraOn;
-      this.publisher.publishVideo(this.cameraOn);
+
       if (this.cameraOn) {
         this.cameraBtnTxt = "camera off";
+        this.camera.start();
       } else {
         this.cameraBtnTxt = "camera on";
+        this.camera.stop();
+        setTimeout(() => {
+          this.ctx.clearRect(0, 0, this.width, this.height);
+          this.ctx.fillStyle = "#009933";
+          this.ctx.fillRect(0, 0, this.width, this.height);
+          this.ctx.restore();
+        }, 100);
       }
     },
     // 마이크 on/off
