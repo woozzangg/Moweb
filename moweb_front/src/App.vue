@@ -1,22 +1,32 @@
 <template>
   <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link to="/webrtc">WebRTC</router-link>
-    </nav>
+    <!-- <nav> -->
+    <router-link to="/">Home</router-link> |
+    <router-link to="/enter">enter</router-link> |
+    <router-link to="/waiting">waiting</router-link> |
+    <router-link to="/shot">shot</router-link> |
+    <router-link to="/result">result</router-link> |
+    <router-link to="/webrtc">WebRTC</router-link>
+    <!-- </nav> -->
     <router-view />
   </div>
 </template>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+/* #app { */
+/* font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-}
+  color: #2c3e50; */
+/* height: 100vh;
+  overflow: hidden;
+  margin: 0; */
+/* background-image: url("./assets/background.jpg"); */
+/* background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center; */
+/* } */
 
 nav {
   padding: 30px;
