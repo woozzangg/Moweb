@@ -1,6 +1,6 @@
 <template>
   <div>
-    <video autoplay :ref="client" :id="client" hidden />
+    <video autoplay :ref="client" :id="client" />
     <canvas :width="width" :height="height" :id="canvasId" />
     <!-- <div>
       <p>{{ client }}</p>

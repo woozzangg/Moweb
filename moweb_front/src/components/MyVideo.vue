@@ -1,6 +1,6 @@
 <template>
   <div>
-    <video ref="video" autoplay hidden id="video" />
+    <video ref="video" autoplay id="video" />
     <canvas :width="width" :height="height" ref="myVideo" id="canvas" />
     <p>{{ myUserName }}</p>
   </div>
@@ -23,7 +23,7 @@ export default {
   },
   mounted() {
     this.init();
-    console.log(this.$refs["video"]);
+    // console.log(this.$refs["video"]);
     this.$refs["video"].srcObject = this.stream;
   },
   methods: {

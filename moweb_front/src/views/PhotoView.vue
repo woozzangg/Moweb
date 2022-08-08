@@ -35,7 +35,7 @@
     </div>
 
     <div id="session" v-if="session">
-      <video v-show="false" ref="input_video"></video>
+      <video v-show="true" ref="input_video"></video>
       <div id="session-header">
         <h1 id="session-title">{{ mySessionId }}</h1>
         <input
@@ -57,7 +57,7 @@
       </button>
       <div id="video-container" class="col-md-6">
         <canvas
-          v-show="false"
+          v-show="true"
           class="output_canvas"
           id="output_canvas"
           :width="width"
@@ -367,10 +367,12 @@ export default {
       } else {
         this.cameraBtnTxt = "camera on";
         this.camera.stop();
-        // this.ctx.clearRect(0, 0, this.width, this.height);
-        // this.ctx.fillStyle = "#009933";
-        // this.ctx.fillRect(0, 0, this.width, this.height);
-        // this.ctx.restore();
+        setTimeout(() => {
+          this.ctx.clearRect(0, 0, this.width, this.height);
+          this.ctx.fillStyle = "#009933";
+          this.ctx.fillRect(0, 0, this.width, this.height);
+          this.ctx.restore();
+        }, 100);
       }
     },
     // 마이크 on/off
