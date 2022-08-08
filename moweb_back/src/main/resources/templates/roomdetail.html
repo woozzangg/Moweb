@@ -46,7 +46,7 @@
 <script>
     //alert(document.title);
     // websocket & stomp initialize
-    var sock = new SockJS("/ws/chat");
+    var sock = new SockJS("/ws");
     var ws = Stomp.over(sock);
     var reconnect = 0;
     // vue.js
@@ -86,11 +86,11 @@
                 vm.recvMessage(recv);
             });
             ws.send("/app/chat/message", {}, JSON.stringify({type:'ENTER', roomId:vm.$data.roomId, sender:vm.$data.sender}));
-        }, function(error) {
+    }, function(error) {
             if(reconnect++ <= 5) {
                 setTimeout(function() {
                     console.log("connection reconnect");
-                    sock = new SockJS("/ws/chat");
+                    sock = new SockJS("/ws");
                     ws = Stomp.over(sock);
                     connect();
                 },10*1000);
