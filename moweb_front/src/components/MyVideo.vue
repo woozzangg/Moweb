@@ -1,6 +1,6 @@
 <template>
   <div>
-    <video ref="video" autoplay id="video" />
+    <video ref="video" autoplay id="video" v-show="false" />
     <canvas :width="width" :height="height" ref="myVideo" id="canvas" />
     <p>{{ myUserName }}</p>
   </div>
