@@ -1,148 +1,299 @@
 <template>
-  <div class="maincon">
-    <div class="leftcon">
-      <div class="webrtc1">webrtc</div>
-      <div class="btnzip">
-        버튼모음
-        <div id="app">
-          <router-link to="/shot">shot으로</router-link>
+  <!-- 컨테이너 시작 -->
+  <v-container class="border-style1" style="margin: 20px 0px 0px 50px">
+    <!-- row로 구간 나눔 -->
+    <v-row d-flex fluid justify-space-around style="margin: 0px">
+      <!-- 왼쪽 영역 -->
+      <v-col
+        no-gutters
+        fluid
+        cols="8"
+        class="border-style1"
+        style="margin: 10px 10px 0px 10px"
+      >
+        <!-- //////////// 여기서 v-if나 v-show로  if else 걸어서 두기 -->
+        <!-- ///////// 정상화면 row 9 , 2 -->
+        <!-- # WebRTC 화면 부분 -->
+        <!-- <v-row
+          no-gutters
+          rows="9"
+          fluid
+          class="border-style1"
+          style="margin: 5px"
+        >
+          <canvas
+            class="border-style1"
+            width="320"
+            height="240"
+            style="background-color: #00ff00; margin: 5px"
+          ></canvas>
+          <canvas
+            class="border-style1"
+            width="320"
+            height="240"
+            style="background-color: #ff0000; margin: 5px"
+          ></canvas>
+          <canvas
+            class="border-style1"
+            width="320"
+            height="240"
+            style="background-color: #ff0000; margin: 5px"
+          ></canvas>
+          <canvas
+            class="border-style1"
+            width="320"
+            height="240"
+            style="background-color: #004400; margin: 5px"
+          ></canvas>
+          <canvas
+            class="border-style1"
+            width="320"
+            height="240"
+            style="background-color: #f00; margin: 5px"
+          ></canvas>
+          <canvas
+            class="border-style1"
+            width="320"
+            height="240"
+            style="background-color: #ff0000; margin: 5px"
+          ></canvas>
+          <canvas
+            class="border-style1"
+            width="320"
+            height="240"
+            style="background-color: #ff0000; margin: 5px"
+          ></canvas>
+          WebRTC 화면이 들어올 곳
+        </v-row>
 
-          <router-view />
-        </div>
-      </div>
-    </div>
-    <div class="rightcon">
-      <div class="members">참여자</div>
-      <div class="chattt">채팅창</div>
-    </div>
-  </div>
+        <v-row
+          fluid
+          no-gutters
+          rows="2"
+          class="border-style1"
+          style="margin: 4px"
+        >
+          버튼 모음집
+          <v-btn elevation="9" outlined tile rounded>
+            <router-link to="/shot" style="margin: 10px">shot으로</router-link>
+
+            <router-view />
+          </v-btn>
+          <v-btn class="pink white--text">
+            <router-link to="/waiting" style="margin: 10px"
+              >waiting으로</router-link
+            >
+            |
+          </v-btn>
+        </v-row> -->
+
+        <!-- 촬영화면 들어가는곳 -->
+        <!-- # 배경선택 들어갔을때 화면 col 나눈 후 ㅇㅇ -->
+
+        <!-- <v-row>
+          <v-col
+            no-gutters
+            fluid
+            cols="8"
+            class="border-style1"
+            style="margin: 20px 0px 0px 10px"
+          >
+            <v-row
+              no-gutters
+              rows="9"
+              fluid
+              class="border-style1"
+              style="margin: 5px"
+            >
+              <canvas
+                class="border-style1"
+                width="640"
+                height="480"
+                style="background-color: #ff0000; margin: 20px 0px 0px 50px"
+              ></canvas>
+              <br />
+
+              WebRTC 화면이 들어올 곳
+            </v-row>
+            <br />
+            <v-row
+              fluid
+              no-gutters
+              rows="2"
+              class="border-style1"
+              style="margin: 4px"
+            >
+              버튼 모음집
+              <v-btn elevation="10" outlined tile rounded>
+                <router-link to="/shot" style="margin: 10px"
+                  >shot으로</router-link
+                >
+
+                <router-view />
+              </v-btn>
+              <v-btn class="pink white--text">
+                <router-link to="/waiting" style="margin: 10px"
+                  >waiting으로</router-link
+                >
+                |
+              </v-btn>
+            </v-row>
+          </v-col>
+
+          <v-col
+            no-gutters
+            fluid
+            cols="3"
+            class="border-style1"
+            style="margin: 20px 0px 0px 35px"
+          >
+            배경 선택 할 carousel
+            <v-card
+              v-scroll.self="onScroll"
+              class="overflow-y-auto"
+              max-height="400"
+            >
+              <v-banner class="justify-center text-h5 font-weight-light" sticky>
+                Scroll Me - Method invoked
+
+                <span class="font-weight-bold" v-text="scrollInvoked"></span>
+
+                times
+              </v-banner>
+
+              <v-card-text>
+                <div v-for="n in 12" :key="n" class="mb-4">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi
+                  commodi earum tenetur. Asperiores dolorem placeat ab nobis
+                  iusto culpa, autem molestias molestiae quidem pariatur.
+                  Debitis beatae expedita nam facere perspiciatis. Lorem ipsum
+                  dolor sit amet consectetur adipisicing elit. Repellendus
+                  ducimus cupiditate rerum officiis consequuntur laborum
+                  doloremque quaerat ipsa voluptates, nobis nam quis nulla ullam
+                  at corporis, similique ratione quasi illo!
+                </div>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row> -->
+
+        <!-- # 결과화면 들어가는곳  -->
+
+        <v-row
+          no-gutters
+          rows="9"
+          fluid
+          class="border-style1"
+          style="margin: 5px"
+        >
+          <v-container
+            class="border-style1"
+            style="margin: 50px 100px 50px 100px"
+          >
+            <canvas
+              class="border-style1"
+              width="320"
+              height="240"
+              style="background-color: #00ff00; margin: 5px"
+            ></canvas>
+            <canvas
+              class="border-style1"
+              width="320"
+              height="240"
+              style="background-color: #ff0000; margin: 5px"
+            ></canvas>
+            <canvas
+              class="border-style1"
+              width="320"
+              height="240"
+              style="background-color: #ff0000; margin: 5px"
+            ></canvas>
+            <canvas
+              class="border-style1"
+              width="320"
+              height="240"
+              style="background-color: #004400; margin: 5px"
+            ></canvas>
+          </v-container>
+          WebRTC 화면이 들어올 곳
+        </v-row>
+
+        <v-row
+          fluid
+          no-gutters
+          rows="2"
+          class="border-style1"
+          style="margin: 4px"
+        >
+          버튼 모음집
+          <v-btn elevation="9" outlined tile rounded>
+            <router-link to="/shot" style="margin: 10px">shot으로</router-link>
+
+            <router-view />
+          </v-btn>
+          <v-btn class="pink white--text">
+            <router-link to="/waiting" style="margin: 10px"
+              >waiting으로</router-link
+            >
+            |
+          </v-btn>
+        </v-row>
+        <!-- <br /> -->
+      </v-col>
+      <!-- <v-spacer></v-spacer> -->
+      <!-- 오른쪽 영역 시작 -->
+      <v-col
+        fluid
+        no-gutters
+        cols="3"
+        class="border-style1"
+        style="margin: 10px 10px 0px 10px"
+      >
+        <!-- 참여 멤버 -->
+        <v-row no-gutters fluid rows="4" class="border-style1">
+          <!-- 이거 버튼 왜 안먹냐 오른쪽으로 붙는거-->
+          <!-- 이거 링크 버튼임 -->
+          <v-btn d-flex class="float-right" outlined rounded color="primary">
+            Link
+          </v-btn>
+          <br />
+          참여자 들어올 곳
+        </v-row>
+        <br />
+        <!-- 채팅창 -->
+        <v-row no-gutters fluid rows="6" class="border-style1"
+          >채팅창 들어올 곳 <br />
+          <!-- <v-virtual-scroll height="100" item-height="20">
+
+          /></v-virtual-scroll> -->
+        </v-row>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 <script>
 export default {
   name: "WaitingView",
+  // data() {
+  //   return {
+  //     colors: [
+  //       "indigo",
+  //       "warning",
+  //       "pink darken-2",
+  //       "red lighten-1",
+  //       "deep-purple accent-4",
+  //     ],
+  //     slides: ["First", "Second", "Third", "Fourth", "Fifth"],
+  //   };
+  // },
+  data: () => ({
+    scrollInvoked: 0,
+  }),
+
+  methods: {
+    onScroll() {
+      this.scrollInvoked++;
+    },
+  },
 };
 </script>
-
-<style scoped>
-/* 메인페이지 */
-/* .maincon { 
-  background-color: rgb(204, 198, 198);
-  width: 1600px;
-  height: 700px;
-  float: center;
-  border: 2px solid rgb(0, 0, 0);
-  margin: 90px 0px 0px 160px;
-} */
-.maincon {
-  background-color: rgb(204, 198, 198);
-  width: 1500px;
-  height: 800px;
-  float: center;
-  border: 2px solid rgb(0, 0, 0);
-  margin: 50px 0px 0px 220px;
-}
-/* 왼쪽 영역 */
-/* .leftcon {
-  background-color: rgb(213, 238, 168);
-  width: 1150px;
-  height: 690px;
-  float: left;
-  border: 2px solid rgb(0, 0, 0);
-  margin: 3px;
-} */
-.leftcon {
-  background-color: rgb(213, 238, 168);
-  width: 1080px;
-  height: 790px;
-  float: left;
-  border: 2px solid rgb(0, 0, 0);
-  margin: 3px;
-}
-/* .rightcon {
-  background-color: rgb(118, 132, 216);
-  width: 430px;
-  height: 690px;
-  float: right;
-  border: 2px solid rgb(0, 0, 0);
-  margin: 3px;
-} */
-
-.rightcon {
-  background-color: rgb(118, 132, 216);
-  width: 400px;
-  height: 790px;
-  float: right;
-  border: 2px solid rgb(0, 0, 0);
-  margin: 3px;
-}
-/* .webrtc1 {
-  background-color: rgb(204, 157, 87);
-  width: 1130px;
-  height: 500px;
-  float: center;
-  border: 2px solid rgb(0, 0, 0);
-
-  margin: 5px;
-} */
-.webrtc1 {
-  background-color: rgb(204, 157, 87);
-  width: 1060px;
-  height: 550px;
-  float: center;
-  border: 2px solid rgb(0, 0, 0);
-
-  margin: 5px;
-}
-/* .btnzip {
-  background-color: rgb(202, 81, 186);
-  width: 1130px;
-  height: 170px;
-  float: center;
-  border: 2px solid rgb(0, 0, 0);
-  margin: 5px;
-} */
-.btnzip {
-  background-color: rgb(202, 81, 186);
-  width: 1060px;
-  height: 220px;
-  float: center;
-  border: 2px solid rgb(0, 0, 0);
-  margin: 5px;
-}
-/* .members {
-  background-color: rgb(3, 209, 54);
-  width: 410px;
-  height: 250px;
-  float: top;
-  border: 2px solid rgb(0, 0, 0);
-  border-style: dotted;
-  margin: 5px;
-} */
-.members {
-  background-color: rgb(3, 209, 54);
-  width: 385px;
-  height: 250px;
-  float: top;
-  border: 2px solid rgb(0, 0, 0);
-  border-style: dotted;
-  margin: 5px;
-}
-/* .chattt {
-  background-color: rgb(57, 195, 230);
-  width: 410px;
-  height: 420px;
-  float: bottom;
-  border: 2px solid rgb(0, 0, 0);
-  border-style: dashed;
-  margin: 5px;
-} */
-.chattt {
-  background-color: rgb(57, 195, 230);
-  width: 385px;
-  height: 520px;
-  float: bottom;
-  border: 2px solid rgb(0, 0, 0);
-  border-style: dashed;
-  margin: 5px;
-}
-</style>
