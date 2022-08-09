@@ -20,12 +20,10 @@ export default {
   background-color: #563d34;
 }
 .background {
-  height: 500vh;
+  width: 1900px;
+  height: 3000px;
   overflow: hidden;
-  margin: 0;
   background-image: url("@/assets/mainpage.png");
   background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
 }
 </style>
