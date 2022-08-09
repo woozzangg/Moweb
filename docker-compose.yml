@@ -11,6 +11,7 @@ services:
       - db.username=${db_username}
       - db.password=${db_password}
       - db.dbname=${db_dbname}
+      - hosturl=${hosturl}
     network_mode: "host"
   moweb_front:
     build:
