@@ -213,7 +213,7 @@
             <button @click="savePhoto" style="margin: 10px">저장</button>
           </v-btn>
           <v-btn class="pink white--text">
-            <router-link to="/waiting" style="margin: 10px">공유</router-link>
+            <button @click="sharePhoto" style="margin: 10px">공유</button>
           </v-btn>
           <v-btn class="pink white--text">
             <router-link to="/" style="margin: 10px">나가기</router-link>
@@ -253,7 +253,12 @@
   </v-container>
 </template>
 <script>
+import Vue from "vue";
 import html2canvas from "html2canvas";
+import kakaosdk from "vue-kakao-sdk";
+
+const apiKey = "59074e20c9d80e6e5200a4bd60122af7";
+Vue.use(kakaosdk, { apiKey });
 
 export default {
   methods: {
@@ -290,6 +295,30 @@ export default {
       link.click();
 
       console.log("moweb_" + today + ".png 저장완료");
+    },
+    async sharePhoto() {
+      this.$kakao.Link.sendDefault({
+        objectType: "feed",
+        content: {
+          title: "모여봐요 웹캠으로",
+          description:
+            "<모여봐요 웹캠으로>를 통해 친구들과 재미있는 사진을 찍어보세요!",
+          imageUrl: "https://i.ibb.co/88s0N4C/moweb.png",
+          link: {
+            mobileWebUrl: "https://i.ibb.co/88s0N4C/moweb.png",
+            webUrl: "https://i.ibb.co/88s0N4C/moweb.png",
+          },
+        },
+        buttons: [
+          {
+            title: "홈페이지 이동",
+            link: {
+              mobileWebUrl: "https://i7a507.p.ssafy.io/",
+              webUrl: "https://i7a507.p.ssafy.io/",
+            },
+          },
+        ],
+      });
     },
   },
   data: () => ({}),
