@@ -1,10 +1,18 @@
 <template>
   <div>
-    <video autoplay :ref="client" :id="client" v-show="false" />
-    <canvas :width="width" :height="height" :id="canvasId" />
-    <!-- <div>
-      <p>{{ client }}</p>
-    </div> -->
+    <video
+      autoplay
+      :ref="client"
+      :id="client"
+      style="visibility: hidden; position: absolute"
+    />
+    <canvas
+      :width="width"
+      :height="height"
+      :id="canvasId"
+      style=""
+      :style="talkingCss"
+    />
   </div>
 </template>
 
@@ -19,6 +27,7 @@ export default {
       width: 320,
       height: 240,
       canvasId: this.client + "'s",
+      talkingCss: "posiotion: absolute",
     };
   },
   props: {
@@ -33,11 +42,18 @@ export default {
     async init() {
       console.log(this.client, this.streamManager);
       //video에 추가
-      this.streamManager.addVideoElement(this.$refs[this.client]);
+      await this.streamManager.addVideoElement(this.$refs[this.client]);
+      this.streamManager.on("publisherStartSpeaking", () => {
+        this.isTalking(true);
+      });
+      this.streamManager.on("publisherStopSpeaking", () => {
+        this.isTalking(false);
+      });
       // this.$refs[this.client].srcObject = this.streamManager.stream.mediaStream;
       let canvas = document.getElementById(this.canvasId);
       this.videoElement = document.getElementById(this.client);
       this.ctx = canvas.getContext("2d");
+      console.log("this.ctx", this.ctx);
 
       this.videoElement.addEventListener("canplay", this.chromaKey);
     },
@@ -65,6 +81,14 @@ export default {
       this.ctx.scale(-1, 1);
       this.ctx.translate(-1 * this.width, 0);
       requestAnimationFrame(this.chromaKey);
+    },
+    isTalking(boolean) {
+      if (boolean) {
+        this.talkingCss =
+          "posiotion: absolute; border-color: aqua; border-style: groove";
+      } else {
+        this.talkingCss = "posiotion: absolute";
+      }
     },
   },
 };

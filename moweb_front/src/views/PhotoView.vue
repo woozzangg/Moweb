@@ -59,14 +59,9 @@
           style="transform: rotateY(180deg)"
         ></canvas>
 
-        <!-- <user-video v-if="videoSetting" :stream-manager="publisher" /> -->
         <v-row>
           <v-col>
-            <my-video
-              v-if="videoSetting"
-              :myUserName="myUserName"
-              :stream="canvasStream"
-            />
+            <user-video v-if="videoSetting" :stream-manager="publisher" />
           </v-col>
           <v-col
             v-for="sub in subscribers"
@@ -86,7 +81,6 @@ import { OpenVidu } from "openvidu-browser";
 import UserVideo from "../components/UserVideo";
 import { Camera } from "@mediapipe/camera_utils";
 import { SelfieSegmentation } from "@mediapipe/selfie_segmentation";
-import MyVideo from "@/components/MyVideo.vue";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
@@ -98,7 +92,6 @@ export default {
 
   components: {
     UserVideo,
-    MyVideo,
   },
   computed: {
     inputVideo() {
@@ -188,6 +181,7 @@ export default {
             this.session.publish(this.publisher);
           })
           .then(() => {
+            console.log(this.session);
             this.videoSetting = true;
           })
           .catch((error) => {
