@@ -41,7 +41,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .mint {
   background-color: #12d3a9;
 }

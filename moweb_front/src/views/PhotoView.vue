@@ -4,7 +4,7 @@
       <div id="img-div">
         <img src="resources/images/openvidu_grey_bg_transp_cropped.png" />
       </div>
-      <div id="join-dialog" class="jumbotron vertical-center">
+      <div id="join-dialog">
         <h1>Join a video session</h1>
         <div class="form-group">
           <p>
@@ -26,38 +26,32 @@
             />
           </p>
           <p class="text-center">
-            <button class="btn btn-lg btn-success" @click="joinSession()">
-              Join!
-            </button>
+            <v-btn @click="joinSession()">Join!</v-btn>
           </p>
         </div>
       </div>
     </div>
 
     <div id="session" v-if="session">
-      <video v-show="true" ref="input_video"></video>
+      <video v-show="false" ref="input_video"></video>
       <div id="session-header">
         <h1 id="session-title">{{ mySessionId }}</h1>
-        <input
-          class="btn btn-large btn-danger"
-          type="button"
-          id="buttonLeaveSession"
-          @click="leaveSession"
-          value="Leave session"
-        />
+        <v-btn id="buttonLeaveSession" @click="leaveSession">
+          Leave session
+        </v-btn>
       </div>
       <!-- <div id="main-video" class="col-md-6">
         <user-video :stream-manager="mainStreamManager" />
       </div> -->
-      <button @click="cameraBtnHandler">
+      <v-btn @click="cameraBtnHandler">
         {{ cameraBtnTxt }}
-      </button>
-      <button @click="micBtnHandler">
+      </v-btn>
+      <v-btn @click="micBtnHandler">
         {{ micBtnTxt }}
-      </button>
-      <div id="video-container" class="col-md-6">
+      </v-btn>
+      <v-container>
         <canvas
-          v-show="true"
+          v-show="false"
           class="output_canvas"
           id="output_canvas"
           :width="width"
@@ -65,19 +59,18 @@
           style="transform: rotateY(180deg)"
         ></canvas>
 
-        <!-- <user-video v-if="videoSetting" :stream-manager="publisher" /> -->
-        <my-video
-          v-if="videoSetting"
-          :myUserName="myUserName"
-          :stream="canvasStream"
-        />
-
-        <user-video
-          v-for="sub in subscribers"
-          :key="sub.stream.connection.connectionId"
-          :stream-manager="sub"
-        />
-      </div>
+        <v-row>
+          <v-col>
+            <user-video v-if="videoSetting" :stream-manager="publisher" />
+          </v-col>
+          <v-col
+            v-for="sub in subscribers"
+            :key="sub.stream.connection.connectionId"
+          >
+            <user-video :stream-manager="sub" />
+          </v-col>
+        </v-row>
+      </v-container>
     </div>
   </div>
 </template>
@@ -88,7 +81,6 @@ import { OpenVidu } from "openvidu-browser";
 import UserVideo from "../components/UserVideo";
 import { Camera } from "@mediapipe/camera_utils";
 import { SelfieSegmentation } from "@mediapipe/selfie_segmentation";
-import MyVideo from "@/components/MyVideo.vue";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
@@ -100,7 +92,6 @@ export default {
 
   components: {
     UserVideo,
-    MyVideo,
   },
   computed: {
     inputVideo() {
@@ -190,6 +181,7 @@ export default {
             this.session.publish(this.publisher);
           })
           .then(() => {
+            console.log(this.session);
             this.videoSetting = true;
           })
           .catch((error) => {
@@ -213,7 +205,7 @@ export default {
       this.publisher = undefined;
       this.subscribers = [];
       this.OV = undefined;
-
+      this.videoSetting = false;
       window.removeEventListener("beforeunload", this.leaveSession);
     },
 
@@ -350,12 +342,6 @@ export default {
       );
 
       this.ctx.restore();
-      if (!this.cameraOn) {
-        this.ctx.clearRect(0, 0, this.width, this.height);
-        this.ctx.fillStyle = "#009933";
-        this.ctx.fillRect(0, 0, this.width, this.height);
-        this.ctx.restore();
-      }
     },
     // 카메라 on/off
     async cameraBtnHandler() {
@@ -388,7 +374,7 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
 video {
   transform: rotateY(180deg);
 }
