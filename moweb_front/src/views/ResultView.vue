@@ -54,15 +54,66 @@
   </v-container>
 </template>-->
 <template>
-  <v-container
+  <!-- <v-container
+    fluid
     class="border-style1"
-    style="width: 1600px; height: 700px; margin: 50px 0px 0px 150px"
-  >
-    <v-row d-flex justify-space-around style="margin: 0px">
-      <v-col no-gutters cols="8" class="ma-2 border-style1" style="margin: 2px">
-        <v-row no-gutters rows="9" class="border-style1" style="margin: 1px"
-          >WebRTC 화면이 들어올 곳 a<br />aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</v-row
+    style="width: 1600px; height: 750px; margin: 50px 150px 0px 160px"
+  > -->
+  <v-container class="border-style1">
+    <v-row d-flex fluid justify-space-around style="margin: 0px">
+      <v-col no-gutters fluid cols="8" class="border-style1">
+        <!-- <v-col
+        no-gutters
+        fluid
+        cols="8"
+        class="border-style1"
+        style="margin: 20px 0px 0px 35px"
+      > -->
+        <v-row
+          no-gutters
+          rows="9"
+          fluid
+          class="border-style1"
+          style="margin: 5px"
         >
+          <canvas
+            class="border-style1"
+            width="320"
+            height="240"
+            style="background-color: #ff0000; margin: 5px"
+          ></canvas>
+          <canvas
+            class="border-style1"
+            width="320"
+            height="240"
+            style="background-color: #ff0000; margin: 5px"
+          ></canvas>
+          <canvas
+            class="border-style1"
+            width="320"
+            height="240"
+            style="background-color: #ff0000; margin: 5px"
+          ></canvas>
+          <canvas
+            class="border-style1"
+            width="320"
+            height="240"
+            style="background-color: #004400; margin: 5px"
+          ></canvas>
+          <canvas
+            class="border-style1"
+            width="320"
+            height="240"
+            style="background-color: #f00; margin: 5px"
+          ></canvas>
+          <canvas
+            class="border-style1"
+            width="320"
+            height="240"
+            style="background-color: #ff0000; margin: 5px"
+          ></canvas>
+          WebRTC 화면이 들어올 곳
+        </v-row>
         <!-- <br /> -->
         <v-row
           fluid
@@ -72,23 +123,32 @@
           style="margin: 4px"
         >
           버튼 모음집
-          <v-btn>
-            <router-link to="/shot" style="margin: 3px">shot으로</router-link>
+          <v-btn elevation="10" outlined tile rounded>
+            <router-link to="/shot" style="margin: 10px">shot으로</router-link>
 
             <router-view />
           </v-btn>
-          <v-btn>
-            <router-link to="/waiting">waiting으로</router-link> |
+          <v-btn class="pink white--text">
+            <router-link to="/waiting" style="margin: 10px"
+              >waiting으로</router-link
+            >
+            |
           </v-btn>
         </v-row>
       </v-col>
-      <v-spacer></v-spacer>
-      <v-col cols="3" class="ma-2 border-style1">
-        <v-row no-gutters rows="4" class="border-style1"
+      <!-- <v-spacer></v-spacer> -->
+      <v-col
+        fluid
+        no-gutters
+        cols="3"
+        class="border-style1"
+        style="margin: 20px 0px 0px 50px"
+      >
+        <v-row no-gutters fluid rows="4" class="border-style1"
           >참여자 들어올 곳 a<br />a<br />a<br />a<br />a<br />a<br />a<br />a<br />a<br />a<br />a<br />a<br />a<br />a<br />a<br />a<br />
         </v-row>
         <!-- <br /> -->
-        <v-row no-gutters rows="6" class="border-style1"
+        <v-row no-gutters fluid rows="6" class="border-style1"
           >채팅창 들어올 곳</v-row
         >
       </v-col>
