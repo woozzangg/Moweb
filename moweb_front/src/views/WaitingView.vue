@@ -191,28 +191,11 @@
             style="margin: 50px 100px 50px 100px"
           >
             <canvas
+              ref="resultCanvas"
               class="border-style1"
               width="320"
               height="240"
-              style="background-color: #00ff00; margin: 5px"
-            ></canvas>
-            <canvas
-              class="border-style1"
-              width="320"
-              height="240"
-              style="background-color: #ff0000; margin: 5px"
-            ></canvas>
-            <canvas
-              class="border-style1"
-              width="320"
-              height="240"
-              style="background-color: #ff0000; margin: 5px"
-            ></canvas>
-            <canvas
-              class="border-style1"
-              width="320"
-              height="240"
-              style="background-color: #004400; margin: 5px"
+              style="background-color: #b7f0b1; margin: 5px"
             ></canvas>
           </v-container>
           WebRTC 화면이 들어올 곳
@@ -227,15 +210,13 @@
         >
           버튼 모음집
           <v-btn elevation="9" outlined tile rounded>
-            <router-link to="/shot" style="margin: 10px">shot으로</router-link>
-
-            <router-view />
+            <button @click="savePhoto" style="margin: 10px">저장</button>
           </v-btn>
           <v-btn class="pink white--text">
-            <router-link to="/waiting" style="margin: 10px"
-              >waiting으로</router-link
-            >
-            |
+            <router-link to="/waiting" style="margin: 10px">공유</router-link>
+          </v-btn>
+          <v-btn class="pink white--text">
+            <router-link to="/" style="margin: 10px">나가기</router-link>
           </v-btn>
         </v-row>
         <!-- <br /> -->
@@ -272,28 +253,45 @@
   </v-container>
 </template>
 <script>
-export default {
-  name: "WaitingView",
-  // data() {
-  //   return {
-  //     colors: [
-  //       "indigo",
-  //       "warning",
-  //       "pink darken-2",
-  //       "red lighten-1",
-  //       "deep-purple accent-4",
-  //     ],
-  //     slides: ["First", "Second", "Third", "Fourth", "Fifth"],
-  //   };
-  // },
-  data: () => ({
-    scrollInvoked: 0,
-  }),
+import html2canvas from "html2canvas";
 
+export default {
   methods: {
-    onScroll() {
-      this.scrollInvoked++;
+    async savePhoto() {
+      var date = new Date();
+      var year = String(date.getFullYear());
+      var yy = year.substring(2, 4);
+      var month = new String(date.getMonth() + 1);
+      var day = new String(date.getDate());
+
+      if (month.length == 1) {
+        month = "0" + month;
+      }
+      if (day.length == 1) {
+        day = "0" + day;
+      }
+
+      var today = yy + month + day;
+
+      console.log("저장중...");
+
+      const el = this.$refs.resultCanvas;
+      const options = {
+        type: "dataURL",
+      };
+      const result = await html2canvas(el, options);
+
+      const link = document.createElement("a");
+      link.setAttribute("download", "moweb_" + today + ".png");
+      link.setAttribute(
+        "href",
+        result.toDataURL("image/png").replace("image/png", "image/octet-stream")
+      );
+      link.click();
+
+      console.log("moweb_" + today + ".png 저장완료");
     },
   },
+  data: () => ({}),
 };
 </script>
