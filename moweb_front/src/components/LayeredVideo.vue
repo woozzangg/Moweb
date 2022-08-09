@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import { chromaKey } from "@/utils/chromakey.js";
+
 export default {
   props: ["width", "height", "layerSequence", "mapUserVideo"],
   data: function () {
@@ -23,7 +25,9 @@ export default {
     this.processV2();
   },
   methods: {
-    process() {
+    processV1() {
+      // video-container에서 video 요소 직접 가져온 후
+      // cavas에 그리고 초록배경 지우는 걸 반복해서 겹치는 함수
       this.canvasContext.clearRect(0, 0, this.width, this.height);
 
       this.layerSequence.forEach((userName) => {
@@ -50,12 +54,13 @@ export default {
             this.width,
             this.height
           );
-          this.canvasContext.putImageData(this.chromaKey(frame), 0, 0);
+          this.canvasContext.putImageData(chromaKey(frame), 0, 0);
         }
       });
-      requestAnimationFrame(this.process);
+      requestAnimationFrame(this.processV1);
     },
     processV2() {
+      // 기존에 크로마키 된 canvas를 elementid로 그냥 가져와서 그리기
       this.canvasContext.clearRect(0, 0, this.width, this.height);
 
       this.layerSequence.forEach((userName) => {
@@ -66,21 +71,6 @@ export default {
       });
 
       requestAnimationFrame(this.processV2);
-    },
-    chromaKey: function (frame) {
-      let l = frame.data.length / 4;
-
-      for (let i = 0; i < l; i++) {
-        let r = frame.data[i * 4 + 0];
-        let g = frame.data[i * 4 + 1];
-        let b = frame.data[i * 4 + 2];
-        if (g > 120 && r < 80 && b < 120) {
-          // if (r == 0 && g == 158 && b == 43) { // 기준 색상
-          frame.data[i * 4 + 3] = 0;
-        }
-      }
-
-      return frame;
     },
   },
 };
