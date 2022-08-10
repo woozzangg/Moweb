@@ -1,37 +1,5 @@
 <template>
   <div id="main-container" class="container">
-    <!-- <div id="join" v-if="!session">
-      <div id="img-div">
-        <img src="resources/images/openvidu_grey_bg_transp_cropped.png" />
-      </div>
-      <div id="join-dialog">
-        <h1>Join a video session</h1>
-        <div class="form-group">
-          <p>
-            <label>Participant</label>
-            <input
-              v-model="user_name"
-              class="form-control"
-              type="text"
-              required
-            />
-          </p>
-          <p>
-            <label>Session</label>
-            <input
-              v-model="room_no"
-              class="form-control"
-              type="text"
-              required
-            />
-          </p>
-          <p class="text-center">
-            <v-btn @click="joinSession()">Join!</v-btn>
-          </p>
-        </div>
-      </div>
-    </div> -->
-
     <div id="session" v-if="session">
       <video v-show="false" ref="input_video"></video>
       <div id="session-header">
@@ -40,9 +8,7 @@
           Leave session
         </v-btn>
       </div>
-      <!-- <div id="main-video" class="col-md-6">
-        <user-video :stream-manager="mainStreamManager" />
-      </div> -->
+
       <v-btn @click="cameraBtnHandler">
         {{ cameraBtnTxt }}
       </v-btn>
@@ -58,7 +24,6 @@
           :height="height"
           style="transform: rotateY(180deg)"
         ></canvas>
-
         <v-row>
           <v-col>
             <user-video v-if="videoSetting" :stream-manager="publisher" />
@@ -124,7 +89,6 @@ export default {
     this.user_name = this.$route.params.user_name;
     this.room_no = this.$route.params.room_no + "";
     this.url = this.$route.params.url;
-    console.log(this.room_no, this.user_name);
   },
   mounted() {
     this.joinSession();
@@ -215,11 +179,6 @@ export default {
       window.removeEventListener("beforeunload", this.leaveSession);
       this.$router.replace("/");
     },
-
-    // updateMainVideoStreamManager(stream) {
-    //   if (this.mainStreamManager === stream) return;
-    //   this.mainStreamManager = stream;
-    // },
 
     /**
      * --------------------------

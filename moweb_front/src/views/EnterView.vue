@@ -31,8 +31,8 @@
         style="margin: 4px"
       >
         버튼 모음집
-        <v-btn @click="createRoom">방만들기</v-btn>
-        <v-btn @click="joinRoom">방입장하기</v-btn>
+        <v-btn v-if="!url" @click="createRoom">방만들기</v-btn>
+        <v-btn v-if="url" @click="joinRoom">방입장하기</v-btn>
       </v-row>
     </v-col>
   </v-container>
@@ -43,6 +43,7 @@ import { Camera } from "@mediapipe/camera_utils";
 import { SelfieSegmentation } from "@mediapipe/selfie_segmentation";
 import axios from "axios";
 
+const ROOT_URL = "http://locahost:8081";
 const API_URL = "https://i7a507.p.ssafy.io/moweb-api";
 
 export default {
@@ -75,12 +76,12 @@ export default {
         )
         .then(({ data }) => {
           if (data.room_no > 0) {
-            this.$router.push({
+            this.$router.replace({
               name: "webrtc",
               params: {
                 user_name: this.user_name,
                 room_no: data.room_no,
-                url: data.url,
+                url: ROOT_URL + data.url,
               },
             });
           }
@@ -109,12 +110,12 @@ export default {
           }
           if (data.room_no > 0) {
             this.camera.stop();
-            this.$router.push({
+            this.$router.replace({
               name: "webrtc",
               params: {
                 user_name: this.user_name,
                 room_no: data.room_no,
-                url: data.url,
+                url: ROOT_URL + data.url,
               },
             });
           }
