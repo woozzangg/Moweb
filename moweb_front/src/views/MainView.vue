@@ -1,7 +1,7 @@
 <template>
   <div class="background">
     <body>
-      홈 화면
+      <v-btn>hi</v-btn>
     </body>
   </div>
 </template>
