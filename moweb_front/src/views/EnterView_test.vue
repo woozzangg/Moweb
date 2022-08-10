@@ -1,38 +1,31 @@
 <template>
-  <v-container class="border-style1" d-flex justify-space-around>
+  <v-container>
     <video v-show="false" ref="input_video"></video>
-    <v-col cols="10">
-      <v-row>
+    <v-col>
+      <v-row justify="center">
         <canvas
           class="output_canvas"
           id="output_canvas"
           :width="width"
           :height="height"
-          style="transform: rotateY(180deg); margin: auto"
+          style="transform: rotateY(180deg)"
         ></canvas>
       </v-row>
-      <v-row class="centercss">
+      <v-row>
         <input
           placeholder="닉네임 입력"
           v-model="user_name"
           style="border-style: solid"
         />
         <input
-          placeholder="url, join테스트 추후 삭제예정"
+          placeholder="url, join테스트"
           v-model="url"
           style="border-style: solid"
         />
       </v-row>
-      <v-row
-        fluid
-        no-gutters
-        rows="2"
-        class="border-style1"
-        style="margin: 4px"
-      >
-        버튼 모음집
+      <v-row>
         <v-btn @click="createRoom">방만들기</v-btn>
-        <v-btn @click="joinRoom">방입장하기</v-btn>
+        <v-btn @click="joinRoom">방참가하기</v-btn>
       </v-row>
     </v-col>
   </v-container>
@@ -45,12 +38,13 @@ import axios from "axios";
 
 const API_URL = "https://i7a507.p.ssafy.io/moweb-api";
 
+axios.defaults.headers.post["Content-Type"] = "application/json";
 export default {
   name: "EnterView",
   data() {
     return {
-      width: 720,
-      height: 540,
+      width: 0,
+      height: 0,
       user_name: "",
       url: "",
     };
@@ -99,14 +93,7 @@ export default {
           })
         )
         .then(({ data }) => {
-          if (data.room_no == -2) {
-            alert("유효하지 않은 방입니다.");
-            this.$router.replace({ name: "main" });
-          } else if (data.room_no == -1) {
-            alert("방 인원이 가득찼습니다.");
-          } else if (data.room_no == 0) {
-            alert("이름이 중복되었습니다.");
-          }
+          console.log(data.room_no);
           if (data.room_no > 0) {
             this.camera.stop();
             this.$router.push({
@@ -139,8 +126,8 @@ export default {
         onFrame: async () => {
           await selfieSegmentation.send({ image: this.inputVideo });
         },
-        width: 720,
-        height: 540,
+        width: 960,
+        height: 720,
       });
       this.camera.start();
 
@@ -178,7 +165,19 @@ export default {
 </script>
 
 <style scoped>
-.centercss {
-  float: center;
+.mint {
+  background-color: #12d3a9;
+}
+.choco {
+  background-color: #563d34;
+}
+.background {
+  height: 500vh;
+  overflow: hidden;
+  margin: 0;
+  background-image: url("@/assets/mainpage.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 </style>
