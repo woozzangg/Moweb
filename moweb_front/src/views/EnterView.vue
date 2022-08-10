@@ -7,7 +7,7 @@
             v-model="firstname"
             :rules="nameRules"
             :counter="10"
-            label="위치 1"
+            label="오늘"
             required
           ></v-text-field>
         </v-col>
@@ -17,7 +17,7 @@
             v-model="lastname"
             :rules="nameRules"
             :counter="10"
-            label="위치 2"
+            label="점심"
             required
           ></v-text-field>
         </v-col>
@@ -26,7 +26,7 @@
           <v-text-field
             v-model="email"
             :rules="emailRules"
-            label="위치 3"
+            label="장조림버터"
             required
           ></v-text-field>
         </v-col>
@@ -40,21 +40,3 @@ export default {
   name: "EnterView",
 };
 </script>
-
-<style>
-.mint {
-  background-color: #12d3a9;
-}
-.choco {
-  background-color: #563d34;
-}
-.background {
-  height: 500vh;
-  overflow: hidden;
-  margin: 0;
-  background-image: url("@/assets/mainimage.png");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-</style>

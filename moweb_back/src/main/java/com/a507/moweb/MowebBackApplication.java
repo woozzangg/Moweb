@@ -9,5 +9,4 @@ public class MowebBackApplication {
     public static void main(String[] args) {
         SpringApplication.run(MowebBackApplication.class, args);
     }
-
 }

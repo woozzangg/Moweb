@@ -1,47 +1,49 @@
 package com.a507.moweb.api.controller;
 
-import com.a507.moweb.api.service.ChatService;
-import com.a507.moweb.common.model.ChatRoom;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+
+import com.a507.moweb.api.service.RoomService;
+import com.a507.moweb.common.model.Room;
+import com.a507.moweb.db.entity.RoomInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.json.*;
 
-import java.util.List;
+import java.util.Map;
 
-@Controller
-@RequiredArgsConstructor
-@RequestMapping("/chat")
+/**
+ *  방 관련 API 요청 처리용 컨트롤러
+ */
+@RestController
+@RequestMapping("/room")
 public class RoomController {
-    private final ChatService chatService;
+    @Autowired
+    private RoomService roomService;
 
-    // 채팅 리스트 화면
-    @GetMapping("/room")
-    public String rooms(Model model) {
-        return "room";
+    @PostMapping("/create")
+    public ResponseEntity<String> createRoom(@RequestBody String req) {
+        //DB에 방 생성후 저장 정보를 리턴
+        RoomInfo roomInfo = roomService.createRoom(req);
+        JSONObject res = new JSONObject();          //응답 JSON 객체 생성
+        res.put("room_no", roomInfo.getRoom_no());  //방번호 저장
+        res.put("url", roomInfo.getUrl());          //url 저장
+        return new ResponseEntity<String>(res.toString(),HttpStatus.OK);
     }
+
+    @PostMapping("/join")
+    public ResponseEntity<String> joinRoom(@RequestBody String req) {
+        int room_no = roomService.joinRoom(req);    //방번호를 불러온다()
+        JSONObject res = new JSONObject();
+        res.put("room_no", room_no);
+        return new ResponseEntity<String>(res.toString(), HttpStatus.OK);
+    }
+
     // 모든 채팅방 목록 반환
-    @GetMapping("/rooms")
+    @GetMapping("/list")
     @ResponseBody
-    public List<ChatRoom> room() {
-        return chatService.findAllRoom();
+    public Map<Integer, Room> room() {
+        return roomService.list();
     }
-    // 채팅방 생성
-    @PostMapping("/room")
-    @ResponseBody
-    public ChatRoom createRoom(@RequestParam String name) {
-        return chatService.createRoom(name);
-    }
-    // 채팅방 입장 화면
-    @GetMapping("/room/enter/{roomId}")
-    public String roomDetail(Model model, @PathVariable String roomId) {
-        model.addAttribute("roomId", roomId);
-        return "roomdetail";
-    }
-    // 특정 채팅방 조회
-    @GetMapping("/room/{roomId}")
-    @ResponseBody
-    public ChatRoom roomInfo(@PathVariable String roomId) {
-        return chatService.findById(roomId);
-    }
+
 }
