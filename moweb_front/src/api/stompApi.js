@@ -11,18 +11,11 @@ const stompApi = {
     this.socket = new SockJS(STOPM_SERVER_URL);
     this.stomp = Stomp.over(this.socket);
     console.log(this.stomp);
-    this.stomp.connect(
-      {},
-      () => {
-        console.log(this.stomp);
-        this.stomp.subscribe(`/topic/moweb/room/${roomNo}`, callback);
-        this.enter(roomNo, userName);
-      },
-      function (obj) {
-        console.log("error");
-        console.log(obj);
-      }
-    );
+    this.stomp.connect({}, () => {
+      console.log(this.stomp);
+      this.stomp.subscribe(`/topic/moweb/room/${roomNo}`, callback);
+      this.enter(roomNo, userName);
+    });
   },
   enter(room_no, user_name) {
     this.stomp.send(
