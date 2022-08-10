@@ -148,20 +148,36 @@
             style="margin: 20px 0px 0px 35px"
           >
             배경 선택 할 carousel
-            <v-carousel v-model="model" vertical="true">
-              <v-carousel-item v-for="(color, i) in colors" :key="color">
-                <v-sheet :color="color" height="50%" width="50%" tile>
-                  <v-col class="fill-height" align="center" justify="center">
-                    <div class="text-h2">Slide {{ i + 1 }}</div>
-                  </v-col>
-                </v-sheet>
-              </v-carousel-item>
-            </v-carousel>
+            <v-card
+              v-scroll.self="onScroll"
+              class="overflow-y-auto"
+              max-height="400"
+            >
+              <v-banner class="justify-center text-h5 font-weight-light" sticky>
+                Scroll Me - Method invoked
+
+                <span class="font-weight-bold" v-text="scrollInvoked"></span>
+
+                times
+              </v-banner>
+
+              <v-card-text>
+                <div v-for="n in 12" :key="n" class="mb-4">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi
+                  commodi earum tenetur. Asperiores dolorem placeat ab nobis
+                  iusto culpa, autem molestias molestiae quidem pariatur.
+                  Debitis beatae expedita nam facere perspiciatis. Lorem ipsum
+                  dolor sit amet consectetur adipisicing elit. Repellendus
+                  ducimus cupiditate rerum officiis consequuntur laborum
+                  doloremque quaerat ipsa voluptates, nobis nam quis nulla ullam
+                  at corporis, similique ratione quasi illo!
+                </div>
+              </v-card-text>
+            </v-card>
           </v-col>
         </v-row> -->
 
         <!-- # 결과화면 들어가는곳  -->
-
         <v-row
           no-gutters
           rows="9"
@@ -225,26 +241,91 @@
         </v-row>
         <br />
         <!-- 채팅창 -->
-        <v-row no-gutters fluid rows="6" class="border-style1"
-          >채팅창 들어올 곳 <br />
-          <!-- <v-virtual-scroll height="100" item-height="20">
-
-          /></v-virtual-scroll> -->
+        <v-row no-gutters fluid rows="6" class="border-style1">
+          <div v-for="(item, idx) in recvList" :key="idx">
+            <h3>유저이름: {{ item.user_name }}</h3>
+            <h3>내용: {{ item.chat_msg }}</h3>
+          </div>
         </v-row>
+        <input v-model="message" type="text" @keyup="sendMessage" />
+        <v-btn elevation="9" outlined tile rounded>
+          <button @click="sendMessage2" style="margin: 10px">입력</button>
+        </v-btn>
       </v-col>
     </v-row>
   </v-container>
 </template>
 <script>
 import Vue from "vue";
-import html2canvas from "html2canvas";
-import kakaosdk from "vue-kakao-sdk";
+import Html2canvas from "html2canvas";
+import Kakaosdk from "vue-kakao-sdk";
+import SockJS from "sockjs-client";
+import Stomp from "webstomp-client";
 
 const apiKey = "59074e20c9d80e6e5200a4bd60122af7";
-Vue.use(kakaosdk, { apiKey });
+Vue.use(Kakaosdk, { apiKey });
 
 export default {
+  data() {
+    return {
+      user_name: "user1",
+      message: "",
+      room_no: 1,
+      recvList: [],
+    };
+  },
+  created() {
+    this.user_name = "user1";
+    this.room_no = "1";
+  },
+  mounted() {
+    this.connect();
+  },
   methods: {
+    sendMessage(e) {
+      if (e.keyCode === 13 && this.user_name !== "" && this.message !== "") {
+        this.send();
+        this.message = "";
+      }
+    },
+    sendMessage2() {
+      this.send();
+      this.message = "";
+    },
+    send() {
+      console.log("Send message:" + this.message);
+      if (this.stompClient && this.stompClient.connected) {
+        const msg = {
+          user_name: this.user_name,
+          chat_msg: this.message,
+          room_no: this.room_no,
+        };
+        this.stompClient.send("/app/chat", JSON.stringify(msg), {});
+      }
+    },
+    connect() {
+      const serverURL = "https://i7a507.p.ssafy.io/moweb-api/ws/moweb";
+      let socket = new SockJS(serverURL);
+      this.stompClient = Stomp.over(socket);
+      console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`);
+      this.stompClient.connect(
+        {},
+        () => {
+          console.log("소켓 연결 성공");
+          this.stompClient.subscribe(
+            "/topic/moweb/room/" + this.room_no,
+            (res) => {
+              console.log("구독으로 받은 메시지 입니다.", res.body);
+              this.recvList.push(JSON.parse(res.body));
+            }
+          );
+        },
+        (error) => {
+          console.log("소켓 연결 실패", error);
+          this.connected = false;
+        }
+      );
+    },
     async savePhoto() {
       var date = new Date();
       var year = String(date.getFullYear());
@@ -267,7 +348,7 @@ export default {
       const options = {
         type: "dataURL",
       };
-      const result = await html2canvas(el, options);
+      const result = await Html2canvas(el, options);
 
       const link = document.createElement("a");
       link.setAttribute("download", "moweb_" + today + ".png");
@@ -304,6 +385,5 @@ export default {
       });
     },
   },
-  data: () => ({}),
 };
 </script>
