@@ -247,9 +247,9 @@
             <h3>내용: {{ item.chat_msg }}</h3>
           </div>
         </v-row>
-        <input v-model="message" type="text" @keyup="sendMessage" />
+        <input v-model="message" type="text" @keyup.enter="sendMessage" />
         <v-btn elevation="9" outlined tile rounded>
-          <button @click="sendMessage2" style="margin: 10px">입력</button>
+          <button @click="sendMessage" style="margin: 10px">입력</button>
         </v-btn>
       </v-col>
     </v-row>
@@ -283,12 +283,6 @@ export default {
   },
   methods: {
     sendMessage(e) {
-      if (e.keyCode === 13 && this.user_name !== "" && this.message !== "") {
-        this.send();
-        this.message = "";
-      }
-    },
-    sendMessage2() {
       this.send();
       this.message = "";
     },
@@ -315,7 +309,7 @@ export default {
           this.stompClient.subscribe(
             "/topic/moweb/room/" + this.room_no,
             (res) => {
-              console.log("구독으로 받은 메시지 입니다.", res.body);
+              console.log("구독한 방에서 받은 메시지: ", res.body);
               this.recvList.push(JSON.parse(res.body));
             }
           );
@@ -361,6 +355,8 @@ export default {
       console.log("moweb_" + today + ".png 저장완료");
     },
     async sharePhoto() {
+      console.log("공유하기");
+
       this.$kakao.Link.sendDefault({
         objectType: "feed",
         content: {
