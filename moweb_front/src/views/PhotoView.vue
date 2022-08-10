@@ -1,6 +1,6 @@
 <template>
   <div id="main-container" class="container">
-    <div id="join" v-if="!session">
+    <!-- <div id="join" v-if="!session">
       <div id="img-div">
         <img src="resources/images/openvidu_grey_bg_transp_cropped.png" />
       </div>
@@ -10,7 +10,7 @@
           <p>
             <label>Participant</label>
             <input
-              v-model="myUserName"
+              v-model="user_name"
               class="form-control"
               type="text"
               required
@@ -19,7 +19,7 @@
           <p>
             <label>Session</label>
             <input
-              v-model="mySessionId"
+              v-model="room_no"
               class="form-control"
               type="text"
               required
@@ -30,12 +30,12 @@
           </p>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <div id="session" v-if="session">
       <video v-show="false" ref="input_video"></video>
       <div id="session-header">
-        <h1 id="session-title">{{ mySessionId }}</h1>
+        <h1 id="session-title">{{ room_no }}</h1>
         <v-btn id="buttonLeaveSession" @click="leaveSession">
           Leave session
         </v-btn>
@@ -100,14 +100,14 @@ export default {
   },
   data() {
     return {
+      user_name: "",
+      room_no: "",
+      url: "",
       OV: undefined,
       session: undefined,
       // mainStreamManager: undefined,
       publisher: undefined,
       subscribers: [],
-
-      mySessionId: "SessionA",
-      myUserName: "Participant" + Math.floor(Math.random() * 100),
 
       width: 0,
       height: 0,
@@ -120,7 +120,15 @@ export default {
       canvasStream: undefined,
     };
   },
-
+  created() {
+    this.user_name = this.$route.params.user_name;
+    this.room_no = this.$route.params.room_no + "";
+    this.url = this.$route.params.url;
+    console.log(this.room_no, this.user_name);
+  },
+  mounted() {
+    this.joinSession();
+  },
   methods: {
     joinSession() {
       // --- Get an OpenVidu object ---
@@ -149,15 +157,14 @@ export default {
       this.session.on("exception", ({ exception }) => {
         console.warn(exception);
       });
-
       // --- Connect to the session with a valid user token ---
 
       // 'getToken' method is simulating what your server-side should do.
       // 'token' parameter should be retrieved and returned by your own backend
-      this.getToken(this.mySessionId).then(async (token) => {
+      this.getToken(this.room_no).then(async (token) => {
         await this.removeBG();
         this.session
-          .connect(token, { clientData: this.myUserName })
+          .connect(token, { clientData: this.user_name })
           .then(async () => {
             // --- Get your own camera stream with the desired properties ---
             let canvas = document.getElementById("output_canvas");
@@ -181,7 +188,6 @@ export default {
             this.session.publish(this.publisher);
           })
           .then(() => {
-            console.log(this.session);
             this.videoSetting = true;
           })
           .catch((error) => {
@@ -207,6 +213,7 @@ export default {
       this.OV = undefined;
       this.videoSetting = false;
       window.removeEventListener("beforeunload", this.leaveSession);
+      this.$router.replace("/");
     },
 
     // updateMainVideoStreamManager(stream) {
