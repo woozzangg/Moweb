@@ -12,6 +12,6 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins("http://localhost:8081", "http://localhost:8080", "https://i7a507.p.ssafy.io")
                 .allowedMethods("*")
                 .allowedHeaders("*")
-                .allowCredentials(false);
+                .allowCredentials(true);
     }
 }
