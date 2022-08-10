@@ -148,32 +148,15 @@
             style="margin: 20px 0px 0px 35px"
           >
             배경 선택 할 carousel
-            <v-card
-              v-scroll.self="onScroll"
-              class="overflow-y-auto"
-              max-height="400"
-            >
-              <v-banner class="justify-center text-h5 font-weight-light" sticky>
-                Scroll Me - Method invoked
-
-                <span class="font-weight-bold" v-text="scrollInvoked"></span>
-
-                times
-              </v-banner>
-
-              <v-card-text>
-                <div v-for="n in 12" :key="n" class="mb-4">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi
-                  commodi earum tenetur. Asperiores dolorem placeat ab nobis
-                  iusto culpa, autem molestias molestiae quidem pariatur.
-                  Debitis beatae expedita nam facere perspiciatis. Lorem ipsum
-                  dolor sit amet consectetur adipisicing elit. Repellendus
-                  ducimus cupiditate rerum officiis consequuntur laborum
-                  doloremque quaerat ipsa voluptates, nobis nam quis nulla ullam
-                  at corporis, similique ratione quasi illo!
-                </div>
-              </v-card-text>
-            </v-card>
+            <v-carousel v-model="model" vertical="true">
+              <v-carousel-item v-for="(color, i) in colors" :key="color">
+                <v-sheet :color="color" height="50%" width="50%" tile>
+                  <v-col class="fill-height" align="center" justify="center">
+                    <div class="text-h2">Slide {{ i + 1 }}</div>
+                  </v-col>
+                </v-sheet>
+              </v-carousel-item>
+            </v-carousel>
           </v-col>
         </v-row> -->
 
