@@ -61,7 +61,7 @@
         배경 선택 할 carousel
         <v-carousel v-model="model">
           <v-carousel-item v-for="(color, i) in colors" :key="color">
-            <v-sheet :color="color" height="50%" tile>
+            <v-sheet :color="color" height="50%" width="50%" tile>
               <v-col class="fill-height" align="center" justify="center">
                 <div class="text-h2">Slide {{ i + 1 }}</div>
               </v-col>
@@ -92,9 +92,5 @@
 <script>
 export default {
   name: "ShotView",
-  data: () => ({
-    model: 0,
-    colors: ["primary", "secondary", "yellow darken-2", "red", "orange"],
-  }),
 };
 </script>
