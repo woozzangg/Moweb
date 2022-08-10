@@ -314,7 +314,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 video {
   transform: rotateY(180deg);
 }
