@@ -52,7 +52,7 @@ export default {
   height: 500vh;
   overflow: hidden;
   margin: 0;
-  background-image: url("@/assets/mainpage.png");
+  background-image: url("@/assets/mainimage.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
