@@ -1,20 +1,32 @@
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
 
+const STOPM_SERVER_URL = "https://i7a507.p.ssafy.io/moweb-api/ws/moweb";
+
 const stompApi = {
   socket: null,
   stomp: null,
   connect(roomNo, userName, callback) {
-    this.socket = new SockJS("https://i7a507.p.ssafy.io/moweb-api");
-    this.stomp = Stomp.over(socket);
-    this.stomp.connect({}, function () {
-      this.stomp.subscribe(`/topic/moweb/room/${roomNo}`, callback);
-      this.enter(roomNo, userName);
-    });
+    // 콜백함수는 .vue 파일의 methods 부분에 작성 후 넣어주세요
+    this.socket = new SockJS(STOPM_SERVER_URL);
+    this.stomp = Stomp.over(this.socket);
+    console.log(this.stomp);
+    this.stomp.connect(
+      {},
+      () => {
+        console.log(this.stomp);
+        this.stomp.subscribe(`/topic/moweb/room/${roomNo}`, callback);
+        this.enter(roomNo, userName);
+      },
+      function (obj) {
+        console.log("error");
+        console.log(obj);
+      }
+    );
   },
   enter(room_no, user_name) {
     this.stomp.send(
-      `/app/moweb/enter`,
+      `/app/enter`,
       JSON.stringify({
         room_no,
         user_name,
@@ -23,7 +35,7 @@ const stompApi = {
   },
   chat(room_no, user_name, chat_msg) {
     this.stomp.send(
-      `/app/moweb/chat`,
+      `/app/chat`,
       JSON.stringify({
         room_no,
         user_name,
@@ -33,7 +45,7 @@ const stompApi = {
   },
   ready(room_no, user_name, status) {
     this.stomp.send(
-      `/app/moweb/ready`,
+      `/app/ready`,
       JSON.stringify({
         room_no,
         user_name,
@@ -43,7 +55,7 @@ const stompApi = {
   },
   start(room_no) {
     this.stomp.send(
-      `/app/moweb/start`,
+      `/app/start`,
       JSON.stringify({
         room_no,
       })
@@ -51,7 +63,7 @@ const stompApi = {
   },
   layer(room_no, user_names) {
     this.stomp.send(
-      `/app/moweb/layer`,
+      `/app/layer`,
       JSON.stringify({
         room_no,
         user_names,
@@ -60,7 +72,7 @@ const stompApi = {
   },
   theme(room_no, bg_no) {
     this.stomp.send(
-      `/app/moweb/theme`,
+      `/app/theme`,
       JSON.stringify({
         room_no,
         bg_no,
@@ -69,20 +81,11 @@ const stompApi = {
   },
   shot(room_no, shot_cnt, bg_no) {
     this.stomp.send(
-      `/app/moweb/shot`,
+      `/app/shot`,
       JSON.stringify({
         room_no,
         shot_cnt,
         bg_no,
-      })
-    );
-  },
-  exit(room_no, user_name) {
-    this.stomp.send(
-      `/app/moweb/exit`,
-      JSON.stringify({
-        room_no,
-        user_name,
       })
     );
   },
