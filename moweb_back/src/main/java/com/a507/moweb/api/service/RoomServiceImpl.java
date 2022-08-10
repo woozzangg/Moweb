@@ -16,7 +16,7 @@ import java.util.UUID;
 import java.util.Map;
 
 @Service("roomInfoService")
-public class RoomInfoServiceImpl implements RoomInfoService{
+public class RoomServiceImpl implements RoomService {
     @Autowired
     private RoomInfoRepository roomInfoRepository;
 
@@ -59,7 +59,7 @@ public class RoomInfoServiceImpl implements RoomInfoService{
         //닉네임 중복검사
         if(!rooms.containsKey(room_no)){    //방이 유효 않을때(존재x)
             return -2;
-        }else if(rooms.get(room_no).getUsers().size() >= 6){
+        }else if(rooms.get(room_no).getUsers().size() > 6){
             return -1;
         }else if(rooms.get(room_no).getUsers().containsKey(user_name)) {    //이름 중복일때
             return 0;
@@ -68,5 +68,37 @@ public class RoomInfoServiceImpl implements RoomInfoService{
             rooms.get(room_no).getUsers().put(user_name, user);         //rooms에 유저 추가
             return room_no;
         }
+    }
+
+    /**
+     * 방번호, 유저이름, 레디 상태를 가져온다
+     * 해당 방 번호의 유저 레디 상태를 변경하고 전부 레디상태이면 TRUE 아니면 FALSE를 리턴
+     * */
+    @Override
+    public boolean ready(int room_no, String user_name, boolean status) {
+        rooms.get(room_no).getUsers().get(user_name).setStatus(status);
+        if(!status) {
+            return false;
+        }else {
+            for(User user : rooms.get(room_no).getUsers().values()) {
+                if(!user.isStatus()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void layer(int room_no, String[] user_names) {
+        int cnt = 1;
+        for(String user_name : user_names) {
+            rooms.get(room_no).getUsers().get(user_name).setLayer(cnt++);
+        }
+    }
+
+    @Override
+    public void exit(int room_no, String user_name) {
+        rooms.get(room_no).getUsers().remove(user_name);
     }
 }
