@@ -101,9 +101,4 @@ public class RoomServiceImpl implements RoomService {
     public void exit(int room_no, String user_name) {
         rooms.get(room_no).getUsers().remove(user_name);
     }
-
-    @Override
-    public Map<Integer, Room> list() {
-        return rooms;
-    }
 }
