@@ -12,4 +12,5 @@ import java.util.List;
 @Repository
 public interface RoomInfoRepository extends JpaRepository<RoomInfo, Integer> {
     RoomInfo findRoomInfoByUrlAndActive(String url, boolean is_active);
+
 }
