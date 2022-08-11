@@ -45,7 +45,7 @@ export default {
       // 이전 인덱스랑 새 인덱스가 다르면 layer 변경 websocket 호출
       if (event.newIndex !== event.oldIndex) {
         console.log("layer dragged!");
-        this.$emit("changeSequence", this.dragLayerSequence);
+        this.$emit("sendLayer", this.dragLayerSequence);
       }
     },
   },

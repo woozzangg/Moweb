@@ -290,6 +290,7 @@
             :layerSequence="layerSequence"
             :isAdmin="is_admin"
             :roomNo="room_no"
+            @sendLayer="sendLayer"
           ></layer-controller>
         </v-row>
         <br />
@@ -436,8 +437,8 @@ export default {
       }
       this.message = "";
     },
-    changeSequence(userNames) {
-      console.log("Send message:" + this.message);
+    sendLayer(userNames) {
+      console.log("Send layer change:" + userNames);
       if (stompApi.stomp && stompApi.stomp.connected) {
         stompApi.layer({
           room_no: this.room_no,
