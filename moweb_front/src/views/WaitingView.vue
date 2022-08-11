@@ -490,14 +490,16 @@ export default {
           break;
       }
     },
-    sendMessage(e) {
-      console.log("Send message:" + this.message);
-      if (stompApi.stomp && stompApi.stomp.connected) {
-        stompApi.chat({
-          user_name: this.user_name,
-          chat_msg: this.message,
-          room_no: this.room_no,
-        });
+    sendMessage() {
+      if (this.user_name !== "" && this.message !== "") {
+        console.log("Send message:" + this.message);
+        if (stompApi.stomp && stompApi.stomp.connected) {
+          stompApi.chat({
+            user_name: this.user_name,
+            chat_msg: this.message,
+            room_no: this.room_no,
+          });
+        }
       }
       this.message = "";
     },
