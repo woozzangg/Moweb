@@ -20,4 +20,4 @@ services:
     ports:
       - 8000:80
     volumes:
-      - ~/front_nginx:/etc/nginx/conf.d
+      - ~/front_nginx:/etc/nginx/conf.d:ro
