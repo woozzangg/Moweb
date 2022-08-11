@@ -7,7 +7,8 @@ import EnterView from "@/views/EnterView";
 import WaitingView from "@/views/WaitingView";
 import ShotView from "@/views/ShotView";
 import ResultView from "@/views/ResultView";
-import PhotoView from "../views/PhotoView.vue";
+import PhotoView from "@/views/PhotoView.vue";
+import JoinView from "@/views/JoinView.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -40,6 +41,11 @@ const routes = [
     path: "/webrtc",
     name: "webrtc",
     component: PhotoView,
+  },
+  {
+    path: "/room/*",
+    name: "join",
+    component: JoinView,
   },
 ];
 

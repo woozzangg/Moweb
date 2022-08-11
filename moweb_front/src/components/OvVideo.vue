@@ -40,7 +40,6 @@ export default {
   },
   methods: {
     async init() {
-      console.log(this.client, this.streamManager);
       //video에 추가
       await this.streamManager.addVideoElement(this.$refs[this.client]);
       this.streamManager.on("publisherStartSpeaking", () => {
@@ -49,11 +48,9 @@ export default {
       this.streamManager.on("publisherStopSpeaking", () => {
         this.isTalking(false);
       });
-      // this.$refs[this.client].srcObject = this.streamManager.stream.mediaStream;
       let canvas = document.getElementById(this.canvasId);
       this.videoElement = document.getElementById(this.client);
       this.ctx = canvas.getContext("2d");
-      console.log("this.ctx", this.ctx);
 
       this.videoElement.addEventListener("canplay", this.chromaKey);
     },
