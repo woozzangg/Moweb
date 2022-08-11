@@ -296,7 +296,11 @@
         <br />
         <!-- 채팅창 -->
         <v-row no-gutters fluid rows="6" class="border-style1">
-          <div v-for="(item, idx) in recvList" :key="idx">
+          <div
+            style="word-break: break-all"
+            v-for="(item, idx) in recvList"
+            :key="idx"
+          >
             <h3>유저이름: {{ item.user_name }}</h3>
             <h3>내용: {{ item.chat_msg }}</h3>
           </div>
