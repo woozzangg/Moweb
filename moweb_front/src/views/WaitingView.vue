@@ -348,7 +348,6 @@ const OPENVIDU_SERVER_URL = "https://i7a507.p.ssafy.io:8443";
 const OPENVIDU_SERVER_SECRET = "MY_SECRET";
 const apiKey = "59074e20c9d80e6e5200a4bd60122af7";
 Vue.use(Kakaosdk, { apiKey });
-
 export default {
   data() {
     return {
@@ -535,7 +534,19 @@ export default {
       });
     },
     linkBtn() {
-      alert(this.url);
+      if (!navigator.clipboard) {
+        navigator.clipboard.writeText(this.url).then(() => {
+          this.$dialog.message.success(this.url, {
+            position: "top",
+          });
+        });
+        return;
+      }
+      navigator.clipboard.writeText(this.url).then(() => {
+        this.$dialog.message.success("url 복사 완료!", {
+          position: "top",
+        });
+      });
     },
     //------------------------ready, start -------------------------
     readyBtn() {
