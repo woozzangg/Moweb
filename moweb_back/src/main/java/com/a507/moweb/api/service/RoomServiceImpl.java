@@ -70,7 +70,7 @@ public class RoomServiceImpl implements RoomService {
 
     /**
      * 방번호, 유저이름, 레디 상태를 가져온다
-     * 해당 방 번호의 유저 레디 상태를 변경하고 전부 레디상태이면 TRUE 아니면 FALSE를 리턴
+     * 해당 방 번호의 유저 레디 상태를 변경한다.
      * */
     @Override
     public void ready(int room_no, String user_name, boolean status) {
