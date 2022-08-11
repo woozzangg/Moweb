@@ -286,7 +286,12 @@
             링크
           </v-btn>
           <br />
-          참여자 들어올 곳
+          <layer-controller
+            :layerSequence="layerSequence"
+            :isAdmin="is_admin"
+            :roomNo="room_no"
+            @sendLayer="sendLayer"
+          ></layer-controller>
         </v-row>
         <br />
         <!-- 채팅창 -->
@@ -308,13 +313,15 @@
 import Vue from "vue";
 import Html2canvas from "html2canvas";
 import Kakaosdk from "vue-kakao-sdk";
-import SockJS from "sockjs-client";
-import Stomp from "webstomp-client";
-import axios from "axios";
 import { OpenVidu } from "openvidu-browser";
-import UserVideo from "@/components/UserVideo";
 import { Camera } from "@mediapipe/camera_utils";
 import { SelfieSegmentation } from "@mediapipe/selfie_segmentation";
+import axios from "axios";
+
+import stompApi from "@/api/stompApi.js";
+
+import LayerController from "@/components/LayerController.vue";
+import UserVideo from "@/components/UserVideo";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
@@ -329,6 +336,7 @@ export default {
       user_name: "",
       message: "",
       room_no: "",
+      users: [],
       recvList: [],
 
       url: "",
@@ -354,10 +362,14 @@ export default {
   },
   components: {
     UserVideo,
+    LayerController,
   },
   computed: {
     inputVideo() {
       return this.$refs.input_video;
+    },
+    layerSequence() {
+      return this.users.map((user) => user.user_name);
     },
   },
   created() {
@@ -367,47 +379,74 @@ export default {
     this.is_admin = this.$route.params.is_admin;
   },
   mounted() {
-    this.connect();
+    stompApi.connect(this.room_no, this.user_name, this.onSocketReceive);
     this.joinSession();
   },
   methods: {
-    sendMessage(e) {
-      this.send();
-      this.message = "";
+    onSocketReceive(result) {
+      const content = JSON.parse(result.body);
+      console.log("socket received!");
+      console.log(content);
+      switch (content.action) {
+        // 채팅방 입장 알림
+        case 0:
+          console.log("new user entered!!");
+          this.recvList.push(content);
+          this.users = content.users;
+          break;
+        // 채팅
+        case 1:
+          console.log(`${content.user_name} said ${content.chat_msg}`);
+          this.recvList.push(content);
+          break;
+        // 준비
+        case 2:
+          break;
+        // 준비 취소
+        case 3:
+          break;
+        // 시작 하기
+        case 4:
+          break;
+        // 레이어 변경하기
+        case 5:
+          console.log("layer changed!!");
+          this.users = content.users;
+          break;
+        // 배경 선택하기
+        case 6:
+          break;
+        // 촬영하기
+        case 7:
+          break;
+        // 방장이 나감
+        case 8:
+          break;
+        default:
+          break;
+      }
     },
-    send() {
+    sendMessage(e) {
       console.log("Send message:" + this.message);
-      if (this.stompClient && this.stompClient.connected) {
-        const msg = {
+      if (stompApi.stomp && stompApi.stomp.connected) {
+        stompApi.chat({
           user_name: this.user_name,
           chat_msg: this.message,
           room_no: this.room_no,
-        };
-        this.stompClient.send("/app/chat", JSON.stringify(msg), {});
+        });
       }
+      this.message = "";
     },
-    connect() {
-      const serverURL = "https://i7a507.p.ssafy.io/moweb-api/ws/moweb";
-      let socket = new SockJS(serverURL);
-      this.stompClient = Stomp.over(socket);
-      console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`);
-      this.stompClient.connect(
-        {},
-        () => {
-          console.log("소켓 연결 성공");
-          this.stompClient.subscribe(
-            "/topic/moweb/room/" + this.room_no,
-            (res) => {
-              console.log("구독한 방에서 받은 메시지: ", res.body);
-              this.recvList.push(JSON.parse(res.body));
-            }
-          );
-        },
-        (error) => {
-          console.log("소켓 연결 실패", error);
-          this.connected = false;
-        }
-      );
+    sendLayer(userNames) {
+      console.log("Send layer change:" + userNames);
+      if (stompApi.stomp && stompApi.stomp.connected) {
+        stompApi.layer({
+          room_no: this.room_no,
+          users: userNames.map((userName) =>
+            this.users.find((user) => user.user_name == userName)
+          ),
+        });
+      }
     },
     async savePhoto() {
       var date = new Date();
