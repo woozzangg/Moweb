@@ -73,25 +73,14 @@ public class RoomServiceImpl implements RoomService {
      * 해당 방 번호의 유저 레디 상태를 변경하고 전부 레디상태이면 TRUE 아니면 FALSE를 리턴
      * */
     @Override
-    public boolean ready(int room_no, String user_name, boolean status) {
+    public void ready(int room_no, String user_name, boolean status) {
         rooms.get(room_no).getUsers().get(user_name).setStatus(status);
-        if(!status) {
-            return false;
-        }else {
-            for(User user : rooms.get(room_no).getUsers().values()) {
-                if(!user.isStatus()) {
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 
     @Override
-    public void layer(int room_no, String[] user_names) {
-        int cnt = 1;
-        for(String user_name : user_names) {
-            rooms.get(room_no).getUsers().get(user_name).setLayer(cnt++);
+    public void layer(int room_no, User[] users) {
+        for(int i = 0; i < users.length; i++) {
+            rooms.get(room_no).getUsers().get(users[i].getUser_name()).setLayer(i+1);
         }
     }
 
@@ -116,13 +105,13 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public String[] layerList(int room_no) {
+    public User[] userList(int room_no) {
         int n = rooms.get(room_no).getUsers().size();
-        String[] userList = new String[n];
+        User[] users = new User[n];
         for (User user : rooms.get(room_no).getUsers().values()) {
-            userList[user.getLayer()-1] = user.getUser_name();
+            users[user.getLayer()-1] = user;
         }
-        return userList;
+        return users;
     }
 
     @Override

@@ -34,7 +34,7 @@ public class WebSocketController {
             headerAccessor.getSessionAttributes().put("room_no", message.getRoom_no());
             //입장 메세지 채팅메세지에 추가
             message.setChat_msg(message.getUser_name()+ "님이 입장하였습니다.");
-            message.setUser_names(roomService.layerList(message.getRoom_no()));
+            message.setUsers(roomService.userList(message.getRoom_no()));
 
             logger.info("User connected : " + message.getUser_name());
             logger.info("layer change");
@@ -51,13 +51,12 @@ public class WebSocketController {
 
     @MessageMapping("/ready")
     public void ready(WebSocketMessage message) {
+        roomService.ready(message.getRoom_no(), message.getUser_name(), message.isStatus());
         if(message.isStatus()) {
             message.setAction(2);
-            message.setAll_ready(roomService.ready((message.getRoom_no()), message.getUser_name(), message.isStatus()));
-            logger.info(message.getUser_name() + " : ready // All-ready : " + message.isAll_ready());
+            logger.info(message.getUser_name() + " : ready");
         }else {
             message.setAction(3);
-            message.setAll_ready(roomService.ready((message.getRoom_no()), message.getUser_name(), message.isStatus()));
             logger.info(message.getUser_name() + " : ydaer");
         }
 
@@ -74,7 +73,7 @@ public class WebSocketController {
     @MessageMapping("/layer")
     public void layer(WebSocketMessage message) {
         message.setAction(5);
-        roomService.layer(message.getRoom_no(), message.getUser_names());
+        roomService.layer(message.getRoom_no(), message.getUsers());
         logger.info("layer change");
         sendingOperations.convertAndSend("/topic/moweb/room/"+message.getRoom_no(),message);
     }
@@ -111,7 +110,7 @@ public class WebSocketController {
             message.setRoom_no(room_no);
             message.setUser_name(user_name);
             message.setChat_msg(user_name+ "님이 퇴장하였습니다.");
-            message.setUser_names(roomService.layerList(room_no));
+            message.setUsers(roomService.userList(room_no));
             logger.info("User Disconnected : " + user_name);
             logger.info("layer change");
             headerAccessor.getSessionAttributes().clear();
