@@ -77,7 +77,7 @@ export default {
         .then(({ data }) => {
           if (data.room_no > 0) {
             this.$router.replace({
-              name: "webrtc",
+              name: "waiting",
               params: {
                 is_admin: true,
                 user_name: this.user_name,
@@ -112,12 +112,12 @@ export default {
           if (data.room_no > 0) {
             this.camera.stop();
             this.$router.replace({
-              name: "webrtc",
+              name: "waiting",
               params: {
                 is_admin: false,
                 user_name: this.user_name,
                 room_no: data.room_no,
-                url: ROOT_URL + data.url,
+                url: ROOT_URL + this.url,
               },
             });
           }
