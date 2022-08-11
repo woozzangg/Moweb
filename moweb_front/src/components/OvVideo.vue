@@ -27,7 +27,8 @@ export default {
       width: 320,
       height: 240,
       canvasId: this.client + "'s",
-      talkingCss: "posiotion: absolute",
+      talkingCss:
+        "posiotion: absolute; border-color: black; border-style: groove",
     };
   },
   props: {
@@ -84,7 +85,8 @@ export default {
         this.talkingCss =
           "posiotion: absolute; border-color: aqua; border-style: groove";
       } else {
-        this.talkingCss = "posiotion: absolute";
+        this.talkingCss =
+          "posiotion: absolute; border-color: black; border-style: groove ";
       }
     },
   },
