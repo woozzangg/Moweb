@@ -17,11 +17,6 @@
           v-model="user_name"
           style="border-style: solid"
         />
-        <input
-          placeholder="url, join테스트 추후 삭제예정"
-          v-model="url"
-          style="border-style: solid"
-        />
       </v-row>
       <v-row
         fluid

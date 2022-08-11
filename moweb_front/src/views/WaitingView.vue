@@ -223,12 +223,25 @@
                         v-if="videoSetting"
                         :stream-manager="publisher"
                       />
+                      <p v-show="readyStatus[user_name]" style="color: red">
+                        ready
+                      </p>
                     </v-col>
                     <v-col
                       v-for="sub in subscribers"
                       :key="sub.stream.connection.connectionId"
                     >
                       <user-video :stream-manager="sub" />
+                      <p
+                        v-show="
+                          readyStatus[
+                            JSON.parse(sub.stream.connection.data).clientData
+                          ]
+                        "
+                        style="color: red"
+                      >
+                        ready
+                      </p>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -252,6 +265,8 @@
           <v-btn @click="micBtnHandler">
             {{ micBtnTxt }}
           </v-btn>
+          <v-btn v-if="is_admin" v-bind:disabled="!allReady">start</v-btn>
+          <v-btn v-if="!is_admin" @click="readyBtn">ready</v-btn>
           <v-btn elevation="9" outlined tile rounded>
             <button @click="savePhoto" style="margin: 10px">저장</button>
           </v-btn>
@@ -343,6 +358,10 @@ export default {
       users: [],
       recvList: [],
 
+      myStatus: false,
+      readyStatus: {},
+      allReady: false,
+
       url: "",
       is_admin: undefined,
 
@@ -397,6 +416,7 @@ export default {
           console.log("new user entered!!");
           this.recvList.push(content);
           this.users = content.users;
+          this.readyJoin(content.users);
           break;
         // 채팅
         case 1:
@@ -405,9 +425,11 @@ export default {
           break;
         // 준비
         case 2:
+          this.ready(content);
           break;
         // 준비 취소
         case 3:
+          this.ready(content);
           break;
         // 시작 하기
         case 4:
@@ -514,6 +536,44 @@ export default {
     },
     linkBtn() {
       alert(this.url);
+    },
+    //------------------------ready, start -------------------------
+    readyBtn() {
+      this.myStatus = !this.myStatus;
+      if (stompApi.stomp && stompApi.stomp.connected) {
+        stompApi.ready({
+          user_name: this.user_name,
+          room_no: this.room_no,
+          status: this.myStatus,
+        });
+      }
+    },
+    readyJoin(users) {
+      this.readyStatus = {};
+      users.forEach((user) => {
+        this.$set(this.readyStatus, user.user_name, user.status);
+      });
+      if (this.is_admin) {
+        this.allReadyCheck();
+      }
+    },
+    ready(data) {
+      this.$set(this.readyStatus, data.user_name, data.status);
+      if (this.is_admin) {
+        this.allReadyCheck();
+      }
+    },
+    allReadyCheck() {
+      let size = 0;
+      for (let user_name in this.readyStatus) {
+        if (user_name == this.user_name) continue;
+        size++;
+        if (!this.readyStatus[user_name] || size < 1) {
+          this.allReady = false;
+          return;
+        }
+      }
+      this.allReady = true;
     },
     // -------------------- webrtc start ------------------
     joinSession() {
