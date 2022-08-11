@@ -19,3 +19,5 @@ services:
     container_name: moweb_front
     ports:
       - 8000:80
+    volumes:
+      - ~/front_nginx:/etc/nginx/conf.d
