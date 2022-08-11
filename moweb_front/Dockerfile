@@ -6,6 +6,6 @@ RUN npm run build
 
 FROM nginx:stable
 COPY --from=builder ./app/dist /usr/share/nginx/html
-COPY ~/front_nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
