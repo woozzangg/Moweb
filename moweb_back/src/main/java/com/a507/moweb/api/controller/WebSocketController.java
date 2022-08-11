@@ -1,7 +1,6 @@
 package com.a507.moweb.api.controller;
 
 import com.a507.moweb.api.service.RoomService;
-import com.a507.moweb.common.model.Room;
 import com.a507.moweb.common.model.WebSocketMessage;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.LoggerFactory;
