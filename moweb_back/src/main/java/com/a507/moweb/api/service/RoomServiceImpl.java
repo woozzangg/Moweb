@@ -11,9 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.UUID;
-import java.util.Map;
+import java.util.*;
 
 @Service("roomInfoService")
 public class RoomServiceImpl implements RoomService {
@@ -30,7 +28,7 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public RoomInfo createRoom(String req) {
         User user = new User(new JSONObject(req).getString("user_name"), 1);                //호스트 유저 생성 레이어 번호는 1번
-        String url = "localhost:8080/room/" + UUID.randomUUID().toString();                  //랜덤 url 생성
+        String url = "/room/" + UUID.randomUUID().toString();                  //랜덤 url 생성
         Room room = new Room(user, url);                                 //방 생성 및 호스트 등록
         RoomInfo roomInfo = new RoomInfo();                         //DB에 저장할 방 정보 생성
         roomInfo.setActive(true);                                  //방 정보 활성화 상태 기본값=true
@@ -99,6 +97,31 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public void exit(int room_no, String user_name) {
+        int n = rooms.get(room_no).getUsers().get(user_name).getLayer();
         rooms.get(room_no).getUsers().remove(user_name);
+        for( User user : rooms.get(room_no).getUsers().values()) {
+            int temp = user.getLayer();
+            if(temp > n) {
+                rooms.get(room_no).getUsers().get(user.getUser_name()).setLayer(temp-1);
+            }
+        }
+    }
+
+    @Override
+    public boolean isHost(int room_no, String user_name) {
+        if(rooms.get(room_no).getHost_name() == user_name) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String[] layerList(int room_no) {
+        int n = rooms.get(room_no).getUsers().size();
+        String[] userList = new String[n];
+        for (User user : rooms.get(room_no).getUsers().values()) {
+            userList[user.getLayer()-1] = user.getUser_name();
+        }
+        return userList;
     }
 }

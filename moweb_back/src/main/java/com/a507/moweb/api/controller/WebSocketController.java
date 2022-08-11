@@ -34,8 +34,10 @@ public class WebSocketController {
             headerAccessor.getSessionAttributes().put("room_no", message.getRoom_no());
             //입장 메세지 채팅메세지에 추가
             message.setChat_msg(message.getUser_name()+ "님이 입장하였습니다.");
+            message.setUser_names(roomService.layerList(message.getRoom_no()));
 
             logger.info("User connected : " + message.getUser_name());
+            logger.info("layer change");
             sendingOperations.convertAndSend("/topic/moweb/room/"+message.getRoom_no(),message);
         }
     }
@@ -100,12 +102,17 @@ public class WebSocketController {
         int room_no = (int) headerAccessor.getSessionAttributes().get("room_no");
         if(user_name != null) {
             WebSocketMessage message = new WebSocketMessage();
-            message.setAction(0);
+            if(roomService.isHost(room_no, user_name)) {
+                message.setAction(8);
+            }else {
+                message.setAction(0);
+            }
             message.setRoom_no(room_no);
             message.setUser_name(user_name);
             message.setChat_msg(user_name+ "님이 퇴장하였습니다.");
+            message.setUser_names(roomService.layerList(room_no));
             logger.info("User Disconnected : " + user_name);
-
+            logger.info("layer change");
             headerAccessor.getSessionAttributes().clear();
             roomService.exit(room_no, user_name);
 
