@@ -12,6 +12,4 @@ public interface RoomService {
     boolean ready(int room_no, String user_name, boolean status);
     void layer(int room_no, String[] user_names);
     void exit(int room_no, String user_name);
-
-    Map<Integer, Room> list();
 }
