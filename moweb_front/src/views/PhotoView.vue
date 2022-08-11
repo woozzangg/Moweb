@@ -4,9 +4,7 @@
       <video v-show="false" ref="input_video"></video>
       <div id="session-header">
         <h1 id="session-title">{{ room_no }}</h1>
-        <v-btn id="buttonLeaveSession" @click="leaveSession">
-          Leave session
-        </v-btn>
+        <v-btn id="buttonLeaveSession" @click="leaveBtn"> 나가기 </v-btn>
       </div>
 
       <v-btn @click="cameraBtnHandler">
@@ -68,9 +66,10 @@ export default {
       user_name: "",
       room_no: "",
       url: "",
+      is_admin: undefined,
+
       OV: undefined,
       session: undefined,
-      // mainStreamManager: undefined,
       publisher: undefined,
       subscribers: [],
 
@@ -86,6 +85,7 @@ export default {
     };
   },
   created() {
+    this.is_admin = this.$route.params.is_admin;
     this.user_name = this.$route.params.user_name;
     this.room_no = this.$route.params.room_no + "";
     this.url = this.$route.params.url;
@@ -100,8 +100,6 @@ export default {
 
       // --- Init a session ---
       this.session = this.OV.initSession();
-
-      // --- Specify the actions when events take place in the session ---
 
       // On every new Stream received...
       this.session.on("streamCreated", ({ stream }) => {
@@ -121,16 +119,12 @@ export default {
       this.session.on("exception", ({ exception }) => {
         console.warn(exception);
       });
-      // --- Connect to the session with a valid user token ---
 
-      // 'getToken' method is simulating what your server-side should do.
-      // 'token' parameter should be retrieved and returned by your own backend
       this.getToken(this.room_no).then(async (token) => {
         await this.removeBG();
         this.session
           .connect(token, { clientData: this.user_name })
           .then(async () => {
-            // --- Get your own camera stream with the desired properties ---
             let canvas = document.getElementById("output_canvas");
             this.canvasStream = canvas.captureStream(30);
             let videoTracks = this.canvasStream.getVideoTracks();
@@ -144,10 +138,7 @@ export default {
               insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
               mirror: false, // Whether to mirror your local video or not
             });
-            // this.mainStreamManager = publisher;
             this.publisher = publisher;
-
-            // --- Publish your stream ---
 
             this.session.publish(this.publisher);
           })
@@ -164,8 +155,14 @@ export default {
       });
 
       window.addEventListener("beforeunload", this.leaveSession);
+      window.addEventListener("popstate", this.leaveSession);
     },
-
+    leaveBtn() {
+      if (this.is_admin) {
+        alert("방장이 나가면 방이 사라집니다.");
+      }
+      if (confirm("정말로 나가시겠습니까?")) this.leaveSession();
+    },
     leaveSession() {
       // --- Leave the session by calling 'disconnect' method over the Session object ---
       if (this.session) this.session.disconnect();
@@ -180,25 +177,11 @@ export default {
       this.$router.replace("/");
     },
 
-    /**
-     * --------------------------
-     * SERVER-SIDE RESPONSIBILITY
-     * --------------------------
-     * These methods retrieve the mandatory user token from OpenVidu Server.
-     * This behavior MUST BE IN YOUR SERVER-SIDE IN PRODUCTION (by using
-     * the API REST, openvidu-java-client or openvidu-node-client):
-     *   1) Initialize a Session in OpenVidu Server	(POST /openvidu/api/sessions)
-     *   2) Create a Connection in OpenVidu Server (POST /openvidu/api/sessions/<SESSION_ID>/connection)
-     *   3) The Connection.token must be consumed in Session.connect() method
-     */
-
     getToken(mySessionId) {
       return this.createSession(mySessionId).then((sessionId) =>
         this.createToken(sessionId)
       );
     },
-
-    // See https://docs.openvidu.io/en/stable/reference-docs/REST-API/#post-session
     createSession(sessionId) {
       return new Promise((resolve, reject) => {
         axios
@@ -236,7 +219,6 @@ export default {
       });
     },
 
-    // See https://docs.openvidu.io/en/stable/reference-docs/REST-API/#post-connection
     createToken(sessionId) {
       return new Promise((resolve, reject) => {
         axios

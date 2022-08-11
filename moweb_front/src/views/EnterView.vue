@@ -43,7 +43,7 @@ import { Camera } from "@mediapipe/camera_utils";
 import { SelfieSegmentation } from "@mediapipe/selfie_segmentation";
 import axios from "axios";
 
-const ROOT_URL = "http://locahost:8081";
+const ROOT_URL = "https://i7a507.p.ssafy.io";
 const API_URL = "https://i7a507.p.ssafy.io/moweb-api";
 
 export default {
@@ -79,6 +79,7 @@ export default {
             this.$router.replace({
               name: "webrtc",
               params: {
+                is_admin: true,
                 user_name: this.user_name,
                 room_no: data.room_no,
                 url: ROOT_URL + data.url,
@@ -101,7 +102,7 @@ export default {
         )
         .then(({ data }) => {
           if (data.room_no == -2) {
-            alert("유효하지 않은 방입니다.");
+            alert("들어갈수 없는 방입니다.");
             this.$router.replace({ name: "main" });
           } else if (data.room_no == -1) {
             alert("방 인원이 가득찼습니다.");
@@ -113,6 +114,7 @@ export default {
             this.$router.replace({
               name: "webrtc",
               params: {
+                is_admin: false,
                 user_name: this.user_name,
                 room_no: data.room_no,
                 url: ROOT_URL + data.url,
