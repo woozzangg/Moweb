@@ -1,7 +1,9 @@
 <template>
   <div class="background">
     <body>
-      <v-btn>hi</v-btn>
+      <router-link to="/enter" style="text-decoration: none"
+        ><v-btn>시작하기</v-btn></router-link
+      >
     </body>
   </div>
 </template>

@@ -11,12 +11,10 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.UUID;
-import java.util.Map;
+import java.util.*;
 
 @Service("roomInfoService")
-public class RoomInfoServiceImpl implements RoomInfoService{
+public class RoomServiceImpl implements RoomService {
     @Autowired
     private RoomInfoRepository roomInfoRepository;
 
@@ -30,7 +28,7 @@ public class RoomInfoServiceImpl implements RoomInfoService{
     @Override
     public RoomInfo createRoom(String req) {
         User user = new User(new JSONObject(req).getString("user_name"), 1);                //호스트 유저 생성 레이어 번호는 1번
-        String url = "localhost:8080/room/" + UUID.randomUUID().toString();                  //랜덤 url 생성
+        String url = "/room/" + UUID.randomUUID().toString();                  //랜덤 url 생성
         Room room = new Room(user, url);                                 //방 생성 및 호스트 등록
         RoomInfo roomInfo = new RoomInfo();                         //DB에 저장할 방 정보 생성
         roomInfo.setActive(true);                                  //방 정보 활성화 상태 기본값=true
@@ -59,7 +57,7 @@ public class RoomInfoServiceImpl implements RoomInfoService{
         //닉네임 중복검사
         if(!rooms.containsKey(room_no)){    //방이 유효 않을때(존재x)
             return -2;
-        }else if(rooms.get(room_no).getUsers().size() >= 6){
+        }else if(rooms.get(room_no).getUsers().size() > 6){
             return -1;
         }else if(rooms.get(room_no).getUsers().containsKey(user_name)) {    //이름 중복일때
             return 0;
@@ -67,6 +65,62 @@ public class RoomInfoServiceImpl implements RoomInfoService{
             User user = new User(user_name, rooms.get(room_no).getUsers().size()+1);   //유저 생성(이름, 레이어(인원수+1))
             rooms.get(room_no).getUsers().put(user_name, user);         //rooms에 유저 추가
             return room_no;
+        }
+    }
+
+    /**
+     * 방번호, 유저이름, 레디 상태를 가져온다
+     * 해당 방 번호의 유저 레디 상태를 변경하고 전부 레디상태이면 TRUE 아니면 FALSE를 리턴
+     * */
+    @Override
+    public void ready(int room_no, String user_name, boolean status) {
+        rooms.get(room_no).getUsers().get(user_name).setStatus(status);
+    }
+
+    @Override
+    public void layer(int room_no, User[] users) {
+        for(int i = 0; i < users.length; i++) {
+            rooms.get(room_no).getUsers().get(users[i].getUser_name()).setLayer(i+1);
+        }
+    }
+
+    @Override
+    public void exit(int room_no, String user_name) {
+        int n = rooms.get(room_no).getUsers().get(user_name).getLayer();
+        rooms.get(room_no).getUsers().remove(user_name);
+        for( User user : rooms.get(room_no).getUsers().values()) {
+            int temp = user.getLayer();
+            if(temp > n) {
+                rooms.get(room_no).getUsers().get(user.getUser_name()).setLayer(temp-1);
+            }
+        }
+    }
+
+    @Override
+    public boolean isHost(int room_no, String user_name) {
+        if(rooms.get(room_no).getHost_name() == user_name) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public User[] userList(int room_no) {
+        int n = rooms.get(room_no).getUsers().size();
+        User[] users = new User[n];
+        for (User user : rooms.get(room_no).getUsers().values()) {
+            users[user.getLayer()-1] = user;
+        }
+        return users;
+    }
+
+    @Override
+    public void finish(int room_no) {
+        Optional<RoomInfo> opt = roomInfoRepository.findById(room_no);
+        if(!opt.isEmpty()){
+            RoomInfo roomInfo = opt.get();
+            roomInfo.setActive(false);
+            roomInfoRepository.save(roomInfo);
         }
     }
 }
