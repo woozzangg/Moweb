@@ -290,15 +290,24 @@
         </v-row>
         <br />
         <!-- 채팅창 -->
-        <v-row no-gutters fluid rows="6" class="border-style1">
-          <div v-for="(item, idx) in recvList" :key="idx">
-            <h3>유저이름: {{ item.user_name }}</h3>
-            <h3>내용: {{ item.chat_msg }}</h3>
+        <v-row
+          no-gutters
+          fluid
+          rows="6"
+          class="border-style1"
+          style="display: block"
+        >
+          <div
+            style="word-break: break-all"
+            v-for="(item, idx) in recvList"
+            :key="idx"
+          >
+            <h4>{{ item.user_name }}: {{ item.chat_msg }}</h4>
           </div>
         </v-row>
         <input v-model="message" type="text" @keyup.enter="sendMessage" />
-        <v-btn elevation="9" outlined tile rounded>
-          <button @click="sendMessage" style="margin: 10px">입력</button>
+        <v-btn @click="sendMessage" elevation="9" outlined tile rounded
+          >입력
         </v-btn>
       </v-col>
     </v-row>
@@ -372,8 +381,10 @@ export default {
   },
   methods: {
     sendMessage(e) {
-      this.send();
-      this.message = "";
+      if (this.user_name !== "" && this.message !== "") {
+        this.send();
+        this.message = "";
+      }
     },
     send() {
       console.log("Send message:" + this.message);
