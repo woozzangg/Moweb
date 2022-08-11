@@ -124,4 +124,14 @@ public class RoomServiceImpl implements RoomService {
         }
         return userList;
     }
+
+    @Override
+    public void finish(int room_no) {
+        Optional<RoomInfo> opt = roomInfoRepository.findById(room_no);
+        if(!opt.isEmpty()){
+            RoomInfo roomInfo = opt.get();
+            roomInfo.setActive(false);
+            roomInfoRepository.save(roomInfo);
+        }
+    }
 }

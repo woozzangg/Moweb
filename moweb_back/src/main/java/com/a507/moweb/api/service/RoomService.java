@@ -15,4 +15,5 @@ public interface RoomService {
     void exit(int room_no, String user_name);
     boolean isHost(int room_no, String user_name);
     String[] layerList(int room_no);
+    void finish(int room_no);
 }

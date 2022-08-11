@@ -104,6 +104,7 @@ public class WebSocketController {
             WebSocketMessage message = new WebSocketMessage();
             if(roomService.isHost(room_no, user_name)) {
                 message.setAction(8);
+                roomService.finish(room_no);
             }else {
                 message.setAction(0);
             }
