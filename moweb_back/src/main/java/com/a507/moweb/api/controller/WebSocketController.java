@@ -34,8 +34,10 @@ public class WebSocketController {
             headerAccessor.getSessionAttributes().put("room_no", message.getRoom_no());
             //입장 메세지 채팅메세지에 추가
             message.setChat_msg(message.getUser_name()+ "님이 입장하였습니다.");
+            message.setUsers(roomService.userList(message.getRoom_no()));
 
             logger.info("User connected : " + message.getUser_name());
+            logger.info("layer change");
             sendingOperations.convertAndSend("/topic/moweb/room/"+message.getRoom_no(),message);
         }
     }
@@ -49,13 +51,12 @@ public class WebSocketController {
 
     @MessageMapping("/ready")
     public void ready(WebSocketMessage message) {
+        roomService.ready(message.getRoom_no(), message.getUser_name(), message.isStatus());
         if(message.isStatus()) {
             message.setAction(2);
-            message.setAll_ready(roomService.ready((message.getRoom_no()), message.getUser_name(), message.isStatus()));
-            logger.info(message.getUser_name() + " : ready // All-ready : " + message.isAll_ready());
+            logger.info(message.getUser_name() + " : ready");
         }else {
             message.setAction(3);
-            message.setAll_ready(roomService.ready((message.getRoom_no()), message.getUser_name(), message.isStatus()));
             logger.info(message.getUser_name() + " : ydaer");
         }
 
@@ -72,7 +73,7 @@ public class WebSocketController {
     @MessageMapping("/layer")
     public void layer(WebSocketMessage message) {
         message.setAction(5);
-        roomService.layer(message.getRoom_no(), message.getUser_names());
+        roomService.layer(message.getRoom_no(), message.getUsers());
         logger.info("layer change");
         sendingOperations.convertAndSend("/topic/moweb/room/"+message.getRoom_no(),message);
     }
@@ -100,12 +101,18 @@ public class WebSocketController {
         int room_no = (int) headerAccessor.getSessionAttributes().get("room_no");
         if(user_name != null) {
             WebSocketMessage message = new WebSocketMessage();
-            message.setAction(0);
+            if(roomService.isHost(room_no, user_name)) {
+                message.setAction(8);
+                roomService.finish(room_no);
+            }else {
+                message.setAction(0);
+            }
             message.setRoom_no(room_no);
             message.setUser_name(user_name);
             message.setChat_msg(user_name+ "님이 퇴장하였습니다.");
+            message.setUsers(roomService.userList(room_no));
             logger.info("User Disconnected : " + user_name);
-
+            logger.info("layer change");
             headerAccessor.getSessionAttributes().clear();
             roomService.exit(room_no, user_name);
 

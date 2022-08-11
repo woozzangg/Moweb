@@ -31,8 +31,8 @@
         style="margin: 4px"
       >
         버튼 모음집
-        <v-btn @click="createRoom">방만들기</v-btn>
-        <v-btn @click="joinRoom">방입장하기</v-btn>
+        <v-btn v-if="!url" @click="createRoom">방만들기</v-btn>
+        <v-btn v-if="url" @click="joinRoom">방입장하기</v-btn>
       </v-row>
     </v-col>
   </v-container>
@@ -43,6 +43,7 @@ import { Camera } from "@mediapipe/camera_utils";
 import { SelfieSegmentation } from "@mediapipe/selfie_segmentation";
 import axios from "axios";
 
+const ROOT_URL = "https://i7a507.p.ssafy.io";
 const API_URL = "https://i7a507.p.ssafy.io/moweb-api";
 
 export default {
@@ -75,12 +76,13 @@ export default {
         )
         .then(({ data }) => {
           if (data.room_no > 0) {
-            this.$router.push({
-              name: "webrtc",
+            this.$router.replace({
+              name: "waiting",
               params: {
+                is_admin: true,
                 user_name: this.user_name,
                 room_no: data.room_no,
-                url: data.url,
+                url: ROOT_URL + data.url,
               },
             });
           }
@@ -100,7 +102,7 @@ export default {
         )
         .then(({ data }) => {
           if (data.room_no == -2) {
-            alert("유효하지 않은 방입니다.");
+            alert("들어갈수 없는 방입니다.");
             this.$router.replace({ name: "main" });
           } else if (data.room_no == -1) {
             alert("방 인원이 가득찼습니다.");
@@ -109,12 +111,13 @@ export default {
           }
           if (data.room_no > 0) {
             this.camera.stop();
-            this.$router.push({
-              name: "webrtc",
+            this.$router.replace({
+              name: "waiting",
               params: {
+                is_admin: false,
                 user_name: this.user_name,
                 room_no: data.room_no,
-                url: data.url,
+                url: ROOT_URL + this.url,
               },
             });
           }

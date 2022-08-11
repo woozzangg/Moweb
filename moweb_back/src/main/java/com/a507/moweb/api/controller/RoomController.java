@@ -38,12 +38,4 @@ public class RoomController {
         res.put("room_no", room_no);
         return new ResponseEntity<String>(res.toString(), HttpStatus.OK);
     }
-
-    // 모든 채팅방 목록 반환
-    @GetMapping("/list")
-    @ResponseBody
-    public Map<Integer, Room> room() {
-        return roomService.list();
-    }
-
 }
