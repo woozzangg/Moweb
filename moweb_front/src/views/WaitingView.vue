@@ -9,7 +9,7 @@
         fluid
         cols="8"
         class="border-style1"
-        style="margin: 10px 10px 0px 10px"
+        style="margin: 10px auto 0px auto"
       >
         <!-- //////////// 여기서 v-if나 v-show로  if else 걸어서 두기 -->
         <!-- ///////// 정상화면 row 9 , 2 -->
@@ -90,13 +90,13 @@
         <!-- 촬영화면 들어가는곳 -->
         <!-- # 배경선택 들어갔을때 화면 col 나눈 후 ㅇㅇ -->
 
-        <!-- <v-row>
+        <v-row>
           <v-col
             no-gutters
             fluid
             cols="8"
             class="border-style1"
-            style="margin: 20px 0px 0px 10px"
+            style="margin: 20px auto 0px auto"
           >
             <v-row
               no-gutters
@@ -109,7 +109,7 @@
                 class="border-style1"
                 width="640"
                 height="480"
-                style="background-color: #ff0000; margin: 20px 0px 0px 50px"
+                style="background-color: #619bed; margin: 20px 0px 0px 50px"
               ></canvas>
               <br />
 
@@ -145,24 +145,50 @@
             fluid
             cols="3"
             class="border-style1"
-            style="margin: 20px 0px 0px 35px"
+            style="margin: 20px auto 0px auto"
           >
-            배경 선택 할 carousel
-            <v-carousel v-model="model" vertical="true">
+            <!-- 카르셀 일탄 포기 - 스크롤 해봄 -->
+            <!-- <v-carousel
+              height="400px"
+              v-model="model"
+              vertical="true"
+              hide-delimiters
+            >
               <v-carousel-item v-for="(color, i) in colors" :key="color">
-                <v-sheet :color="color" height="50%" width="50%" tile>
-                  <v-col class="fill-height" align="center" justify="center">
+                <v-sheet :color="color" height="80%" width="50%">
+                  <v-col
+                    class="fill-height"
+                    align="center"
+                    justify="center"
+                    style="margin: auto"
+                  >
                     <div class="text-h2">Slide {{ i + 1 }}</div>
                   </v-col>
                 </v-sheet>
               </v-carousel-item>
-            </v-carousel>
+            </v-carousel> -->
+            <!-- 카드로 스크롤 형태 ㅇ -->
+            <v-card class="flex-grow-0" fluid style="margin: auto">
+              <v-virtual-scroll
+                :items="Array.from({ length: 100 }).map((_, index) => index)"
+                :item-height="70"
+                height="600px"
+              >
+                <template v-slot="{ item }">
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-title>Item {{ item }}</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </template>
+              </v-virtual-scroll>
+            </v-card>
           </v-col>
-        </v-row> -->
+        </v-row>
 
         <!-- # 결과화면 들어가는곳  -->
 
-        <v-row
+        <!-- <v-row
           no-gutters
           rows="9"
           fluid
@@ -170,7 +196,7 @@
           style="margin: 5px"
         >
           <v-container
-            class="border-style1"
+            class="border-style1; aaaaaa"
             style="margin: 50px 100px 50px 100px"
           >
             <canvas
@@ -220,7 +246,7 @@
             >
             |
           </v-btn>
-        </v-row>
+        </v-row> -->
         <!-- <br /> -->
       </v-col>
       <!-- <v-spacer></v-spacer> -->
@@ -230,7 +256,7 @@
         no-gutters
         cols="3"
         class="border-style1"
-        style="margin: 10px 10px 0px 10px"
+        style="margin: 10px auto 0px auto"
       >
         <!-- 참여 멤버 -->
         <v-row no-gutters fluid rows="4" class="border-style1">
@@ -258,9 +284,18 @@
 export default {
   name: "WaitingView",
 
+  // data: () => ({
+  //   model: 0,
+  //   colors: ["primary", "secondary", "yellow darken-2", "red", "orange"],
+  // }),
   data: () => ({
-    model: 0,
-    colors: ["primary", "secondary", "yellow darken-2", "red", "orange"],
+    scrollInvoked: 0,
   }),
+
+  methods: {
+    onScroll() {
+      this.scrollInvoked++;
+    },
+  },
 };
 </script>

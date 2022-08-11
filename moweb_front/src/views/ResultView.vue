@@ -160,9 +160,3 @@ export default {
   name: "ResultView",
 };
 </script>
-
-<style>
-.border-style1 {
-  border: 1px solid rgb(0, 0, 0);
-}
-</style>
