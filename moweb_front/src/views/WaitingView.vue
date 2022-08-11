@@ -2,6 +2,19 @@
   <!-- 컨테이너 시작 -->
   <v-container class="border-style1" style="margin: 20px 0px 0px 50px">
     <!-- row로 구간 나눔 -->
+
+    <!-- 캠에서 가져온 소스비디오 -->
+    <video v-show="false" ref="input_video"></video>
+
+    <!-- webrtc를 통해 보낼 소스 -->
+    <canvas
+      v-show="false"
+      class="output_canvas"
+      id="output_canvas"
+      :width="width"
+      :height="height"
+      style="transform: rotateY(180deg)"
+    ></canvas>
     <v-row d-flex fluid justify-space-around style="margin: 0px">
       <!-- 왼쪽 영역 -->
       <v-col
@@ -199,20 +212,11 @@
             ></canvas>
             <div id="main-container" class="container" v-if="page == 'waiting'">
               <div id="session" v-if="session">
-                <video v-show="false" ref="input_video"></video>
                 <div id="session-header">
                   <h1 id="session-title">{{ room_no }}</h1>
                 </div>
 
                 <v-container>
-                  <canvas
-                    v-show="false"
-                    class="output_canvas"
-                    id="output_canvas"
-                    :width="width"
-                    :height="height"
-                    style="transform: rotateY(180deg)"
-                  ></canvas>
                   <v-row>
                     <v-col>
                       <user-video
