@@ -223,12 +223,25 @@
                         v-if="videoSetting"
                         :stream-manager="publisher"
                       />
+                      <p v-show="readyStatus[user_name]" style="color: red">
+                        ready
+                      </p>
                     </v-col>
                     <v-col
                       v-for="sub in subscribers"
                       :key="sub.stream.connection.connectionId"
                     >
                       <user-video :stream-manager="sub" />
+                      <p
+                        v-show="
+                          readyStatus[
+                            JSON.parse(sub.stream.connection.data).clientData
+                          ]
+                        "
+                        style="color: red"
+                      >
+                        ready
+                      </p>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -252,6 +265,8 @@
           <v-btn @click="micBtnHandler">
             {{ micBtnTxt }}
           </v-btn>
+          <v-btn v-if="is_admin" v-bind:disabled="!allReady">start</v-btn>
+          <v-btn v-if="!is_admin" @click="readyBtn">ready</v-btn>
           <v-btn elevation="9" outlined tile rounded>
             <button @click="savePhoto" style="margin: 10px">저장</button>
           </v-btn>
@@ -286,7 +301,12 @@
             링크
           </v-btn>
           <br />
-          참여자 들어올 곳
+          <layer-controller
+            :layerSequence="layerSequence"
+            :isAdmin="is_admin"
+            :roomNo="room_no"
+            @sendLayer="sendLayer"
+          ></layer-controller>
         </v-row>
         <br />
         <!-- 채팅창 -->
@@ -351,13 +371,15 @@
 import Vue from "vue";
 import Html2canvas from "html2canvas";
 import Kakaosdk from "vue-kakao-sdk";
-import SockJS from "sockjs-client";
-import Stomp from "webstomp-client";
-import axios from "axios";
 import { OpenVidu } from "openvidu-browser";
-import UserVideo from "@/components/UserVideo";
 import { Camera } from "@mediapipe/camera_utils";
 import { SelfieSegmentation } from "@mediapipe/selfie_segmentation";
+import axios from "axios";
+
+import stompApi from "@/api/stompApi.js";
+
+import LayerController from "@/components/LayerController.vue";
+import UserVideo from "@/components/UserVideo";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
@@ -365,14 +387,18 @@ const OPENVIDU_SERVER_URL = "https://i7a507.p.ssafy.io:8443";
 const OPENVIDU_SERVER_SECRET = "MY_SECRET";
 const apiKey = "59074e20c9d80e6e5200a4bd60122af7";
 Vue.use(Kakaosdk, { apiKey });
-
 export default {
   data() {
     return {
       user_name: "",
       message: "",
       room_no: "",
+      users: [],
       recvList: [],
+
+      myStatus: false,
+      readyStatus: {},
+      allReady: false,
 
       url: "",
       is_admin: undefined,
@@ -397,10 +423,14 @@ export default {
   },
   components: {
     UserVideo,
+    LayerController,
   },
   computed: {
     inputVideo() {
       return this.$refs.input_video;
+    },
+    layerSequence() {
+      return this.users.map((user) => user.user_name);
     },
   },
   created() {
@@ -410,46 +440,77 @@ export default {
     this.is_admin = this.$route.params.is_admin;
   },
   mounted() {
-    this.connect();
+    stompApi.connect(this.room_no, this.user_name, this.onSocketReceive);
     this.joinSession();
   },
   methods: {
+    onSocketReceive(result) {
+      const content = JSON.parse(result.body);
+      console.log("socket received!");
+      console.log(content);
+      switch (content.action) {
+        // 채팅방 입장 알림
+        case 0:
+          console.log("new user entered!!");
+          this.recvList.push(content);
+          this.users = content.users;
+          this.readyJoin(content.users);
+          break;
+        // 채팅
+        case 1:
+          console.log(`${content.user_name} said ${content.chat_msg}`);
+          this.recvList.push(content);
+          break;
+        // 준비
+        case 2:
+          this.ready(content);
+          break;
+        // 준비 취소
+        case 3:
+          this.ready(content);
+          break;
+        // 시작 하기
+        case 4:
+          break;
+        // 레이어 변경하기
+        case 5:
+          console.log("layer changed!!");
+          this.users = content.users;
+          break;
+        // 배경 선택하기
+        case 6:
+          break;
+        // 촬영하기
+        case 7:
+          break;
+        // 방장이 나감
+        case 8:
+          break;
+        default:
+          break;
+      }
+    },
     sendMessage(e) {
-      if (this.user_name !== "" && this.message !== "") {
-        console.log("Send message:" + this.message);
-        if (this.stompClient && this.stompClient.connected) {
-          const msg = {
-            user_name: this.user_name,
-            chat_msg: this.message,
-            room_no: this.room_no,
-          };
-          this.stompClient.send("/app/chat", JSON.stringify(msg), {});
-        }
+      console.log("Send message:" + this.message);
+      if (stompApi.stomp && stompApi.stomp.connected) {
+        stompApi.chat({
+          user_name: this.user_name,
+          chat_msg: this.message,
+          room_no: this.room_no,
+        });
       }
       this.message = "";
     },
-    connect() {
-      const serverURL = "https://i7a507.p.ssafy.io/moweb-api/ws/moweb";
-      let socket = new SockJS(serverURL);
-      this.stompClient = Stomp.over(socket);
-      console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`);
-      this.stompClient.connect(
-        {},
-        () => {
-          console.log("소켓 연결 성공");
-          this.stompClient.subscribe(
-            "/topic/moweb/room/" + this.room_no,
-            (res) => {
-              console.log("구독한 방에서 받은 메시지: ", res.body);
-              this.recvList.push(JSON.parse(res.body));
-            }
-          );
-        },
-        (error) => {
-          console.log("소켓 연결 실패", error);
-          this.connected = false;
-        }
-      );
+    sendLayer(userNames) {
+      console.log("Send layer change:" + userNames);
+      if (stompApi.stomp && stompApi.stomp.connected) {
+        stompApi.layer({
+          room_no: this.room_no,
+          users: userNames.map((userName) =>
+            this.users.find((user) => user.user_name == userName)
+          ),
+        });
+      }
     },
     async savePhoto() {
       var date = new Date();
@@ -512,7 +573,57 @@ export default {
       });
     },
     linkBtn() {
-      alert(this.url);
+      if (!navigator.clipboard) {
+        navigator.clipboard.writeText(this.url).then(() => {
+          this.$dialog.message.success(this.url, {
+            position: "top",
+          });
+        });
+        return;
+      }
+      navigator.clipboard.writeText(this.url).then(() => {
+        this.$dialog.message.success("url 복사 완료!", {
+          position: "top",
+        });
+      });
+    },
+    //------------------------ready, start -------------------------
+    readyBtn() {
+      this.myStatus = !this.myStatus;
+      if (stompApi.stomp && stompApi.stomp.connected) {
+        stompApi.ready({
+          user_name: this.user_name,
+          room_no: this.room_no,
+          status: this.myStatus,
+        });
+      }
+    },
+    readyJoin(users) {
+      this.readyStatus = {};
+      users.forEach((user) => {
+        this.$set(this.readyStatus, user.user_name, user.status);
+      });
+      if (this.is_admin) {
+        this.allReadyCheck();
+      }
+    },
+    ready(data) {
+      this.$set(this.readyStatus, data.user_name, data.status);
+      if (this.is_admin) {
+        this.allReadyCheck();
+      }
+    },
+    allReadyCheck() {
+      let size = 0;
+      for (let user_name in this.readyStatus) {
+        if (user_name == this.user_name) continue;
+        size++;
+        if (!this.readyStatus[user_name] || size < 1) {
+          this.allReady = false;
+          return;
+        }
+      }
+      this.allReady = true;
     },
     // -------------------- webrtc start ------------------
     joinSession() {
