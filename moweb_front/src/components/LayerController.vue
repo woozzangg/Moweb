@@ -15,8 +15,8 @@
         >
           <div class="user_name">
             <div>{{ userName }}</div>
-            <div v-if="index === 0">뒤</div>
-            <div v-else-if="index === dragLayerSequence.length - 1">앞</div>
+            <div v-if="index === dragLayerSequence.length - 1">앞</div>
+            <div v-else-if="index === 0">뒤</div>
           </div>
         </div>
       </transition-group>
