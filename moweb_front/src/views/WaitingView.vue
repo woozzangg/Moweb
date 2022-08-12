@@ -300,6 +300,7 @@
             rounded
             color="primary"
             @click="linkBtn"
+            position="absolute"
           >
             링크
           </v-btn>
@@ -906,14 +907,19 @@ video {
   margin: auto;
   overflow-y: auto;
   box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
+  background-color: #ecb7a5;
+  border-radius: 15px;
+  padding: 1.4rem;
 }
 
 .form {
   display: flex;
   justify-content: space-between;
   padding: 1.4rem;
-  background: #ffffff;
+  background: #f7cee7;
   /* border-radius: 30px 30px 24px 24px; */
+
+  border-radius: 15px;
   box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
 }
 
@@ -951,13 +957,6 @@ svg:hover {
   border-radius: 15px;
 
   box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.5);
-}
-.chatting {
-  background-color: #faa284;
-  border-radius: 15px;
-  padding: 2px;
-
-  box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
 }
 .webrtc {
   background-color: #fff0f0;
