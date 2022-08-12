@@ -8,7 +8,7 @@
           id="output_canvas"
           :width="width"
           :height="height"
-          style="transform: rotateY(180deg); margin: auto"
+          style="transform: rotateY(180deg); margin: auto; border-style: groove"
         ></canvas>
       </v-row>
       <v-row class="centercss">
@@ -62,6 +62,10 @@ export default {
   },
   methods: {
     createRoom() {
+      if (!this.nameCheck()) {
+        alert("닉네임은 1자이상 10자이하만 가능합니다.");
+        return;
+      }
       axios
         .post(
           API_URL + "/room/create",
@@ -87,6 +91,10 @@ export default {
         });
     },
     joinRoom() {
+      if (!this.nameCheck()) {
+        alert("닉네임은 1자이상 10자이하만 가능합니다.");
+        return;
+      }
       axios
         .post(
           API_URL + "/room/join",
@@ -170,6 +178,11 @@ export default {
       );
 
       this.ctx.restore();
+    },
+    nameCheck() {
+      let flag = false;
+      if (this.user_name.length > 0 && this.user_name.length < 11) flag = true;
+      return flag;
     },
   },
 };
