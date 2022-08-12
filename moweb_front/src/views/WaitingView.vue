@@ -3,7 +3,7 @@
   <v-container
     class="border-style2"
     style="
-      width: 90%;
+      width: 85%;
       min-height: 800px;
       margin: 20px auto 0px auto;
       padding: 0px;
@@ -25,7 +25,10 @@
     ></canvas>
     <v-row d-flex fluid justify-space-around style="margin: 0px">
       <!-- 왼쪽 영역 -->
-      <div no-gutters style="width: 71%; margin: 10px auto 0px auto">
+      <div
+        no-gutters
+        style="width: 71%; margin: 5px auto 0px auto; min-height: 750px"
+      >
         <!-- //////////// 여기서 v-if나 v-show로  if else 걸어서 두기 -->
         <!-- ///////// 정상화면 row 9 , 2 -->
         <!-- # WebRTC 화면 부분 -->
@@ -199,7 +202,7 @@
 
         <!-- # 결과화면 들어가는곳  -->
 
-        <v-container class="border-style1" style="height: 72%; margin: 5px">
+        <v-container class="webrtc" style="height: 85%; margin: 0px">
           <canvas
             ref="resultCanvas"
             class="border-style1"
@@ -222,7 +225,7 @@
                       :stream-manager="publisher"
                     />
                     <p v-show="readyStatus[user_name]" style="color: red">
-                      ready
+                      Ready
                     </p>
                   </v-col>
                   <v-col
@@ -238,51 +241,51 @@
                       "
                       style="color: red"
                     >
-                      ready
+                      Ready
                     </p>
                   </v-col>
                 </v-row>
               </v-container>
             </div>
           </div>
-          WebRTC 화면이 들어올 곳
         </v-container>
 
         <v-container
           no-gutters
-          class="border-style1"
-          style="height: 24%; margin: 4px"
+          class="btnzip"
+          style="height: 10%; margin: 4px; padding:2px; justify-content-center"
         >
-          버튼 모음집
-          <v-btn @click="cameraBtnHandler">
-            {{ cameraBtnTxt }}
-          </v-btn>
-          <v-btn @click="micBtnHandler">
-            {{ micBtnTxt }}
-          </v-btn>
-          <v-btn v-if="is_admin" v-bind:disabled="!allReady">start</v-btn>
-          <v-btn v-if="!is_admin" @click="readyBtn">ready</v-btn>
-          <v-btn elevation="9" outlined tile rounded>
-            <button @click="savePhoto" style="margin: 10px">저장</button>
-          </v-btn>
-          <v-btn class="pink white--text">
-            <button @click="sharePhoto" style="margin: 10px">공유</button>
-          </v-btn>
+          <div class="btncss" justify="center">
+            <v-btn @click="cameraBtnHandler">
+              {{ cameraBtnTxt }}
+            </v-btn>
+            <v-btn @click="micBtnHandler">
+              {{ micBtnTxt }}
+            </v-btn>
+            <v-btn v-if="is_admin" v-bind:disabled="!allReady">start</v-btn>
+            <v-btn v-if="!is_admin" @click="readyBtn">ready</v-btn>
+            <v-btn elevation="9" outlined tile rounded>
+              <button @click="savePhoto" style="margin: 10px">저장</button>
+            </v-btn>
+            <v-btn class="pink white--text">
+              <button @click="sharePhoto" style="margin: 10px">공유</button>
+            </v-btn>
 
-          <v-btn id="buttonLeaveSession" @click="leaveBtn"> 나가기 </v-btn>
+            <v-btn id="buttonLeaveSession" @click="leaveBtn"> 나가기 </v-btn>
+          </div>
         </v-container>
         <!-- <br /> -->
       </div>
       <!-- <v-spacer></v-spacer> -->
       <!-- 오른쪽 영역 시작 -->
-      <div style="width: 26%; margin: 10px auto 0px auto">
+      <div style="width: 26%; margin: 5px auto 0px auto">
         <!-- 참여 멤버 -->
-        <div no-gutters class="border-style1" style="height: 36%; margin: auto">
+        <div no-gutters class="members" style="height: 30%; margin: auto">
           <!-- 이거 버튼 왜 안먹냐 오른쪽으로 붙는거-->
           <!-- 이거 링크 버튼임 -->
           <v-btn
             d-flex
-            class="float-right"
+            class="linkbtn"
             outlined
             rounded
             color="primary"
@@ -300,55 +303,57 @@
         </div>
         <br />
         <!-- 채팅창 -->
-        <div
-          no-gutters
-          class="border-style1"
-          style="height: 60%; display: block; min-height: 351px; margin: auto"
-        >
+        <div>
           <div
-            style="word-break: break-all"
-            v-for="(item, idx) in recvList"
-            :key="idx"
+            no-gutters
+            class="chatting"
+            style="height: 45%; display: block; min-height: 350px; margin: auto"
           >
-            <h4>{{ item.user_name }}: {{ item.chat_msg }}</h4>
-          </div>
-        </div>
-        <!-- 채팅입력 -->
-        <div class="form">
-          <input
-            class="form_input"
-            type="text"
-            placeholder="채팅을 입력하세요."
-            v-model="message"
-            @keyup.enter="sendMessage"
-          />
-          <div @click="sendMessage" class="form_submit">
-            <svg
-              width="30"
-              height="30"
-              viewBox="0 0 68 68"
-              fill="#CCCCCC"
-              xmlns="http://www.w3.org/2000/svg"
+            <div
+              style="word-break: break-all"
+              v-for="(item, idx) in recvList"
+              :key="idx"
             >
-              <g clip-path="url(#clip0_26_10)">
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M48.0833 19.799C48.619 20.3347 48.806 21.127 48.5665 21.8457L35.8385 60.0294C35.5946 60.7614 34.9513 61.2877 34.1855 61.382C33.4198 61.4763 32.6681 61.1217 32.2539 60.4707L22.593 45.2893L7.41158 35.6285C6.76065 35.2142 6.40604 34.4625 6.50031 33.6968C6.59458 32.931 7.12092 32.2878 7.85287 32.0438L46.0366 19.3159C46.7553 19.0763 47.5476 19.2633 48.0833 19.799ZM26.5903 44.1204L33.3726 54.7782L42.0926 28.6181L26.5903 44.1204ZM39.2642 25.7897L23.7619 41.292L13.1041 34.5097L39.2642 25.7897Z"
-                  fill=""
-                />
-              </g>
-              <defs>
-                <clipPath id="clip0_26_10">
-                  <rect
-                    width="48"
-                    height="48"
-                    fill="white"
-                    transform="translate(33.9412) rotate(45)"
+              <h4>{{ item.user_name }}: {{ item.chat_msg }}</h4>
+            </div>
+          </div>
+          <!-- 채팅입력 -->
+          <div class="form">
+            <input
+              class="form_input"
+              type="text"
+              placeholder="채팅을 입력하세요."
+              v-model="message"
+              @keyup.enter="sendMessage"
+            />
+            <div @click="sendMessage" class="form_submit">
+              <svg
+                width="30"
+                height="30"
+                viewBox="0 0 68 68"
+                fill="#CCCCCC"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g clip-path="url(#clip0_26_10)">
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M48.0833 19.799C48.619 20.3347 48.806 21.127 48.5665 21.8457L35.8385 60.0294C35.5946 60.7614 34.9513 61.2877 34.1855 61.382C33.4198 61.4763 32.6681 61.1217 32.2539 60.4707L22.593 45.2893L7.41158 35.6285C6.76065 35.2142 6.40604 34.4625 6.50031 33.6968C6.59458 32.931 7.12092 32.2878 7.85287 32.0438L46.0366 19.3159C46.7553 19.0763 47.5476 19.2633 48.0833 19.799ZM26.5903 44.1204L33.3726 54.7782L42.0926 28.6181L26.5903 44.1204ZM39.2642 25.7897L23.7619 41.292L13.1041 34.5097L39.2642 25.7897Z"
+                    fill=""
                   />
-                </clipPath>
-              </defs>
-            </svg>
+                </g>
+                <defs>
+                  <clipPath id="clip0_26_10">
+                    <rect
+                      width="48"
+                      height="48"
+                      fill="white"
+                      transform="translate(33.9412) rotate(45)"
+                    />
+                  </clipPath>
+                </defs>
+              </svg>
+            </div>
           </div>
         </div>
       </div>
@@ -893,4 +898,42 @@ svg {
 svg:hover {
   fill: #999999;
 }
+.linkbtn {
+  float: right;
+  margin: 3px 3px;
+}
+.members {
+  background-color: #faf4aa;
+  border-radius: 15px;
+
+  box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.5);
+}
+.chatting {
+  background-color: #faa284;
+  border-radius: 15px;
+  padding: 2px;
+
+  box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
+}
+.webrtc {
+  background-color: #fff0f0;
+  border-radius: 15px;
+  padding: 2px;
+
+  box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.5);
+}
+.btnzip {
+  width: 99%;
+  position: relative;
+
+  box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
+}
+.btncss {
+  position: absolute;
+  left: 30%;
+
+  box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
+}
 </style>
+
+#FFF0F0
