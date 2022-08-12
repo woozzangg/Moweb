@@ -3,7 +3,7 @@
     class="border-style2"
     d-flex
     justify-space-around
-    style="width: 80%; margin: 50px auto"
+    style="width: 60%; margin: 50px auto"
   >
     <video v-show="false" ref="input_video"></video>
     <v-col cols="12">
@@ -17,7 +17,7 @@
           justify="center"
         ></canvas>
       </v-row>
-      <v-row class="centercss" style="margin: 5px">
+      <v-row style="margin: 5px">
         <input
           placeholder="닉네임 입력"
           v-model="user_name"
@@ -44,7 +44,7 @@
   <!-- <v-container class="border-style1" d-flex justify-space-around>
     <div style="margin: 50px 0px 0px 0px">
       <div class="mx-auto">이름 들어갈 곳</div>
-      <div class="centercss">
+      <div >
         <canvas
           mx="auto"
           class="border-style1"
@@ -53,7 +53,7 @@
           style="background-color: #ff0000; margin: 20px 0px 0px 50px"
         ></canvas>
       </div>
-      <div class="centercss">
+      <div >
         <v-input>닉네임 입력창</v-input>
       </div>
       <div>
@@ -240,15 +240,11 @@ export default {
 </script>
 
 <style>
-.centercss {
-  float: center;
-}
-
 .border-style1 {
   border: 1px solid rgb(0, 0, 0);
 }
 .border-style2 {
-  border: 25px solid rgb(0, 0, 0);
+  border: 15px solid rgb(46, 5, 5);
   border-radius: 15px;
   background-color: white;
 }

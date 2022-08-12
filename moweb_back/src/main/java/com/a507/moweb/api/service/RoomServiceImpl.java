@@ -57,7 +57,7 @@ public class RoomServiceImpl implements RoomService {
         //닉네임 중복검사
         if(!rooms.containsKey(room_no)){    //방이 유효 않을때(존재x)
             return -2;
-        }else if(rooms.get(room_no).getUsers().size() > 6){
+        }else if(rooms.get(room_no).getUsers().size() > 5){
             return -1;
         }else if(rooms.get(room_no).getUsers().containsKey(user_name)) {    //이름 중복일때
             return 0;
@@ -115,7 +115,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public void finish(int room_no) {
+    public void cantJoin(int room_no) {
         Optional<RoomInfo> opt = roomInfoRepository.findById(room_no);
         if(!opt.isEmpty()){
             RoomInfo roomInfo = opt.get();
