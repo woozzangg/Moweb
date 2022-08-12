@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" style="height: 1000px">
     <!-- <nav> -->
     <router-link to="/">Home</router-link> |
     <router-link to="/enter">enter</router-link> |
@@ -13,7 +13,9 @@
 </template>
 
 <style>
-/* #app { */
+#app {
+  background-color: beige;
+}
 /* font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

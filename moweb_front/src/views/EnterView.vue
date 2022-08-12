@@ -1,7 +1,12 @@
 <template>
-  <v-container class="border-style1" d-flex justify-space-around>
+  <v-container
+    class="border-style2"
+    d-flex
+    justify-space-around
+    style="width: 80%; margin: 50px auto"
+  >
     <video v-show="false" ref="input_video"></video>
-    <v-col cols="10">
+    <v-col cols="12">
       <v-row>
         <canvas
           class="output_canvas"
@@ -9,28 +14,72 @@
           :width="width"
           :height="height"
           style="transform: rotateY(180deg); margin: auto"
+          justify="center"
         ></canvas>
       </v-row>
-      <v-row class="centercss">
+      <v-row class="centercss" style="margin: 5px">
         <input
           placeholder="닉네임 입력"
           v-model="user_name"
-          style="border-style: solid"
+          style="border-style: solid; margin: 20px auto 10px auto"
         />
       </v-row>
-      <v-row
-        fluid
-        no-gutters
-        rows="2"
-        class="border-style1"
-        style="margin: 4px"
-      >
-        버튼 모음집
-        <v-btn v-if="!url" @click="createRoom">방만들기</v-btn>
-        <v-btn v-if="url" @click="joinRoom">방입장하기</v-btn>
+      <v-row fluid no-gutters rows="2" style="margin: 4px; padding: 0px">
+        <v-btn
+          v-if="!url"
+          @click="createRoom"
+          style="border-style: solid; margin: auto"
+          >방만들기</v-btn
+        >
+        <v-btn
+          v-if="url"
+          @click="joinRoom"
+          style="border-style: solid; margin: auto"
+          >방입장하기</v-btn
+        >
       </v-row>
     </v-col>
   </v-container>
+  <!-- 대안~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- <v-container class="border-style1" d-flex justify-space-around>
+    <div style="margin: 50px 0px 0px 0px">
+      <div class="mx-auto">이름 들어갈 곳</div>
+      <div class="centercss">
+        <canvas
+          mx="auto"
+          class="border-style1"
+          width="640"
+          height="480"
+          style="background-color: #ff0000; margin: 20px 0px 0px 50px"
+        ></canvas>
+      </div>
+      <div class="centercss">
+        <v-input>닉네임 입력창</v-input>
+      </div>
+      <div>
+        <v-row
+          fluid
+          no-gutters
+          rows="2"
+          class="border-style1"
+          style="margin: 4px"
+        >
+          버튼 모음집
+          <v-btn elevation="10" outlined tile rounded>
+            <router-link to="/shot" style="margin: 10px">shot으로</router-link>
+
+            <router-view />
+          </v-btn>
+          <v-btn class="pink white--text">
+            <router-link to="/waiting" style="margin: 10px"
+              >waiting으로</router-link
+            >
+            |
+          </v-btn>
+        </v-row>
+      </div>
+    </div>
+  </v-container> -->
 </template>
 
 <script>
@@ -177,8 +226,21 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .centercss {
   float: center;
+}
+
+.border-style1 {
+  border: 1px solid rgb(0, 0, 0);
+}
+.border-style2 {
+  border: 25px solid rgb(0, 0, 0);
+  border-radius: 15px;
+  background-color: white;
+}
+img {
+  display: block;
+  margin: 0px auto;
 }
 </style>
