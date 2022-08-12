@@ -84,6 +84,7 @@ public class WebSocketController {
     @MessageMapping("/start")
     public void start(WebSocketMessage message) {
         message.setAction(4);
+        roomService.cantJoin(message.getRoom_no());
         logger.info("moweb start");
         sendingOperations.convertAndSend("/topic/moweb/room/"+message.getRoom_no(),message);
     }
@@ -152,7 +153,7 @@ public class WebSocketController {
 
             if(roomService.isHost(room_no, user_name)) {
                 message.setAction(8);
-                roomService.finish(room_no);
+                roomService.cantJoin(room_no);
                 logger.info("room "+ room_no + " : BOOM!");
                 sendingOperations.convertAndSend("/topic/moweb/room/"+message.getRoom_no(),message);
             }
