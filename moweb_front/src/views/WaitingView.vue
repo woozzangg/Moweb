@@ -627,6 +627,7 @@ export default {
       }
       this.allReady = true;
     },
+    // ---------------------------- ready end ------------------
     // -------------------- webrtc start ------------------
     joinSession() {
       // --- Get an OpenVidu object ---
@@ -707,8 +708,11 @@ export default {
       this.subscribers = [];
       this.OV = undefined;
       this.videoSetting = false;
+      stompApi.disconnect();
       window.removeEventListener("beforeunload", this.leaveSession);
-      this.$router.replace("/");
+      this.$router.replace("/").then(() => {
+        window.location.reload();
+      });
     },
 
     getToken(mySessionId) {
