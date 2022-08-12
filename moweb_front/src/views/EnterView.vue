@@ -40,6 +40,8 @@ import axios from "axios";
 
 const ROOT_URL = "https://i7a507.p.ssafy.io";
 const API_URL = "https://i7a507.p.ssafy.io/moweb-api";
+//const ROOT_URL = "http://localhost:8081";
+//const API_URL = "http://localhost:8080/moweb-api";
 
 export default {
   name: "EnterView",
