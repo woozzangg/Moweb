@@ -208,7 +208,7 @@
             style="background-color: #b7f0b1; margin: 5px"
             v-if="page == 'result'"
           ></canvas>
-          <div id="main-container" class="container" v-if="page == 'waiting'">
+          <div id="main-container" class="container">
             <div id="session" v-if="session">
               <div id="session-header">
                 <h1 id="session-title">{{ room_no }}</h1>
@@ -218,6 +218,7 @@
                 <v-row>
                   <v-col>
                     <user-video
+                      :style="waitingStyle"
                       v-if="videoSetting"
                       :stream-manager="publisher"
                     />
@@ -226,6 +227,7 @@
                     </p>
                   </v-col>
                   <v-col
+                    v-show="page == 'waiting'"
                     v-for="sub in subscribers"
                     :key="sub.stream.connection.connectionId"
                   >
@@ -243,6 +245,15 @@
                   </v-col>
                 </v-row>
               </v-container>
+              <v-container v-if="page == 'shot'">
+                <p>
+                  <layered-video
+                    width="640"
+                    height="480"
+                    :backgroundCode="backGroundImg"
+                    :layerSequence="layerSequence"
+                  ></layered-video></p
+              ></v-container>
             </div>
           </div>
           WebRTC 화면이 들어올 곳
@@ -260,8 +271,15 @@
           <v-btn @click="micBtnHandler">
             {{ micBtnTxt }}
           </v-btn>
-          <v-btn v-if="is_admin" v-bind:disabled="!allReady">start</v-btn>
-          <v-btn v-if="!is_admin" @click="readyBtn">ready</v-btn>
+          <v-btn
+            v-if="is_admin && page == 'waiting'"
+            v-bind:disabled="!allReady"
+            @click="startBtn"
+            >start</v-btn
+          >
+          <v-btn v-if="!is_admin && page == 'waiting'" @click="readyBtn"
+            >ready</v-btn
+          >
           <v-btn elevation="9" outlined tile rounded>
             <button @click="savePhoto" style="margin: 10px">저장</button>
           </v-btn>
@@ -362,13 +380,13 @@ import Kakaosdk from "vue-kakao-sdk";
 import { OpenVidu } from "openvidu-browser";
 import { Camera } from "@mediapipe/camera_utils";
 import { SelfieSegmentation } from "@mediapipe/selfie_segmentation";
-
 import axios from "axios";
 
 import stompApi from "@/api/stompApi.js";
 
 import LayerController from "@/components/LayerController.vue";
 import UserVideo from "@/components/UserVideo";
+import LayeredVideo from "@/components/LayeredVideo.vue";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
@@ -408,12 +426,16 @@ export default {
       videoSetting: false,
       canvasStream: undefined,
 
+      backGroundImg: "#354521",
+
+      waitingStyle: "",
       page: "waiting", // page가 waiting, shot, result로 변함에 따라 v-if로 교체.
     };
   },
   components: {
     UserVideo,
     LayerController,
+    LayeredVideo,
   },
   computed: {
     inputVideo() {
@@ -468,6 +490,7 @@ export default {
           break;
         // 시작 하기
         case 4:
+          this.mowebStart();
           break;
         // 레이어 변경하기
         case 5:
@@ -484,11 +507,16 @@ export default {
         case 8:
           console.log("BOOM!");
           alert("호스트가 방을 종료하였습니다.");
-          this.$router.replace({ name: "main" });
+          this.leaveSession();
           break;
         default:
           break;
       }
+    },
+    // ---------------------------- 화면 전환 start --------------------------------
+    mowebStart() {
+      this.page = "shot";
+      this.waitingStyle = "visibility:hidden; position:absolute";
     },
     sendMessage() {
       if (this.user_name !== "" && this.message !== "") {
@@ -503,6 +531,7 @@ export default {
       }
       this.message = "";
     },
+    // ----------------------------- 화면 전환 end --------------------------------
     sendLayer(userNames) {
       console.log("Send layer change:" + userNames);
       if (stompApi.stomp && stompApi.stomp.connected) {
@@ -626,6 +655,11 @@ export default {
         }
       }
       this.allReady = true;
+    },
+    startBtn() {
+      stompApi.start({
+        room_no: this.room_no,
+      });
     },
     // ---------------------------- ready end ------------------
     // -------------------- webrtc start ------------------
