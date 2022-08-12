@@ -1,10 +1,22 @@
 <template>
-  <div>
-    <h3>레이어 순서</h3>
-    <draggable :list="dragLayerSequence" :move="checkMove" @end="onMove">
+  <div class="layer_container">
+    <h3 class="layer_title">참가자 목록</h3>
+    <draggable
+      class="layer_list"
+      :list="dragLayerSequence"
+      :move="checkMove"
+      @end="onMove"
+    >
       <transition-group>
-        <div v-for="(userName, index) in dragLayerSequence" :key="userName">
-          {{ index + 1 }} | {{ userName }}
+        <div
+          class="layer_item"
+          v-for="(userName, index) in dragLayerSequence"
+          :key="userName"
+        >
+          <div class="layer_no">
+            {{ index + 1 }}
+          </div>
+          <div class="user_name">{{ userName }}</div>
         </div>
       </transition-group>
     </draggable>
@@ -13,8 +25,6 @@
 
 <script>
 import draggable from "vuedraggable";
-
-import stompApi from "@/api/stompApi.js";
 
 export default {
   // 레이어 순서, 방장 여부, prop으로 받음
@@ -52,4 +62,31 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.layer_container {
+  padding: 20px;
+}
+.layer_list {
+}
+.layer_item {
+  padding: 4px;
+  vertical-align: middle;
+  border-radius: 4px;
+}
+.layer_item:hover {
+  background-color: lightgray;
+  cursor: pointer;
+}
+.layer_no {
+  font-size: 1.2rem;
+  box-sizing: border-box;
+  display: inline-block;
+  width: 24px;
+  text-align: center;
+}
+
+.user_name {
+  font-size: 1.2rem;
+  display: inline-block;
+}
+</style>

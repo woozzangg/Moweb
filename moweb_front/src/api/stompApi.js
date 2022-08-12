@@ -2,6 +2,7 @@ import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
 
 const STOPM_SERVER_URL = "https://i7a507.p.ssafy.io/moweb-api/ws/moweb";
+//const STOPM_SERVER_URL = "http://localhost:8080/moweb-api/ws/moweb";
 
 const stompApi = {
   socket: null,
@@ -44,6 +45,9 @@ const stompApi = {
   },
   shot(message) {
     this.stomp.send(`/app/shot`, JSON.stringify(message));
+  },
+  disconnect() {
+    this.stomp.disconnect();
   },
 };
 

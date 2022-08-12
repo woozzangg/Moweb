@@ -310,9 +310,29 @@
             style="height: 45%; display: block; min-height: 350px; margin: auto"
           >
             <div
-              style="word-break: break-all"
-              v-for="(item, idx) in recvList"
-              :key="idx"
+            style="word-break: break-all"
+            v-for="(chat, idx) in chatList"
+            :key="idx"
+            >
+            <h4>{{ chat }}</h4>
+          </div>
+        </div>
+        <!-- 채팅입력 -->
+        <div class="form">
+          <input
+            class="form_input"
+            type="text"
+            placeholder="채팅을 입력하세요."
+            v-model="message"
+            @keyup.enter="sendMessage"
+          />
+          <div @click="sendMessage" class="form_submit">
+            <svg
+              width="30"
+              height="30"
+              viewBox="0 0 68 68"
+              fill="#CCCCCC"
+              xmlns="http://www.w3.org/2000/svg"
             >
               <h4>{{ item.user_name }}: {{ item.chat_msg }}</h4>
             </div>
@@ -389,7 +409,7 @@ export default {
       message: "",
       room_no: "",
       users: [],
-      recvList: [],
+      chatList: [],
 
       myStatus: false,
       readyStatus: {},
@@ -454,14 +474,14 @@ export default {
         // 채팅방 입장 알림
         case 0:
           console.log("new user entered!!");
-          this.recvList.push(content);
+          this.chatList.push("[알림] " + content.chat_msg);
           this.users = content.users;
           this.readyJoin(content.users);
           break;
         // 채팅
         case 1:
           console.log(`${content.user_name} said ${content.chat_msg}`);
-          this.recvList.push(content);
+          this.chatList.push(content.user_name + ": " + content.chat_msg);
           break;
         // 준비
         case 2:
@@ -487,6 +507,9 @@ export default {
           break;
         // 방장이 나감
         case 8:
+          console.log("BOOM!");
+          alert("호스트가 방을 종료하였습니다.");
+          this.$router.replace({ name: "main" });
           break;
         default:
           break;
@@ -629,6 +652,7 @@ export default {
       }
       this.allReady = true;
     },
+    // ---------------------------- ready end ------------------
     // -------------------- webrtc start ------------------
     joinSession() {
       // --- Get an OpenVidu object ---
@@ -709,8 +733,11 @@ export default {
       this.subscribers = [];
       this.OV = undefined;
       this.videoSetting = false;
+      stompApi.disconnect();
       window.removeEventListener("beforeunload", this.leaveSession);
-      this.$router.replace("/");
+      this.$router.replace("/").then(() => {
+        window.location.reload();
+      });
     },
 
     getToken(mySessionId) {

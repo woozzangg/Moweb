@@ -13,7 +13,7 @@
 import { chromaKey } from "@/utils/chromakey.js";
 
 export default {
-  props: ["width", "height", "layerSequence", "mapUserVideo"],
+  props: ["width", "height", "layerSequence", "mapUserVideo", "backgroundCode"],
   data: function () {
     return {
       canvasContext: null,
@@ -62,14 +62,25 @@ export default {
     processV2() {
       // 기존에 크로마키 된 canvas를 elementid로 그냥 가져와서 그리기
       this.canvasContext.clearRect(0, 0, this.width, this.height);
+      this.canvasContext.fillStyle = this.backgroundCode;
+      this.canvasContext.fillRect(0, 0, this.width, this.height);
 
       this.layerSequence.forEach((userName) => {
         const userCanvas = document.getElementById(`${userName}'s`);
         if (userCanvas) {
-          this.canvasContext.drawImage(userCanvas, 0, 0);
+          this.canvasContext.drawImage(
+            userCanvas,
+            0,
+            0,
+            userCanvas.width,
+            userCanvas.height,
+            0,
+            0,
+            this.width,
+            this.height
+          );
         }
       });
-
       requestAnimationFrame(this.processV2);
     },
   },
