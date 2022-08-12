@@ -13,10 +13,11 @@
           v-for="(userName, index) in dragLayerSequence"
           :key="userName"
         >
-          <div class="layer_no">
-            {{ index + 1 }}
+          <div class="user_name">
+            <div>{{ userName }}</div>
+            <div v-if="index === dragLayerSequence.length - 1">앞</div>
+            <div v-else-if="index === 0">뒤</div>
           </div>
-          <div class="user_name">{{ userName }}</div>
         </div>
       </transition-group>
     </draggable>
@@ -86,7 +87,7 @@ export default {
 }
 
 .user_name {
-  font-size: 1.2rem;
-  display: inline-block;
+  display: flex;
+  justify-content: space-between;
 }
 </style>
