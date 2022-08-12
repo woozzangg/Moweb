@@ -98,7 +98,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public boolean isHost(int room_no, String user_name) {
-        if(rooms.get(room_no).getHost_name() == user_name) {
+        if(rooms.get(room_no).getHost_name().equals(user_name)) {
             return true;
         }
         return false;

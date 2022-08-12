@@ -135,16 +135,11 @@ public class WebSocketController {
         //웹소켓 세션에서 user_name과 방번호 가져오기
         String user_name = (String) headerAccessor.getSessionAttributes().get("user_name");
         int room_no = (int) headerAccessor.getSessionAttributes().get("room_no");
+        WebSocketMessage message = new WebSocketMessage();
         if(user_name != null) {
             roomService.exit(room_no, user_name); //퇴장 처리
+            message.setAction(0);
 
-            WebSocketMessage message = new WebSocketMessage();
-            if(roomService.isHost(room_no, user_name)) {
-                message.setAction(8);
-                roomService.finish(room_no);
-            }else {
-                message.setAction(0);
-            }
             message.setRoom_no(room_no);
             message.setUser_name(user_name);
             message.setChat_msg(user_name+ "님이 퇴장하였습니다.");
@@ -154,6 +149,13 @@ public class WebSocketController {
             headerAccessor.getSessionAttributes().clear();
 
             sendingOperations.convertAndSend("/topic/moweb/room/"+message.getRoom_no(),message);
+
+            if(roomService.isHost(room_no, user_name)) {
+                message.setAction(8);
+                roomService.finish(room_no);
+                logger.info("room "+ room_no + " : BOOM!");
+                sendingOperations.convertAndSend("/topic/moweb/room/"+message.getRoom_no(),message);
+            }
         }
     }
 }
