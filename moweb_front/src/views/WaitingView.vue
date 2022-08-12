@@ -378,7 +378,7 @@
               width="30"
               height="30"
               viewBox="0 0 68 68"
-              fill="#CCCCCC"
+              fill="#757575"
               xmlns="http://www.w3.org/2000/svg"
             >
               <g clip-path="url(#clip0_26_10)">
@@ -994,7 +994,7 @@ svg {
 }
 
 svg:hover {
-  fill: #999999;
+  fill: #3c3c3c;
 }
 
 .linkbtn {
