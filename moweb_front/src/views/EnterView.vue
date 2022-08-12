@@ -1,5 +1,10 @@
 <template>
-  <v-container class="border-style2" d-flex justify-space-around>
+  <v-container
+    class="border-style2"
+    d-flex
+    justify-space-around
+    style="width: 80%; margin: 50px auto"
+  >
     <video v-show="false" ref="input_video"></video>
     <v-col cols="12">
       <v-row>
@@ -230,6 +235,7 @@ export default {
 .border-style2 {
   border: 25px solid rgb(0, 0, 0);
   border-radius: 15px;
+  background-color: white;
 }
 img {
   display: block;

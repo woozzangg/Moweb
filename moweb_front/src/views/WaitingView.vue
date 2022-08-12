@@ -2,7 +2,12 @@
   <!-- 컨테이너 시작 -->
   <v-container
     class="border-style2"
-    style="margin: 20px auto 0px auto; padding: 0px"
+    style="
+      width: 90%;
+      min-height: 800px;
+      margin: 20px auto 0px auto;
+      padding: 0px;
+    "
   >
     <!-- row로 구간 나눔 -->
 
@@ -20,13 +25,7 @@
     ></canvas>
     <v-row d-flex fluid justify-space-around style="margin: 0px">
       <!-- 왼쪽 영역 -->
-      <v-col
-        no-gutters
-        fluid
-        cols="8"
-        class="border-style1"
-        style="margin: 10px auto 0px auto"
-      >
+      <div no-gutters style="width: 71%; margin: 10px auto 0px auto">
         <!-- //////////// 여기서 v-if나 v-show로  if else 걸어서 두기 -->
         <!-- ///////// 정상화면 row 9 , 2 -->
         <!-- # WebRTC 화면 부분 -->
@@ -163,101 +162,96 @@
             class="border-style1"
             style="margin: 20px auto 0px auto"
           >
-            배경 선택 할 carousel
-            <v-card
-              v-scroll.self="onScroll"
-              class="overflow-y-auto"
-              max-height="400"
-            >
-              <v-banner class="justify-center text-h5 font-weight-light" sticky>
-                Scroll Me - Method invoked
+            <div>
+              <v-card elevation="16" max-width="400" class="mx-auto, mt-auto">
+                <v-virtual-scroll
+                  :bench="benched"
+                  :items="items"
+                  height="600"
+                  item-height="120"
+                >
+                  <template v-slot:default="{ item }">
+                    <v-list-item :key="item">
+                      <v-list-item-action>
+                        <v-btn fab small depressed color="primary">
+                          {{ item }}
+                        </v-btn>
+                      </v-list-item-action>
 
-                <span class="font-weight-bold" v-text="scrollInvoked"></span>
+                      <v-list-item-content>
+                        <v-list-item-title>
+                          User Database Record <strong>ID {{ item }}</strong>
+                        </v-list-item-title>
+                      </v-list-item-content>
 
-                times
-              </v-banner>
+                      <v-list-item-action>
+                        <v-icon small> mdi-open-in-new </v-icon>
+                      </v-list-item-action>
+                    </v-list-item>
 
-              <v-card-text>
-                <div v-for="n in 12" :key="n" class="mb-4">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi
-                  commodi earum tenetur. Asperiores dolorem placeat ab nobis
-                  iusto culpa, autem molestias molestiae quidem pariatur.
-                  Debitis beatae expedita nam facere perspiciatis. Lorem ipsum
-                  dolor sit amet consectetur adipisicing elit. Repellendus
-                  ducimus cupiditate rerum officiis consequuntur laborum
-                  doloremque quaerat ipsa voluptates, nobis nam quis nulla ullam
-                  at corporis, similique ratione quasi illo!
-                </div>
-              </v-card-text>
-            </v-card>
+                    <v-divider></v-divider>
+                  </template>
+                </v-virtual-scroll>
+              </v-card>
+            </div>
           </v-col>
         </v-row> -->
 
         <!-- # 결과화면 들어가는곳  -->
 
-        <v-row
-          no-gutters
-          rows="9"
-          fluid
-          class="border-style1"
-          style="margin: 5px"
-        >
-          <v-container class="border-style1" style="margin: auto">
-            <canvas
-              ref="resultCanvas"
-              class="border-style1"
-              width="320"
-              height="240"
-              style="background-color: #b7f0b1; margin: 5px"
-              v-if="page == 'result'"
-            ></canvas>
-            <div id="main-container" class="container" v-if="page == 'waiting'">
-              <div id="session" v-if="session">
-                <div id="session-header">
-                  <h1 id="session-title">{{ room_no }}</h1>
-                </div>
-
-                <v-container>
-                  <v-row>
-                    <v-col>
-                      <user-video
-                        v-if="videoSetting"
-                        :stream-manager="publisher"
-                      />
-                      <p v-show="readyStatus[user_name]" style="color: red">
-                        ready
-                      </p>
-                    </v-col>
-                    <v-col
-                      v-for="sub in subscribers"
-                      :key="sub.stream.connection.connectionId"
-                    >
-                      <user-video :stream-manager="sub" />
-                      <p
-                        v-show="
-                          readyStatus[
-                            JSON.parse(sub.stream.connection.data).clientData
-                          ]
-                        "
-                        style="color: red"
-                      >
-                        ready
-                      </p>
-                    </v-col>
-                  </v-row>
-                </v-container>
+        <v-container class="border-style1" style="height: 72%; margin: 5px">
+          <canvas
+            ref="resultCanvas"
+            class="border-style1"
+            width="320"
+            height="240"
+            style="background-color: #b7f0b1; margin: 5px"
+            v-if="page == 'result'"
+          ></canvas>
+          <div id="main-container" class="container" v-if="page == 'waiting'">
+            <div id="session" v-if="session">
+              <div id="session-header">
+                <h1 id="session-title">{{ room_no }}</h1>
               </div>
-            </div>
-          </v-container>
-          WebRTC 화면이 들어올 곳
-        </v-row>
 
-        <v-row
-          fluid
+              <v-container>
+                <v-row>
+                  <v-col>
+                    <user-video
+                      v-if="videoSetting"
+                      :stream-manager="publisher"
+                    />
+                    <p v-show="readyStatus[user_name]" style="color: red">
+                      ready
+                    </p>
+                  </v-col>
+                  <v-col
+                    v-for="sub in subscribers"
+                    :key="sub.stream.connection.connectionId"
+                  >
+                    <user-video :stream-manager="sub" />
+                    <p
+                      v-show="
+                        readyStatus[
+                          JSON.parse(sub.stream.connection.data).clientData
+                        ]
+                      "
+                      style="color: red"
+                    >
+                      ready
+                    </p>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </div>
+          </div>
+          WebRTC 화면이 들어올 곳
+        </v-container>
+
+        <v-container
           no-gutters
-          rows="2"
           class="border-style1"
-          style="margin: 4px"
+          style="height: 24%; margin: 4px"
         >
           버튼 모음집
           <v-btn @click="cameraBtnHandler">
@@ -276,20 +270,14 @@
           </v-btn>
 
           <v-btn id="buttonLeaveSession" @click="leaveBtn"> 나가기 </v-btn>
-        </v-row>
+        </v-container>
         <!-- <br /> -->
-      </v-col>
+      </div>
       <!-- <v-spacer></v-spacer> -->
       <!-- 오른쪽 영역 시작 -->
-      <v-col
-        fluid
-        no-gutters
-        cols="3"
-        class="border-style1"
-        style="margin: 10px auto 0px auto"
-      >
+      <div style="width: 26%; margin: 10px auto 0px auto">
         <!-- 참여 멤버 -->
-        <v-row no-gutters fluid rows="4" class="border-style1">
+        <div no-gutters class="border-style1" style="height: 36%; margin: auto">
           <!-- 이거 버튼 왜 안먹냐 오른쪽으로 붙는거-->
           <!-- 이거 링크 버튼임 -->
           <v-btn
@@ -309,15 +297,13 @@
             :roomNo="room_no"
             @sendLayer="sendLayer"
           ></layer-controller>
-        </v-row>
+        </div>
         <br />
         <!-- 채팅창 -->
-        <v-row
+        <div
           no-gutters
-          fluid
-          rows="6"
           class="border-style1"
-          style="display: block; height: 350px"
+          style="height: 60%; display: block; min-height: 351px; margin: auto"
         >
           <div
             style="word-break: break-all"
@@ -326,7 +312,7 @@
           >
             <h4>{{ item.user_name }}: {{ item.chat_msg }}</h4>
           </div>
-        </v-row>
+        </div>
         <!-- 채팅입력 -->
         <div class="form">
           <input
@@ -365,7 +351,7 @@
             </svg>
           </div>
         </div>
-      </v-col>
+      </div>
     </v-row>
   </v-container>
 </template>
@@ -393,6 +379,7 @@ Vue.use(Kakaosdk, { apiKey });
 export default {
   data() {
     return {
+      benched: 0,
       user_name: "",
       message: "",
       room_no: "",
@@ -434,6 +421,13 @@ export default {
     },
     layerSequence() {
       return this.users.map((user) => user.user_name);
+    },
+    // 배경선택부분
+    items() {
+      return Array.from({ length: this.length }, (k, v) => v + 1);
+    },
+    length() {
+      return 20;
     },
   },
   created() {
