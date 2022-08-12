@@ -3,7 +3,7 @@
   <v-container
     class="border-style2"
     style="
-      width: 90%;
+      width: 85%;
       min-height: 800px;
       margin: 20px auto 0px auto;
       padding: 0px;
@@ -25,7 +25,10 @@
     ></canvas>
     <v-row d-flex fluid justify-space-around style="margin: 0px">
       <!-- 왼쪽 영역 -->
-      <div no-gutters style="width: 71%; margin: 10px auto 0px auto">
+      <div
+        no-gutters
+        style="width: 71%; margin: 5px auto 0px auto; min-height: 750px"
+      >
         <!-- //////////// 여기서 v-if나 v-show로  if else 걸어서 두기 -->
         <!-- ///////// 정상화면 row 9 , 2 -->
         <!-- # WebRTC 화면 부분 -->
@@ -198,8 +201,7 @@
         </v-row> -->
 
         <!-- # 결과화면 들어가는곳  -->
-
-        <v-container class="border-style1" style="height: 72%; margin: 5px">
+        <v-container class="webrtc" style="height: 85%; margin: 0px">
           <canvas
             ref="resultCanvas"
             class="border-style1"
@@ -208,7 +210,7 @@
             style="background-color: #b7f0b1; margin: 5px"
             v-if="page == 'result'"
           ></canvas>
-          <div id="main-container" class="container" v-if="page == 'waiting'">
+          <div id="main-container" class="container">
             <div id="session" v-if="session">
               <div id="session-header">
                 <h1 id="session-title">{{ room_no }}</h1>
@@ -218,14 +220,16 @@
                 <v-row>
                   <v-col>
                     <user-video
+                      :style="waitingStyle"
                       v-if="videoSetting"
                       :stream-manager="publisher"
                     />
                     <p v-show="readyStatus[user_name]" style="color: red">
-                      ready
+                      Ready
                     </p>
                   </v-col>
                   <v-col
+                    v-show="page == 'waiting'"
                     v-for="sub in subscribers"
                     :key="sub.stream.connection.connectionId"
                   >
@@ -238,51 +242,60 @@
                       "
                       style="color: red"
                     >
-                      ready
+                      Ready
                     </p>
                   </v-col>
                 </v-row>
               </v-container>
+              <v-container v-if="page == 'shot'">
+                <p>
+                  <layered-video
+                    width="640"
+                    height="480"
+                    :backgroundCode="backGroundImg"
+                    :layerSequence="layerSequence"
+                  ></layered-video></p
+              ></v-container>
             </div>
           </div>
-          WebRTC 화면이 들어올 곳
         </v-container>
 
         <v-container
           no-gutters
-          class="border-style1"
-          style="height: 24%; margin: 4px"
+          class="btnzip"
+          style="height: 10%; margin: 4px; padding:2px; justify-content-center"
         >
-          버튼 모음집
-          <v-btn @click="cameraBtnHandler">
-            {{ cameraBtnTxt }}
-          </v-btn>
-          <v-btn @click="micBtnHandler">
-            {{ micBtnTxt }}
-          </v-btn>
-          <v-btn v-if="is_admin" v-bind:disabled="!allReady">start</v-btn>
-          <v-btn v-if="!is_admin" @click="readyBtn">ready</v-btn>
-          <v-btn elevation="9" outlined tile rounded>
-            <button @click="savePhoto" style="margin: 10px">저장</button>
-          </v-btn>
-          <v-btn class="pink white--text">
-            <button @click="sharePhoto" style="margin: 10px">공유</button>
-          </v-btn>
+          <div class="btncss" justify="center">
+            <v-btn @click="cameraBtnHandler">
+              {{ cameraBtnTxt }}
+            </v-btn>
+            <v-btn @click="micBtnHandler">
+              {{ micBtnTxt }}
+            </v-btn>
+            <v-btn v-if="is_admin" v-bind:disabled="!allReady">start</v-btn>
+            <v-btn v-if="!is_admin" @click="readyBtn">ready</v-btn>
+            <v-btn elevation="9" outlined tile rounded>
+              <button @click="savePhoto" style="margin: 10px">저장</button>
+            </v-btn>
+            <v-btn class="pink white--text">
+              <button @click="sharePhoto" style="margin: 10px">공유</button>
+            </v-btn>
 
-          <v-btn id="buttonLeaveSession" @click="leaveBtn"> 나가기 </v-btn>
+            <v-btn id="buttonLeaveSession" @click="leaveBtn"> 나가기 </v-btn>
+          </div>
         </v-container>
         <!-- <br /> -->
       </div>
       <!-- <v-spacer></v-spacer> -->
       <!-- 오른쪽 영역 시작 -->
-      <div style="width: 26%; margin: 10px auto 0px auto">
+      <div style="width: 26%; margin: 5px auto 0px auto">
         <!-- 참여 멤버 -->
-        <div no-gutters class="border-style1" style="height: 36%; margin: auto">
+        <div no-gutters class="members" style="height: 30%; margin: auto">
           <!-- 이거 버튼 왜 안먹냐 오른쪽으로 붙는거-->
           <!-- 이거 링크 버튼임 -->
           <v-btn
             d-flex
-            class="float-right"
+            class="linkbtn"
             outlined
             rounded
             color="primary"
@@ -364,6 +377,7 @@ import stompApi from "@/api/stompApi.js";
 
 import LayerController from "@/components/LayerController.vue";
 import UserVideo from "@/components/UserVideo";
+import LayeredVideo from "@/components/LayeredVideo.vue";
 
 import VueChatScroll from "vue-chat-scroll";
 
@@ -412,12 +426,16 @@ export default {
       videoSetting: false,
       canvasStream: undefined,
 
+      backGroundImg: "#354521",
+
+      waitingStyle: "",
       page: "waiting", // page가 waiting, shot, result로 변함에 따라 v-if로 교체.
     };
   },
   components: {
     UserVideo,
     LayerController,
+    LayeredVideo,
   },
   computed: {
     inputVideo() {
@@ -488,11 +506,16 @@ export default {
         case 8:
           console.log("BOOM!");
           alert("호스트가 방을 종료하였습니다.");
-          this.$router.replace({ name: "main" });
+          this.leaveSession();
           break;
         default:
           break;
       }
+    },
+    // ---------------------------- 화면 전환 start --------------------------------
+    mowebStart() {
+      this.page = "shot";
+      this.waitingStyle = "visibility:hidden; position:absolute";
     },
     sendMessage() {
       if (this.user_name !== "" && this.message !== "") {
@@ -507,6 +530,7 @@ export default {
       }
       this.message = "";
     },
+    // ----------------------------- 화면 전환 end --------------------------------
     sendLayer(userNames) {
       console.log("Send layer change:" + userNames);
       if (stompApi.stomp && stompApi.stomp.connected) {
@@ -630,6 +654,11 @@ export default {
         }
       }
       this.allReady = true;
+    },
+    startBtn() {
+      stompApi.start({
+        room_no: this.room_no,
+      });
     },
     // ---------------------------- ready end ------------------
     // -------------------- webrtc start ------------------
@@ -911,5 +940,42 @@ svg {
 
 svg:hover {
   fill: #999999;
+}
+
+.linkbtn {
+  float: right;
+  margin: 3px 3px;
+}
+.members {
+  background-color: #faf4aa;
+  border-radius: 15px;
+
+  box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.5);
+}
+.chatting {
+  background-color: #faa284;
+  border-radius: 15px;
+  padding: 2px;
+
+  box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
+}
+.webrtc {
+  background-color: #fff0f0;
+  border-radius: 15px;
+  padding: 2px;
+
+  box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.5);
+}
+.btnzip {
+  width: 99%;
+  position: relative;
+
+  box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
+}
+.btncss {
+  position: absolute;
+  left: 30%;
+
+  box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
 }
 </style>
