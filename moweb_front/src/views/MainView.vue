@@ -27,11 +27,7 @@
           화상으로 미팅 중인 동료들과도<br />
           그때 그 순간을 기록할 수 있어요!</span
         >
-        <div class="photoGroupTwo">
-          <div class="earth"></div>
-          <div class="hospital"></div>
-          <div class="meeting"></div>
-        </div>
+        <div class="photoGroupTwo"></div>
         <div class="containerFirst"></div>
         <div class="pictureFirst"></div>
         <span class="stepFirst">STEP 1</span>
@@ -74,7 +70,7 @@ body {
 }
 .frame {
   width: 100%;
-  height: 7000px;
+  height: 4500px;
   background: #e8f0ff;
   opacity: 1;
   position: relative;
@@ -91,7 +87,7 @@ body {
   background-size: cover;
   opacity: 1;
   position: absolute;
-  top: 2%;
+  top: 3%;
   left: 68%;
   transform: rotate(-15deg);
   overflow: hidden;
@@ -105,7 +101,7 @@ body {
   background-size: cover;
   opacity: 1;
   position: absolute;
-  top: 1.7%;
+  top: 2.5%;
   left: 74%;
   transform: rotate(11deg);
   overflow: hidden;
@@ -118,7 +114,7 @@ body {
   background-size: cover;
   opacity: 1;
   position: absolute;
-  top: 2%;
+  top: 3%;
   left: 20%;
   overflow: hidden;
 }
@@ -126,7 +122,7 @@ body {
   width: 777rem;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 2%;
+  top: 3%;
   left: 0px;
   font-family: SCDream;
   font-weight: 5;
@@ -138,7 +134,7 @@ body {
   width: 106rem;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 1.3%;
+  top: 2%;
   left: 9px;
   font-family: NanumGgeu;
   font-size: 3rem;
@@ -164,7 +160,7 @@ body {
   background-size: cover;
   opacity: 1;
   position: absolute;
-  top: 16.5rem;
+  top: 17rem;
   left: 15rem;
   font-family: SCDream;
   font-weight: 4;
@@ -179,13 +175,13 @@ body {
   background-size: cover;
   opacity: 1;
   position: absolute;
-  top: 13%;
+  top: 27%;
   left: 16%;
   overflow: hidden;
 }
 .cameraFrame {
-  width: 330px;
-  height: 330px;
+  width: 300px;
+  height: 300px;
   background: url("@/assets/images/cameraFrame.png");
   background-repeat: no-repeat;
   background-position: center center;
@@ -204,14 +200,14 @@ body {
   opacity: 85%;
   position: relative;
   top: 0;
-  left: 2.5em;
+  left: 2em;
   overflow: hidden;
 }
 .explainOne {
   width: 100%;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 14.5%;
+  top: 30%;
   left: 58%;
   font-family: SCDream;
   font-weight: 3;
@@ -223,7 +219,7 @@ body {
   width: 100%;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 24%;
+  top: 40%;
   left: 14.5%;
   font-family: SCDream;
   font-weight: 3;
@@ -232,62 +228,25 @@ body {
   text-align: left;
 }
 .photoGroupTwo {
-  width: 100%;
-  height: 100%;
+  width: 270px;
+  height: 270px;
+  background: url("@/assets/images/photoGroupTwo.png");
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
   opacity: 1;
   position: absolute;
-  top: 22%;
+  top: 40%;
   left: 59%;
-  overflow: hidden;
-}
-.earth {
-  width: 180px;
-  height: 180px;
-  background: url("@/assets/images/earth.png");
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-  opacity: 1;
-  position: absolute;
-  left: 9%;
-  overflow: hidden;
-}
-.hospital {
-  width: 180px;
-  height: 180px;
-  background: url("@/assets/images/hospital.png");
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-  opacity: 1;
-  position: absolute;
-  left: 1.5%;
-  top: 2.5%;
-  overflow: hidden;
-}
-.meeting {
-  width: 160px;
-  height: 160px;
-  background: url("@/assets/images/meeting.png");
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-  opacity: 1;
-  position: absolute;
-  top: 2.7%;
-  left: 17%;
   overflow: hidden;
 }
 .containerFirst {
   width: 80%;
-  height: 8%;
+  height: 12%;
   background: rgba(236, 236, 236, 1);
   opacity: 1;
   position: absolute;
-  top: 33%;
+  top: 50%;
   left: 10%;
   overflow: hidden;
 }
@@ -330,11 +289,11 @@ body {
 }
 .containerSecond {
   width: 80%;
-  height: 8%;
+  height: 12%;
   background: rgba(236, 236, 236, 1);
   opacity: 1;
   position: absolute;
-  top: 44%;
+  top: 65%;
   left: 10%;
   overflow: hidden;
 }
@@ -381,7 +340,7 @@ body {
   background: rgba(236, 236, 236, 1);
   opacity: 1;
   position: absolute;
-  top: 55%;
+  top: 72%;
   left: 10%;
   overflow: hidden;
 }
@@ -428,7 +387,7 @@ body {
   background: rgba(236, 236, 236, 1);
   opacity: 1;
   position: absolute;
-  top: 66%;
+  top: 83%;
   left: 10%;
   overflow: hidden;
 }
