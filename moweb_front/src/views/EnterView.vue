@@ -1,7 +1,7 @@
 <template>
-  <v-container class="border-style1" d-flex justify-space-around>
+  <v-container class="border-style2" d-flex justify-space-around>
     <video v-show="false" ref="input_video"></video>
-    <v-col cols="10">
+    <v-col cols="12">
       <v-row>
         <canvas
           class="output_canvas"
@@ -9,13 +9,14 @@
           :width="width"
           :height="height"
           style="transform: rotateY(180deg); margin: auto"
+          justify="center"
         ></canvas>
       </v-row>
-      <v-row class="centercss">
+      <v-row class="centercss" style="margin: 5px">
         <input
           placeholder="닉네임 입력"
           v-model="user_name"
-          style="border-style: solid"
+          style="border-style: solid; margin: 20px auto 10px auto"
         />
         <input
           placeholder="url, join테스트 추후 삭제예정"
@@ -23,17 +24,19 @@
           style="border-style: solid"
         />
       </v-row>
-      <v-row
-        fluid
-        no-gutters
-        rows="2"
-        class="border-style1"
-        style="margin: 4px"
-      >
-        버튼 모음집
-
-        <v-btn v-if="!url" @click="createRoom">방만들기</v-btn>
-        <v-btn v-if="url" @click="joinRoom">방입장하기</v-btn>
+      <v-row fluid no-gutters rows="2" style="margin: 4px; padding: 0px">
+        <v-btn
+          v-if="!url"
+          @click="createRoom"
+          style="border-style: solid; margin: auto"
+          >방만들기</v-btn
+        >
+        <v-btn
+          v-if="url"
+          @click="joinRoom"
+          style="border-style: solid; margin: auto"
+          >방입장하기</v-btn
+        >
       </v-row>
     </v-col>
   </v-container>

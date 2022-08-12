@@ -1,6 +1,9 @@
 <template>
   <!-- 컨테이너 시작 -->
-  <v-container class="border-style1" style="margin: 20px 0px 0px 50px">
+  <v-container
+    class="border-style2"
+    style="margin: 20px auto 0px auto; padding: 0px"
+  >
     <!-- row로 구간 나눔 -->
 
     <!-- 캠에서 가져온 소스비디오 -->
@@ -103,7 +106,7 @@
         <!-- 촬영화면 들어가는곳 -->
         <!-- # 배경선택 들어갔을때 화면 col 나눈 후 ㅇㅇ -->
 
-        <v-row>
+        <!-- <v-row>
           <v-col
             no-gutters
             fluid
@@ -188,7 +191,7 @@
               </v-card-text>
             </v-card>
           </v-col>
-        </v-row>
+        </v-row> -->
 
         <!-- # 결과화면 들어가는곳  -->
 
@@ -199,10 +202,7 @@
           class="border-style1"
           style="margin: 5px"
         >
-          <v-container
-            class="border-style1; aaaaaa"
-            style="margin: 50px 100px 50px 100px"
-          >
+          <v-container class="border-style1" style="margin: auto">
             <canvas
               ref="resultCanvas"
               class="border-style1"
