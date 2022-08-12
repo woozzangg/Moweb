@@ -136,6 +136,8 @@ public class WebSocketController {
         String user_name = (String) headerAccessor.getSessionAttributes().get("user_name");
         int room_no = (int) headerAccessor.getSessionAttributes().get("room_no");
         if(user_name != null) {
+            roomService.exit(room_no, user_name); //퇴장 처리
+
             WebSocketMessage message = new WebSocketMessage();
             if(roomService.isHost(room_no, user_name)) {
                 message.setAction(8);
@@ -150,7 +152,6 @@ public class WebSocketController {
             logger.info("User Disconnected : " + user_name);
             logger.info("layer change");
             headerAccessor.getSessionAttributes().clear();
-            roomService.exit(room_no, user_name);
 
             sendingOperations.convertAndSend("/topic/moweb/room/"+message.getRoom_no(),message);
         }
