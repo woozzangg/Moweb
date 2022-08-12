@@ -319,10 +319,10 @@
         >
           <div
             style="word-break: break-all"
-            v-for="(item, idx) in recvList"
+            v-for="(chat, idx) in chatList"
             :key="idx"
           >
-            <h4>{{ item.user_name }}: {{ item.chat_msg }}</h4>
+            <h4>{{ chat }}</h4>
           </div>
         </v-row>
         <!-- 채팅입력 -->
@@ -394,7 +394,7 @@ export default {
       message: "",
       room_no: "",
       users: [],
-      recvList: [],
+      chatList: [],
 
       myStatus: false,
       readyStatus: {},
@@ -452,14 +452,14 @@ export default {
         // 채팅방 입장 알림
         case 0:
           console.log("new user entered!!");
-          this.recvList.push(content);
+          this.chatList.push("[알림] " + content.chat_msg);
           this.users = content.users;
           this.readyJoin(content.users);
           break;
         // 채팅
         case 1:
           console.log(`${content.user_name} said ${content.chat_msg}`);
-          this.recvList.push(content);
+          this.chatList.push(content.user_name + ": " + content.chat_msg);
           break;
         // 준비
         case 2:
