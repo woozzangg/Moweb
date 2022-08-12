@@ -173,27 +173,7 @@
                   height="600"
                   item-height="120"
                 >
-                  <template v-slot:default="{ item }">
-                    <v-list-item :key="item">
-                      <v-list-item-action>
-                        <v-btn fab small depressed color="primary">
-                          {{ item }}
-                        </v-btn>
-                      </v-list-item-action>
-
-                      <v-list-item-content>
-                        <v-list-item-title>
-                          User Database Record <strong>ID {{ item }}</strong>
-                        </v-list-item-title>
-                      </v-list-item-content>
-
-                      <v-list-item-action>
-                        <v-icon small> mdi-open-in-new </v-icon>
-                      </v-list-item-action>
-                    </v-list-item>
-
-                    <v-divider></v-divider>
-                  </template>
+                  배경색깔
                 </v-virtual-scroll>
               </v-card>
             </div>
@@ -248,14 +228,47 @@
                 </v-row>
               </v-container>
               <v-container v-if="page == 'shot'">
-                <p>
-                  <layered-video
-                    width="640"
-                    height="480"
-                    :backgroundCode="backGroundImg"
-                    :layerSequence="layerSequence"
-                  ></layered-video></p
-              ></v-container>
+                <v-col>
+                  <v-row class="justify-space-around">
+                    <layered-video
+                      width="640"
+                      height="480"
+                      :backgroundCode="backGroundImg"
+                      :layerSequence="layerSequence"
+                    ></layered-video>
+                  </v-row>
+                  <v-row class="justify-space-around">
+                    <v-dialog
+                      transition="dialog-top-transition"
+                      max-width="320"
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn color="primary" v-bind="attrs" v-on="on"
+                          >From the top</v-btn
+                        >
+                      </template>
+                      <template v-slot:default="dialog">
+                        <v-card min-height="370">
+                          <v-color-picker
+                            v-model="bg_code"
+                            dot-size="12"
+                            hide-mode-switch
+                            mode="hexa"
+                            style="margin: auto; padding-top: 10px"
+                          ></v-color-picker>
+                          <v-card-actions class="justify-end">
+                            <v-btn text @click="backGroundBtn">적용하기</v-btn>
+                            <v-btn text @click="dialog.value = false"
+                              >닫기</v-btn
+                            >
+                          </v-card-actions>
+                        </v-card>
+                      </template>
+                    </v-dialog>
+                  </v-row>
+                  <!--  -->
+                </v-col>
+              </v-container>
             </div>
           </div>
         </v-container>
@@ -272,12 +285,19 @@
             <v-btn @click="micBtnHandler">
               {{ micBtnTxt }}
             </v-btn>
-            <v-btn v-if="is_admin" v-bind:disabled="!allReady">start</v-btn>
-            <v-btn v-if="!is_admin" @click="readyBtn">ready</v-btn>
-            <v-btn elevation="9" outlined tile rounded>
+            <v-btn
+              v-if="is_admin && page == 'waiting'"
+              v-bind:disabled="!allReady"
+              @click="startBtn"
+              >start</v-btn
+            >
+            <v-btn v-if="!is_admin && page == 'waiting'" @click="readyBtn"
+              >ready</v-btn
+            >
+            <v-btn elevation="9" v-if="page == 'result'" outlined tile rounded>
               <button @click="savePhoto" style="margin: 10px">저장</button>
             </v-btn>
-            <v-btn class="pink white--text">
+            <v-btn v-if="page == 'result'" class="pink white--text">
               <button @click="sharePhoto" style="margin: 10px">공유</button>
             </v-btn>
 
@@ -300,6 +320,7 @@
             rounded
             color="primary"
             @click="linkBtn"
+            position="absolute"
           >
             링크
           </v-btn>
@@ -426,8 +447,8 @@ export default {
       videoSetting: false,
       canvasStream: undefined,
 
-      backGroundImg: "#354521",
-
+      backGroundImg: "#3D939EFF",
+      bg_code: "",
       waitingStyle: "",
       page: "waiting", // page가 waiting, shot, result로 변함에 따라 v-if로 교체.
     };
@@ -490,6 +511,7 @@ export default {
           break;
         // 시작 하기
         case 4:
+          this.mowebStart();
           break;
         // 레이어 변경하기
         case 5:
@@ -498,6 +520,7 @@ export default {
           break;
         // 배경 선택하기
         case 6:
+          this.backGroundImg = content.bg_code;
           break;
         // 촬영하기
         case 7:
@@ -511,6 +534,12 @@ export default {
         default:
           break;
       }
+    },
+    backGroundBtn() {
+      stompApi.theme({
+        room_no: this.room_no,
+        bg_code: this.bg_code,
+      });
     },
     // ---------------------------- 화면 전환 start --------------------------------
     mowebStart() {
@@ -906,14 +935,19 @@ video {
   margin: auto;
   overflow-y: auto;
   box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
+  background-color: #ecb7a5;
+  border-radius: 15px;
+  padding: 1.4rem;
 }
 
 .form {
   display: flex;
   justify-content: space-between;
   padding: 1.4rem;
-  background: #ffffff;
+  background: #f7cee7;
   /* border-radius: 30px 30px 24px 24px; */
+
+  border-radius: 15px;
   box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
 }
 
@@ -951,13 +985,6 @@ svg:hover {
   border-radius: 15px;
 
   box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.5);
-}
-.chatting {
-  background-color: #faa284;
-  border-radius: 15px;
-  padding: 2px;
-
-  box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
 }
 .webrtc {
   background-color: #fff0f0;
