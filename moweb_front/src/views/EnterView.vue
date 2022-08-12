@@ -18,11 +18,6 @@
           v-model="user_name"
           style="border-style: solid; margin: 20px auto 10px auto"
         />
-        <input
-          placeholder="url, join테스트 추후 삭제예정"
-          v-model="url"
-          style="border-style: solid"
-        />
       </v-row>
       <v-row fluid no-gutters rows="2" style="margin: 4px; padding: 0px">
         <v-btn
