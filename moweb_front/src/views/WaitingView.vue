@@ -204,7 +204,11 @@
                       v-if="videoSetting"
                       :stream-manager="publisher"
                     />
-                    <p v-show="readyStatus[user_name]" style="color: red">
+                    <p
+                      v-if="page == 'waiting'"
+                      v-show="readyStatus[user_name]"
+                      style="color: red"
+                    >
                       Ready
                     </p>
                   </v-col>
@@ -244,7 +248,7 @@
                     >
                       <template v-slot:activator="{ on, attrs }">
                         <v-btn color="primary" v-bind="attrs" v-on="on"
-                          >From the top</v-btn
+                          >배경 색상 선택</v-btn
                         >
                       </template>
                       <template v-slot:default="dialog">
