@@ -300,11 +300,7 @@
         </div>
         <br />
         <!-- 채팅창 -->
-        <div
-          no-gutters
-          class="border-style1"
-          style="height: 60%; display: block; min-height: 351px; margin: auto"
-        >
+        <div no-gutters class="chat_body" v-chat-scroll>
           <div
             style="word-break: break-all"
             v-for="(chat, idx) in chatList"
@@ -357,8 +353,7 @@
 </template>
 <script>
 import Vue from "vue";
-import Html2canvas from "html2canvas";
-import Kakaosdk from "vue-kakao-sdk";
+
 import { OpenVidu } from "openvidu-browser";
 import { Camera } from "@mediapipe/camera_utils";
 import { SelfieSegmentation } from "@mediapipe/selfie_segmentation";
@@ -370,12 +365,21 @@ import stompApi from "@/api/stompApi.js";
 import LayerController from "@/components/LayerController.vue";
 import UserVideo from "@/components/UserVideo";
 
+import VueChatScroll from "vue-chat-scroll";
+
+import Html2canvas from "html2canvas";
+import Kakaosdk from "vue-kakao-sdk";
+
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 const OPENVIDU_SERVER_URL = "https://i7a507.p.ssafy.io:8443";
 const OPENVIDU_SERVER_SECRET = "MY_SECRET";
+
 const apiKey = "59074e20c9d80e6e5200a4bd60122af7";
 Vue.use(Kakaosdk, { apiKey });
+
+Vue.use(VueChatScroll);
+
 export default {
   data() {
     return {
@@ -862,9 +866,17 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 video {
   transform: rotateY(180deg);
+}
+
+.chat_body {
+  height: 400px;
+  padding: 0.4rem;
+  margin: auto;
+  overflow-y: auto;
+  box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
 }
 
 .form {
