@@ -485,6 +485,9 @@ export default {
           break;
         // 방장이 나감
         case 8:
+          console.log("BOOM!");
+          alert("호스트가 방을 종료하였습니다.");
+          this.$router.replace({ name: "main" });
           break;
         default:
           break;
