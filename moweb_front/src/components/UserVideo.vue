@@ -20,7 +20,6 @@ export default {
   props: {
     streamManager: Object,
   },
-
   computed: {
     clientData() {
       const { clientData } = this.getConnectionData();
