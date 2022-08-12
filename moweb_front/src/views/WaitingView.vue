@@ -252,7 +252,9 @@
             <v-btn @click="micBtnHandler">
               {{ micBtnTxt }}
             </v-btn>
-            <v-btn v-if="is_admin" v-bind:disabled="!allReady" @click="startBtn">start</v-btn>
+            <v-btn v-if="is_admin" v-bind:disabled="!allReady" @click="startBtn"
+              >start</v-btn
+            >
             <v-btn v-if="!is_admin" @click="readyBtn">ready</v-btn>
             <v-btn elevation="9" outlined tile rounded>
               <button @click="savePhoto" style="margin: 10px">저장</button>
