@@ -16,5 +16,5 @@ public interface RoomService {
     void exit(int room_no, String user_name);
     boolean isHost(int room_no, String user_name);
     User[] userList(int room_no);
-    void finish(int room_no);
+    void cantJoin(int room_no);
 }
