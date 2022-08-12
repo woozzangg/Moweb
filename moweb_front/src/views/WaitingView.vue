@@ -491,6 +491,7 @@ export default {
           break;
         // 시작 하기
         case 4:
+          this.mowebStart();
           break;
         // 레이어 변경하기
         case 5:
