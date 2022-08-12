@@ -173,27 +173,7 @@
                   height="600"
                   item-height="120"
                 >
-                  <template v-slot:default="{ item }">
-                    <v-list-item :key="item">
-                      <v-list-item-action>
-                        <v-btn fab small depressed color="primary">
-                          {{ item }}
-                        </v-btn>
-                      </v-list-item-action>
-
-                      <v-list-item-content>
-                        <v-list-item-title>
-                          User Database Record <strong>ID {{ item }}</strong>
-                        </v-list-item-title>
-                      </v-list-item-content>
-
-                      <v-list-item-action>
-                        <v-icon small> mdi-open-in-new </v-icon>
-                      </v-list-item-action>
-                    </v-list-item>
-
-                    <v-divider></v-divider>
-                  </template>
+                  배경색깔
                 </v-virtual-scroll>
               </v-card>
             </div>
