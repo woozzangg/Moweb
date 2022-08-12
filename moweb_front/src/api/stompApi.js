@@ -46,6 +46,9 @@ const stompApi = {
   shot(message) {
     this.stomp.send(`/app/shot`, JSON.stringify(message));
   },
+  disconnect() {
+    this.stomp.disconnect();
+  },
 };
 
 export default stompApi;
