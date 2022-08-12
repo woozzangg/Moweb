@@ -17,11 +17,6 @@
           v-model="user_name"
           style="border-style: solid"
         />
-        <input
-          placeholder="url, join테스트 추후 삭제예정"
-          v-model="url"
-          style="border-style: solid"
-        />
       </v-row>
       <v-row
         fluid
@@ -45,6 +40,8 @@ import axios from "axios";
 
 const ROOT_URL = "https://i7a507.p.ssafy.io";
 const API_URL = "https://i7a507.p.ssafy.io/moweb-api";
+//const ROOT_URL = "http://localhost:8081";
+//const API_URL = "http://localhost:8080/moweb-api";
 
 export default {
   name: "EnterView",

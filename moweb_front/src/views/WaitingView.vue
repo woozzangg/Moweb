@@ -223,12 +223,25 @@
                         v-if="videoSetting"
                         :stream-manager="publisher"
                       />
+                      <p v-show="readyStatus[user_name]" style="color: red">
+                        ready
+                      </p>
                     </v-col>
                     <v-col
                       v-for="sub in subscribers"
                       :key="sub.stream.connection.connectionId"
                     >
                       <user-video :stream-manager="sub" />
+                      <p
+                        v-show="
+                          readyStatus[
+                            JSON.parse(sub.stream.connection.data).clientData
+                          ]
+                        "
+                        style="color: red"
+                      >
+                        ready
+                      </p>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -252,6 +265,8 @@
           <v-btn @click="micBtnHandler">
             {{ micBtnTxt }}
           </v-btn>
+          <v-btn v-if="is_admin" v-bind:disabled="!allReady">start</v-btn>
+          <v-btn v-if="!is_admin" @click="readyBtn">ready</v-btn>
           <v-btn elevation="9" outlined tile rounded>
             <button @click="savePhoto" style="margin: 10px">저장</button>
           </v-btn>
@@ -295,16 +310,59 @@
         </v-row>
         <br />
         <!-- 채팅창 -->
-        <v-row no-gutters fluid rows="6" class="border-style1">
-          <div v-for="(item, idx) in recvList" :key="idx">
-            <h3>유저이름: {{ item.user_name }}</h3>
-            <h3>내용: {{ item.chat_msg }}</h3>
+        <v-row
+          no-gutters
+          fluid
+          rows="6"
+          class="border-style1"
+          style="display: block; height: 350px"
+        >
+          <div
+            style="word-break: break-all"
+            v-for="(chat, idx) in chatList"
+            :key="idx"
+          >
+            <h4>{{ chat }}</h4>
           </div>
         </v-row>
-        <input v-model="message" type="text" @keyup.enter="sendMessage" />
-        <v-btn elevation="9" outlined tile rounded>
-          <button @click="sendMessage" style="margin: 10px">입력</button>
-        </v-btn>
+        <!-- 채팅입력 -->
+        <div class="form">
+          <input
+            class="form_input"
+            type="text"
+            placeholder="채팅을 입력하세요."
+            v-model="message"
+            @keyup.enter="sendMessage"
+          />
+          <div @click="sendMessage" class="form_submit">
+            <svg
+              width="30"
+              height="30"
+              viewBox="0 0 68 68"
+              fill="#CCCCCC"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g clip-path="url(#clip0_26_10)">
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M48.0833 19.799C48.619 20.3347 48.806 21.127 48.5665 21.8457L35.8385 60.0294C35.5946 60.7614 34.9513 61.2877 34.1855 61.382C33.4198 61.4763 32.6681 61.1217 32.2539 60.4707L22.593 45.2893L7.41158 35.6285C6.76065 35.2142 6.40604 34.4625 6.50031 33.6968C6.59458 32.931 7.12092 32.2878 7.85287 32.0438L46.0366 19.3159C46.7553 19.0763 47.5476 19.2633 48.0833 19.799ZM26.5903 44.1204L33.3726 54.7782L42.0926 28.6181L26.5903 44.1204ZM39.2642 25.7897L23.7619 41.292L13.1041 34.5097L39.2642 25.7897Z"
+                  fill=""
+                />
+              </g>
+              <defs>
+                <clipPath id="clip0_26_10">
+                  <rect
+                    width="48"
+                    height="48"
+                    fill="white"
+                    transform="translate(33.9412) rotate(45)"
+                  />
+                </clipPath>
+              </defs>
+            </svg>
+          </div>
+        </div>
       </v-col>
     </v-row>
   </v-container>
@@ -329,7 +387,6 @@ const OPENVIDU_SERVER_URL = "https://i7a507.p.ssafy.io:8443";
 const OPENVIDU_SERVER_SECRET = "MY_SECRET";
 const apiKey = "59074e20c9d80e6e5200a4bd60122af7";
 Vue.use(Kakaosdk, { apiKey });
-
 export default {
   data() {
     return {
@@ -337,7 +394,11 @@ export default {
       message: "",
       room_no: "",
       users: [],
-      recvList: [],
+      chatList: [],
+
+      myStatus: false,
+      readyStatus: {},
+      allReady: false,
 
       url: "",
       is_admin: undefined,
@@ -391,19 +452,22 @@ export default {
         // 채팅방 입장 알림
         case 0:
           console.log("new user entered!!");
-          this.recvList.push(content);
+          this.chatList.push("[알림] " + content.chat_msg);
           this.users = content.users;
+          this.readyJoin(content.users);
           break;
         // 채팅
         case 1:
           console.log(`${content.user_name} said ${content.chat_msg}`);
-          this.recvList.push(content);
+          this.chatList.push(content.user_name + ": " + content.chat_msg);
           break;
         // 준비
         case 2:
+          this.ready(content);
           break;
         // 준비 취소
         case 3:
+          this.ready(content);
           break;
         // 시작 하기
         case 4:
@@ -421,19 +485,24 @@ export default {
           break;
         // 방장이 나감
         case 8:
+          console.log("BOOM!");
+          alert("호스트가 방을 종료하였습니다.");
+          this.$router.replace({ name: "main" });
           break;
         default:
           break;
       }
     },
-    sendMessage(e) {
-      console.log("Send message:" + this.message);
-      if (stompApi.stomp && stompApi.stomp.connected) {
-        stompApi.chat({
-          user_name: this.user_name,
-          chat_msg: this.message,
-          room_no: this.room_no,
-        });
+    sendMessage() {
+      if (this.user_name !== "" && this.message !== "") {
+        console.log("Send message:" + this.message);
+        if (stompApi.stomp && stompApi.stomp.connected) {
+          stompApi.chat({
+            user_name: this.user_name,
+            chat_msg: this.message,
+            room_no: this.room_no,
+          });
+        }
       }
       this.message = "";
     },
@@ -509,7 +578,57 @@ export default {
       });
     },
     linkBtn() {
-      alert(this.url);
+      if (!navigator.clipboard) {
+        navigator.clipboard.writeText(this.url).then(() => {
+          this.$dialog.message.success(this.url, {
+            position: "top",
+          });
+        });
+        return;
+      }
+      navigator.clipboard.writeText(this.url).then(() => {
+        this.$dialog.message.success("url 복사 완료!", {
+          position: "top",
+        });
+      });
+    },
+    //------------------------ready, start -------------------------
+    readyBtn() {
+      this.myStatus = !this.myStatus;
+      if (stompApi.stomp && stompApi.stomp.connected) {
+        stompApi.ready({
+          user_name: this.user_name,
+          room_no: this.room_no,
+          status: this.myStatus,
+        });
+      }
+    },
+    readyJoin(users) {
+      this.readyStatus = {};
+      users.forEach((user) => {
+        this.$set(this.readyStatus, user.user_name, user.status);
+      });
+      if (this.is_admin) {
+        this.allReadyCheck();
+      }
+    },
+    ready(data) {
+      this.$set(this.readyStatus, data.user_name, data.status);
+      if (this.is_admin) {
+        this.allReadyCheck();
+      }
+    },
+    allReadyCheck() {
+      let size = 0;
+      for (let user_name in this.readyStatus) {
+        if (user_name == this.user_name) continue;
+        size++;
+        if (!this.readyStatus[user_name] || size < 1) {
+          this.allReady = false;
+          return;
+        }
+      }
+      this.allReady = true;
     },
     // -------------------- webrtc start ------------------
     joinSession() {
@@ -741,8 +860,43 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 video {
   transform: rotateY(180deg);
+}
+
+.form {
+  display: flex;
+  justify-content: space-between;
+  padding: 1.4rem;
+  background: #ffffff;
+  /* border-radius: 30px 30px 24px 24px; */
+  box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
+}
+
+.form_input {
+  border: none;
+  padding: 0.5rem;
+  font-size: 16px;
+  width: calc(100% - 60px);
+}
+
+.form_input:focus {
+  outline: none;
+}
+
+.form_submit {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+svg {
+  transition: 0.3s;
+}
+
+svg:hover {
+  fill: #999999;
 }
 </style>
