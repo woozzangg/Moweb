@@ -1,7 +1,14 @@
 <template>
   <v-dialog v-model="dialog" width="fit-content" :persistent="!isAdmin">
     <template v-if="isAdmin" v-slot:activator="{ on, attrs }">
-      <v-btn color="red lighten-2" dark v-bind="attrs" v-on="on">
+      <v-btn
+        color="blue"
+        dark
+        large
+        v-bind="attrs"
+        v-on="on"
+        style="width: 100%"
+      >
         활영하기
       </v-btn>
     </template>
