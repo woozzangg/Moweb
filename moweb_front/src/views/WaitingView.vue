@@ -197,10 +197,6 @@
           ></canvas>
           <div id="main-container" class="container">
             <div id="session" v-if="session">
-              <!-- <div id="session-header">
-                <h1 id="session-title">{{ room_no }}</h1>
-              </div> -->
-
               <v-container>
                 <v-row>
                   <v-col>
@@ -244,6 +240,7 @@
                       height="480"
                       :backgroundCode="backGroundImg"
                       :layerSequence="layerSequence"
+                      :shotCnt="shot_cnt"
                       ref="layeredVideo"
                     ></layered-video>
                   </v-row>
@@ -288,76 +285,80 @@
           class="btnzip"
           style="height: 10%; margin: 4px; padding:2px; justify-content-center"
         >
-          <div style="float: left; position: absolute">
-            <v-btn @click="cameraBtnHandler">
-              <v-icon v-if="cameraOn" large>mdi-video</v-icon>
-              <v-icon v-if="!cameraOn" large>mdi-video-off</v-icon>
-            </v-btn>
-            <v-btn @click="micBtnHandler">
-              <v-icon v-if="micOn" large>mdi-microphone</v-icon>
-              <v-icon v-if="!micOn" large>mdi-microphone-off</v-icon>
-            </v-btn>
-          </div>
-          <div align="center">
-            <v-btn
-              large
-              color="primary"
-              v-if="is_admin && page == 'waiting'"
-              v-bind:disabled="!allReady"
-              @click="startBtn"
-              >start</v-btn
-            >
-            <v-btn
-              large
-              color="primary"
-              v-if="!is_admin && page == 'waiting'"
-              @click="readyBtn"
-              >ready</v-btn
-            >
-            <v-btn
-              elevation="9"
-              v-if="page == 'result'"
-              @click="savePhoto"
-              outlined
-              tile
-              rounded
-              >저장</v-btn
-            >
-            <v-btn
-              v-if="page == 'result'"
-              class="pink white--text"
-              @click="sharePhoto"
-              >공유</v-btn
-            >
+          <v-row style="margin: auto">
+            <v-col>
+              <v-btn @click="cameraBtnHandler">
+                <v-icon v-if="cameraOn" large>mdi-video</v-icon>
+                <v-icon v-if="!cameraOn" large>mdi-video-off</v-icon>
+              </v-btn>
+              <v-btn @click="micBtnHandler">
+                <v-icon v-if="micOn" large>mdi-microphone</v-icon>
+                <v-icon v-if="!micOn" large>mdi-microphone-off</v-icon>
+              </v-btn>
+            </v-col>
+            <v-col align="center">
+              <v-btn
+                large
+                color="primary"
+                v-if="is_admin && page == 'waiting'"
+                v-bind:disabled="!allReady"
+                @click="startBtn"
+                style="width: 100%"
+              >
+                start
+              </v-btn>
+              <v-btn
+                large
+                color="primary"
+                v-if="!is_admin && page == 'waiting'"
+                @click="readyBtn"
+                style="width: 100%"
+              >
+                ready
+              </v-btn>
+              <v-btn
+                elevation="9"
+                v-if="page == 'result'"
+                outlined
+                tile
+                rounded
+              >
+                <button @click="savePhoto" style="margin: 10px">저장</button>
+              </v-btn>
+              <v-btn v-if="page == 'result'" class="pink white--text">
+                <button @click="sharePhoto" style="margin: 10px">공유</button>
+              </v-btn>
 
-            <!-- 촬영화면 다이얼로그  start -->
-            <shot-modal
-              v-if="page === 'shot'"
-              :dialogProp="shotDialog"
-              :count="count"
-              :isAdmin="is_admin"
-              @sendShotCountdown="sendShotCountdown"
-              @sendDialogChange="sendDialogChange"
-            >
-              <layered-video
-                width="960"
-                height="720"
-                :backgroundCode="backGroundImg"
-                :layerSequence="layerSequence"
-              ></layered-video>
-            </shot-modal>
-            <!-- 촬영화면 다이얼로그 end -->
-
-            <v-btn
-              large
-              color="error"
-              id="buttonLeaveSession"
-              @click="leaveBtn"
-            >
-              나가기
-            </v-btn>
-          </div>
+              <!-- 촬영화면 다이얼로그  start -->
+              <shot-modal
+                v-if="page === 'shot'"
+                :dialogProp="shotDialog"
+                :count="count"
+                :isAdmin="is_admin"
+                @sendShotCountdown="sendShotCountdown"
+                @sendDialogChange="sendDialogChange"
+              >
+                <layered-video
+                  width="960"
+                  height="720"
+                  :backgroundCode="backGroundImg"
+                  :layerSequence="layerSequence"
+                  :shotCnt="shot_cnt"
+                >
+                </layered-video>
+              </shot-modal>
+            </v-col>
+            <v-col align="right">
+              <exit-modal
+                :is_admin="is_admin"
+                @leaveSession="leaveSession"
+                style="float: right; margin: auto"
+              >
+              </exit-modal>
+            </v-col>
+          </v-row>
         </v-container>
+
         <!-- <br /> -->
       </div>
       <!-- <v-spacer></v-spacer> -->
@@ -454,6 +455,7 @@ import LayerController from "@/components/LayerController.vue";
 import UserVideo from "@/components/UserVideo";
 import LayeredVideo from "@/components/LayeredVideo.vue";
 import ShotModal from "@/components/ShotModal.vue";
+import ExitModal from "@/components/ExitModal.vue";
 
 import VueChatScroll from "vue-chat-scroll";
 
@@ -461,7 +463,7 @@ import Html2canvas from "html2canvas";
 import Kakaosdk from "vue-kakao-sdk";
 
 import shutterSoundSource from "@/assets/sounds/camera_click_sound.wav";
-import countdownSoundSource from "@/assets/sounds/countdown_sound.wav";
+import beepSoundSource from "@/assets/sounds/beep_sound.wav";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
@@ -516,7 +518,7 @@ export default {
       shot_cnt: 0,
 
       shutterSound: new Audio(shutterSoundSource),
-      countdownSound: new Audio(countdownSoundSource),
+      countdownSound: new Audio(beepSoundSource),
     };
   },
   components: {
@@ -524,6 +526,7 @@ export default {
     LayerController,
     LayeredVideo,
     ShotModal,
+    ExitModal,
   },
   computed: {
     inputVideo() {
@@ -597,9 +600,12 @@ export default {
         // 촬영하기
         case 7:
           console.log("shot!!!!!!");
-          this.shutterSound.play();
           this.shot_cnt = content.shot_cnt;
           this.takepic();
+          if (this.shot_cnt === 4) {
+            this.page = "result";
+            this.shotDialog = false;
+          }
           break;
         // 방장이 나감
         case 8:
@@ -810,12 +816,14 @@ export default {
     // -------------------- shot start -------------------
     startShotCount() {
       this.count = 5000;
-      this.countdownSound.play();
       this.shotTick();
     },
     shotTick() {
+      this.countdownSound.pause();
+      this.countdownSound.currentTime = 0;
+      this.countdownSound.play();
       setTimeout(() => {
-        this.count -= 50;
+        this.count -= 1000;
         if (!this.shotDialog) {
           // 촬영화면 닫으면 카운트 중단
           this.countdownSound.pause();
@@ -827,6 +835,7 @@ export default {
         } else {
           this.uploadPhoto();
           console.log("shot!!!!");
+          this.shutterSound.play();
           if (this.is_admin) {
             stompApi.shot({
               room_no: this.room_no,
@@ -835,7 +844,7 @@ export default {
             });
           }
         }
-      }, 50);
+      }, 1000);
     },
     sendShotCountdown() {
       stompApi.shotCountdown({
