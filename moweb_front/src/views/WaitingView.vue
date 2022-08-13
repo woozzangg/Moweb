@@ -245,6 +245,7 @@
                       height="480"
                       :backgroundCode="backGroundImg"
                       :layerSequence="layerSequence"
+                      :shotCnt="shot_cnt"
                       ref="layeredVideo"
                     ></layered-video>
                   </v-row>
@@ -289,66 +290,80 @@
           class="btnzip"
           style="height: 10%; margin: 4px; padding:2px; justify-content-center"
         >
-          <div style="float: left; position: absolute">
-            <v-btn @click="cameraBtnHandler">
-              <v-icon v-if="cameraOn" large>mdi-video</v-icon>
-              <v-icon v-if="!cameraOn" large>mdi-video-off</v-icon>
-            </v-btn>
-            <v-btn @click="micBtnHandler">
-              <v-icon v-if="micOn" large>mdi-microphone</v-icon>
-              <v-icon v-if="!micOn" large>mdi-microphone-off</v-icon>
-            </v-btn>
-          </div>
-          <div align="center">
-            <v-btn
-              large
-              color="primary"
-              v-if="is_admin && page == 'waiting'"
-              v-bind:disabled="!allReady"
-              @click="startBtn"
-              >start</v-btn
-            >
-            <v-btn
-              large
-              color="primary"
-              v-if="!is_admin && page == 'waiting'"
-              @click="readyBtn"
-              >ready</v-btn
-            >
-            <v-btn elevation="9" v-if="page == 'result'" outlined tile rounded>
-              <button @click="savePhoto" style="margin: 10px">저장</button>
-            </v-btn>
-            <v-btn v-if="page == 'result'" class="pink white--text">
-              <button @click="sharePhoto" style="margin: 10px">공유</button>
-            </v-btn>
+          <v-row>
+            <v-col>
+              <v-btn @click="cameraBtnHandler">
+                <v-icon v-if="cameraOn" large>mdi-video</v-icon>
+                <v-icon v-if="!cameraOn" large>mdi-video-off</v-icon>
+              </v-btn>
+              <v-btn @click="micBtnHandler">
+                <v-icon v-if="micOn" large>mdi-microphone</v-icon>
+                <v-icon v-if="!micOn" large>mdi-microphone-off</v-icon>
+              </v-btn>
+            </v-col>
+            <v-col align="center">
+              <v-btn
+                large
+                color="primary"
+                v-if="is_admin && page == 'waiting'"
+                v-bind:disabled="!allReady"
+                @click="startBtn"
+                style="width: 100%"
+              >
+                start
+              </v-btn>
+              <v-btn
+                large
+                color="primary"
+                v-if="!is_admin && page == 'waiting'"
+                @click="readyBtn"
+                style="width: 100%"
+              >
+                ready
+              </v-btn>
+              <v-btn
+                elevation="9"
+                v-if="page == 'result'"
+                outlined
+                tile
+                rounded
+              >
+                <button @click="savePhoto" style="margin: 10px">저장</button>
+              </v-btn>
+              <v-btn v-if="page == 'result'" class="pink white--text">
+                <button @click="sharePhoto" style="margin: 10px">공유</button>
+              </v-btn>
 
-            <!-- 촬영화면 다이얼로그  start -->
-            <shot-modal
-              v-if="page === 'shot'"
-              :dialogProp="shotDialog"
-              :count="count"
-              :isAdmin="is_admin"
-              @sendShotCountdown="sendShotCountdown"
-              @sendDialogChange="sendDialogChange"
-            >
-              <layered-video
-                width="960"
-                height="720"
-                :backgroundCode="backGroundImg"
-                :layerSequence="layerSequence"
-              ></layered-video>
-            </shot-modal>
-            <!-- 촬영화면 다이얼로그 end -->
-
-            <v-btn
-              large
-              color="error"
-              id="buttonLeaveSession"
-              @click="leaveBtn"
-            >
-              나가기
-            </v-btn>
-          </div>
+              <!-- 촬영화면 다이얼로그  start -->
+              <shot-modal
+                v-if="page === 'shot'"
+                :dialogProp="shotDialog"
+                :count="count"
+                :isAdmin="is_admin"
+                @sendShotCountdown="sendShotCountdown"
+                @sendDialogChange="sendDialogChange"
+              >
+                <layered-video
+                  width="960"
+                  height="720"
+                  :backgroundCode="backGroundImg"
+                  :layerSequence="layerSequence"
+                  :shotCnt="shot_cnt"
+                >
+                </layered-video>
+              </shot-modal>
+            </v-col>
+            <v-col align="right">
+              <v-btn
+                large
+                color="error"
+                id="buttonLeaveSession"
+                @click="leaveBtn"
+              >
+                나가기
+              </v-btn>
+            </v-col>
+          </v-row>
         </v-container>
         <!-- <br /> -->
       </div>
@@ -589,6 +604,10 @@ export default {
           console.log("shot!!!!!!");
           this.shot_cnt = content.shot_cnt;
           this.takepic();
+          if (this.shot_cnt === 4) {
+            this.page = "result";
+            this.shotDialog = false;
+          }
           break;
         // 방장이 나감
         case 8:

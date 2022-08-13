@@ -6,6 +6,7 @@
       id="layered-output-canvas"
       ref="layeredOutputCanvas"
     ></canvas>
+    <div class="shot-cnt" :style="styleSet">{{ shotCnt }} / 4</div>
   </div>
 </template>
 
@@ -13,10 +14,23 @@
 import { chromaKey } from "@/utils/chromakey.js";
 
 export default {
-  props: ["width", "height", "layerSequence", "mapUserVideo", "backgroundCode"],
+  props: [
+    "width",
+    "height",
+    "layerSequence",
+    "mapUserVideo",
+    "backgroundCode",
+    "shotCnt",
+  ],
   data: function () {
     return {
       canvasContext: null,
+      styleSet: {
+        position: "relative",
+        top: `${-this.height}px`,
+        left: "10px",
+        "text-align": "left",
+      },
     };
   },
   computed: {},
