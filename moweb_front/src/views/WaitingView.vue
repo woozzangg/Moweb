@@ -187,13 +187,32 @@
 
         <!-- # 결과화면 들어가는곳  -->
         <v-container class="webrtc" style="height: 85%; margin: 0px">
-          <canvas
-            class="border-style1"
-            width="320"
-            height="240"
-            style="background-color: #b7f0b1; margin: 5px"
+          <div
+            ref="resultCanvas"
+            width="720"
+            height="540"
+            style="margin: 5px"
             v-if="page == 'result'"
-          ></canvas>
+          >
+            <table style="margin: auto; background: black">
+              <tr>
+                <td style="padding: 12px">
+                  <img :src="resultImg[0]" width="320" height="240" />
+                </td>
+                <td style="padding: 12px">
+                  <img :src="resultImg[1]" width="320" height="240" />
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 12px">
+                  <img :src="resultImg[2]" width="320" height="240" />
+                </td>
+                <td style="padding: 12px">
+                  <img :src="resultImg[3]" width="320" height="240" />
+                </td>
+              </tr>
+            </table>
+          </div>
           <div id="main-container" class="container">
             <div id="session" v-if="session">
               <v-container>
@@ -472,7 +491,7 @@ axios.defaults.headers.post["Content-Type"] = "application/json";
 
 const OPENVIDU_SERVER_URL = "https://i7a507.p.ssafy.io:8443";
 const OPENVIDU_SERVER_SECRET = "MY_SECRET";
-
+const API_URL = "https://i7a507.p.ssafy.io/moweb-api";
 const apiKey = "59074e20c9d80e6e5200a4bd60122af7";
 Vue.use(Kakaosdk, { apiKey });
 
@@ -517,7 +536,7 @@ export default {
       count: 0,
       shotDialog: false,
       shot_cnt: 0,
-
+      resultImg: [],
       shutterSound: new Audio(shutterSoundSource),
       countdownSound: new Audio(beepSoundSource),
     };
@@ -563,7 +582,7 @@ export default {
     }
   },
   methods: {
-    onSocketReceive(result) {
+    async onSocketReceive(result) {
       const content = JSON.parse(result.body);
       console.log("socket received!");
       console.log(content);
@@ -605,10 +624,9 @@ export default {
         case 7:
           console.log("shot!!!!!!");
           this.shot_cnt = content.shot_cnt;
-          this.takepic();
+          await this.takepic();
           if (this.shot_cnt === 4) {
-            this.page = "result";
-            this.shotDialog = false;
+            this.page2Result();
           }
           break;
         // 방장이 나감
@@ -659,6 +677,27 @@ export default {
       }
       this.message = "";
     },
+
+    async page2Result() {
+      this.page = "result";
+      this.shotDialog = false;
+      for (let i = 1; i <= 4; i++) {
+        await axios
+          .get(
+            API_URL +
+              "/display?imgName=canvas_img_" +
+              this.room_no +
+              "_" +
+              i +
+              ".png"
+          )
+          .then(async (res) => {
+            console.log(res.request.responseURL);
+            this.resultImg.push(res.request.responseURL);
+          });
+      }
+    },
+
     // ----------------------------- 화면 전환 end --------------------------------
     sendLayer(userNames) {
       console.log("Send layer change:" + userNames);
@@ -1144,8 +1183,8 @@ export default {
         "canvas_img_" + this.room_no + "_" + this.shot_cnt + ".png";
       let formData = new FormData();
       formData.append("image", file, fileName);
-      const API_URL = "https://i7a507.p.ssafy.io/moweb-api";
-      axios.post(API_URL + "/upload", formData, {
+
+      await axios.post(API_URL + "/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
