@@ -339,15 +339,12 @@
               ></layered-video>
             </shot-modal>
             <!-- 촬영화면 다이얼로그 end -->
-
-            <v-btn
-              large
-              color="error"
-              id="buttonLeaveSession"
-              @click="leaveBtn"
+            <exit-modal
+              :is_admin="is_admin"
+              @leaveSession="leaveSession"
+              style="float: right; magin: auto"
             >
-              나가기
-            </v-btn>
+            </exit-modal>
           </div>
         </v-container>
         <!-- <br /> -->
@@ -446,6 +443,7 @@ import LayerController from "@/components/LayerController.vue";
 import UserVideo from "@/components/UserVideo";
 import LayeredVideo from "@/components/LayeredVideo.vue";
 import ShotModal from "@/components/ShotModal.vue";
+import ExitModal from "@/components/ExitModal.vue";
 
 import VueChatScroll from "vue-chat-scroll";
 
@@ -514,6 +512,7 @@ export default {
     LayerController,
     LayeredVideo,
     ShotModal,
+    ExitModal,
   },
   computed: {
     inputVideo() {
