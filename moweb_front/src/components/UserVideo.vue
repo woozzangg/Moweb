@@ -1,9 +1,13 @@
 <template>
-  <div v-if="streamManager">
-    <ov-video :stream-manager="streamManager" :client="clientData" />
-    <div>
-      <p>{{ clientData }}</p>
-    </div>
+  <div v-if="streamManager" style="position: relative">
+    <p style="position: absolute; margin: 0px 0px 0px 10px">
+      {{ clientData }}
+    </p>
+    <ov-video
+      :stream-manager="streamManager"
+      :client="clientData"
+      style="position: relative"
+    />
   </div>
 </template>
 
