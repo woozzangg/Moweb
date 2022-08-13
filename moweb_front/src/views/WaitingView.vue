@@ -493,6 +493,7 @@ export default {
       page: "waiting", // page가 waiting, shot, result로 변함에 따라 v-if로 교체.
       count: 0,
       shotDialog: false,
+      shot_cnt: 0,
     };
   },
   components: {
@@ -567,12 +568,19 @@ export default {
           break;
         // 촬영하기
         case 7:
+          console.log("shot!!!!!!");
+          this.shot_cnt = content.shot_cnt;
           break;
         // 방장이 나감
         case 8:
           console.log("BOOM!");
           alert("호스트가 방을 종료하였습니다.");
           this.leaveSession();
+          break;
+        case 9:
+          console.log("toggle shot dialog");
+          console.log(content);
+          this.shotDialog = content.status;
           break;
         default:
           break;
@@ -746,16 +754,20 @@ export default {
         } else {
           // do something shot here
           console.log("shot!!!!");
+          stompApi.shot({
+            room_no: this.room_no,
+            shot_cnt: this.shot_cnt + 1,
+            bg_code: this.bg_code,
+          });
         }
       }, 50);
     },
     sendDialogChange(dialog) {
       // 여기서 동기화를 위해 다이얼로그 전송
-      // stompApi.shotMode({
-      //   room: this.room_no,
-      //   user_name: this.user_name,
-      //   status: dialog
-      // });
+      stompApi.shotMode({
+        room_no: this.room_no,
+        status: dialog,
+      });
     },
     // -------------------- shot end -------------------
     // -------------------- webrtc start ------------------
