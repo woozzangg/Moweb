@@ -192,9 +192,9 @@
           ></canvas>
           <div id="main-container" class="container">
             <div id="session" v-if="session">
-              <div id="session-header">
+              <!-- <div id="session-header">
                 <h1 id="session-title">{{ room_no }}</h1>
-              </div>
+              </div> -->
 
               <v-container>
                 <v-row>
@@ -282,20 +282,30 @@
           class="btnzip"
           style="height: 10%; margin: 4px; padding:2px; justify-content-center"
         >
-          <div class="btncss" justify="center">
+          <div style="float: left; position: absolute">
             <v-btn @click="cameraBtnHandler">
-              {{ cameraBtnTxt }}
+              <v-icon v-if="cameraOn" large>mdi-video</v-icon>
+              <v-icon v-if="!cameraOn" large>mdi-video-off</v-icon>
             </v-btn>
             <v-btn @click="micBtnHandler">
-              {{ micBtnTxt }}
+              <v-icon v-if="micOn" large>mdi-microphone</v-icon>
+              <v-icon v-if="!micOn" large>mdi-microphone-off</v-icon>
             </v-btn>
+          </div>
+          <div align="center">
             <v-btn
+              large
+              color="primary"
               v-if="is_admin && page == 'waiting'"
               v-bind:disabled="!allReady"
               @click="startBtn"
               >start</v-btn
             >
-            <v-btn v-if="!is_admin && page == 'waiting'" @click="readyBtn"
+            <v-btn
+              large
+              color="primary"
+              v-if="!is_admin && page == 'waiting'"
+              @click="readyBtn"
               >ready</v-btn
             >
             <v-btn elevation="9" v-if="page == 'result'" outlined tile rounded>
@@ -304,8 +314,6 @@
             <v-btn v-if="page == 'result'" class="pink white--text">
               <button @click="sharePhoto" style="margin: 10px">공유</button>
             </v-btn>
-
-            <v-btn id="buttonLeaveSession" @click="leaveBtn"> 나가기 </v-btn>
 
             <!-- 촬영화면 다이얼로그  start -->
             <shot-modal
@@ -324,6 +332,15 @@
               ></layered-video>
             </shot-modal>
             <!-- 촬영화면 다이얼로그 end -->
+
+            <v-btn
+              large
+              color="error"
+              id="buttonLeaveSession"
+              @click="leaveBtn"
+            >
+              나가기
+            </v-btn>
           </div>
         </v-container>
         <!-- <br /> -->
@@ -379,7 +396,7 @@
               width="30"
               height="30"
               viewBox="0 0 68 68"
-              fill="#CCCCCC"
+              fill="#757575"
               xmlns="http://www.w3.org/2000/svg"
             >
               <g clip-path="url(#clip0_26_10)">
@@ -1024,7 +1041,7 @@ svg {
 }
 
 svg:hover {
-  fill: #999999;
+  fill: #3c3c3c;
 }
 
 .linkbtn {
@@ -1052,7 +1069,7 @@ svg:hover {
 }
 .btncss {
   position: absolute;
-  left: 30%;
+  left: 35%;
 
   box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
 }
