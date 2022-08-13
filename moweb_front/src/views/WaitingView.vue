@@ -319,14 +319,19 @@
               <v-btn
                 elevation="9"
                 v-if="page == 'result'"
+                @click="savePhoto"
                 outlined
                 tile
                 rounded
               >
-                <button @click="savePhoto" style="margin: 10px">저장</button>
+                저장
               </v-btn>
-              <v-btn v-if="page == 'result'" class="pink white--text">
-                <button @click="sharePhoto" style="margin: 10px">공유</button>
+              <v-btn
+                v-if="page == 'result'"
+                class="pink white--text"
+                @click="sharePhoto"
+              >
+                공유
               </v-btn>
 
               <!-- 촬영화면 다이얼로그  start -->
@@ -703,6 +708,11 @@ export default {
     },
     async sharePhoto() {
       console.log("공유하기");
+      this.uploadResult();
+
+      const fileName = "canvas_img_" + this.room_no + "_result.png";
+      const API_URL = "https://i7a507.p.ssafy.io/moweb-api";
+      const fileUrl = API_URL + "/display?imgName=" + fileName;
 
       this.$kakao.Link.sendDefault({
         objectType: "feed",
@@ -710,10 +720,10 @@ export default {
           title: "모여봐요 웹캠으로",
           description:
             "<모여봐요 웹캠으로>를 통해 친구들과 재미있는 사진을 찍어보세요!",
-          imageUrl: "https://i.ibb.co/88s0N4C/moweb.png",
+          imageUrl: fileUrl,
           link: {
-            mobileWebUrl: "https://i.ibb.co/88s0N4C/moweb.png",
-            webUrl: "https://i.ibb.co/88s0N4C/moweb.png",
+            mobileWebUrl: fileUrl,
+            webUrl: fileUrl,
           },
         },
         buttons: [
@@ -725,6 +735,27 @@ export default {
             },
           },
         ],
+      });
+    },
+    async uploadResult() {
+      console.log("결과화면 업로드");
+      const canvas = this.$refs.resultCanvas; //결과화면
+      const imgBase64 = canvas.toDataURL("image/png");
+      const decodImg = atob(imgBase64.split(",")[1]);
+
+      let array = [];
+      for (let i = 0; i < decodImg.length; i++) {
+        array.push(decodImg.charCodeAt(i));
+      }
+      const file = new Blob([new Uint8Array(array)], { type: "image/png" });
+      const fileName = "canvas_img_" + this.room_no + "_result.png";
+      let formData = new FormData();
+      formData.append("image", file, fileName);
+      const API_URL = "https://i7a507.p.ssafy.io/moweb-api";
+      axios.post(API_URL + "/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
     },
     linkBtn() {
