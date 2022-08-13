@@ -188,7 +188,6 @@
         <!-- # 결과화면 들어가는곳  -->
         <v-container class="webrtc" style="height: 85%; margin: 0px">
           <canvas
-            ref="resultCanvas"
             class="border-style1"
             width="320"
             height="240"
@@ -393,7 +392,7 @@
         </div>
         <br />
         <!-- 채팅창 -->
-        <div no-gutters class="chat_body" v-chat-scroll>
+        <div ref="resultCanvas" no-gutters class="chat_body" v-chat-scroll>
           <div
             style="word-break: break-all"
             v-for="(chat, idx) in chatList"
@@ -739,20 +738,26 @@ export default {
     },
     async uploadResult() {
       console.log("결과화면 업로드");
-      const canvas = this.$refs.resultCanvas; //결과화면
-      const imgBase64 = canvas.toDataURL("image/png");
-      const decodImg = atob(imgBase64.split(",")[1]);
 
-      let array = [];
-      for (let i = 0; i < decodImg.length; i++) {
-        array.push(decodImg.charCodeAt(i));
-      }
-      const file = new Blob([new Uint8Array(array)], { type: "image/png" });
-      const fileName = "canvas_img_" + this.room_no + "_result.png";
-      let formData = new FormData();
-      formData.append("image", file, fileName);
+      const canvas = this.$refs.resultCanvas;
+      Html2canvas(canvas).then(function (canvas) {
+        var image = canvas.toDataURL("image/png");
+        var name = "canvas_img_" + this.room_no + "_result.png";
+
+        var byteString = atob(image.split(",")[1]);
+        var ab = new ArrayBuffer(byteString.length);
+        var ia = new Uint8Array(ab);
+
+        for (var i = 0; i < byteString.length; i++) {
+          ia[i] = byteString.charCodeAt(i);
+        }
+        var blob = new Blob([ab], { type: "image/png" });
+
+        var form = new FormData();
+        form.append("image", blob, name);
+
       const API_URL = "https://i7a507.p.ssafy.io/moweb-api";
-      axios.post(API_URL + "/upload", formData, {
+      axios.post(API_URL + "/upload", form, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
