@@ -53,7 +53,7 @@ export default {
   methods: {
     onShotButtonClick() {
       if (this.isAdmin) {
-        this.$emit("startShotCount");
+        this.$emit("sendShotCountdown");
       }
     },
   },

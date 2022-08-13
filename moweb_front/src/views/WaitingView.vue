@@ -321,7 +321,7 @@
               :dialogProp="shotDialog"
               :count="count"
               :isAdmin="is_admin"
-              @startShotCount="startShotCount"
+              @sendShotCountdown="sendShotCountdown"
               @sendDialogChange="sendDialogChange"
             >
               <layered-video
@@ -577,10 +577,16 @@ export default {
           alert("호스트가 방을 종료하였습니다.");
           this.leaveSession();
           break;
+        // 촬영화면 다이얼로그 토글
         case 9:
           console.log("toggle shot dialog");
           console.log(content);
           this.shotDialog = content.status;
+          break;
+        // 카운트다운 시작
+        case 10:
+          console.log("start countDown!!");
+          this.startShotCount();
           break;
         default:
           break;
@@ -749,7 +755,11 @@ export default {
     shotTick() {
       setTimeout(() => {
         this.count -= 50;
-        if (this.count > 0) {
+        if (!this.shotDialog) {
+          // 촬영화면 닫으면 카운트 중단
+          this.count = 0;
+        } else if (this.count > 0) {
+          // 카운트
           this.shotTick();
         } else {
           // do something shot here
@@ -761,6 +771,11 @@ export default {
           });
         }
       }, 50);
+    },
+    sendShotCountdown() {
+      stompApi.shotCountdown({
+        room_no: this.room_no,
+      });
     },
     sendDialogChange(dialog) {
       // 여기서 동기화를 위해 다이얼로그 전송
