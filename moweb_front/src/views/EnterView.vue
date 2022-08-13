@@ -114,7 +114,10 @@ export default {
   methods: {
     createRoom() {
       if (!this.nameCheck()) {
-        alert("닉네임은 1자이상 10자이하만 가능합니다.");
+        this.$dialog.error({
+          text: "닉네임은 1자이상 10자이하만 가능합니다.",
+          persistent: true,
+        });
         return;
       }
       axios
@@ -143,7 +146,10 @@ export default {
     },
     joinRoom() {
       if (!this.nameCheck()) {
-        alert("닉네임은 1자이상 10자이하만 가능합니다.");
+        this.$dialog.error({
+          text: "닉네임은 1자이상 10자이하만 가능합니다.",
+          persistent: true,
+        });
         return;
       }
       axios
@@ -156,12 +162,21 @@ export default {
         )
         .then(({ data }) => {
           if (data.room_no == -2) {
-            alert("들어갈수 없는 방입니다.");
+            this.$dialog.error({
+              text: "들어갈수 없는 방입니다.",
+              persistent: true,
+            });
             this.$router.replace({ name: "main" });
           } else if (data.room_no == -1) {
-            alert("방 인원이 가득찼습니다.");
+            this.$dialog.error({
+              text: "방 인원이 가득찼습니다.",
+              persistent: true,
+            });
           } else if (data.room_no == 0) {
-            alert("이름이 중복되었습니다.");
+            this.$dialog.error({
+              text: "이름이 중복되었습니다.",
+              persistent: true,
+            });
           }
           if (data.room_no > 0) {
             this.camera.stop();
