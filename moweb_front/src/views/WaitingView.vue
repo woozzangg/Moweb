@@ -1087,13 +1087,12 @@ export default {
       for (let i = 0; i < decodImg.length; i++) {
         array.push(decodImg.charCodeAt(i));
       }
-
       const file = new Blob([new Uint8Array(array)], { type: "image/png" });
       const fileName =
         "canvas_img_" + this.room_no + "_" + this.shot_cnt + ".png";
       let formData = new FormData();
       formData.append("image", file, fileName);
-      const API_URL = "http://localhost:8080/moweb-api";
+      const API_URL = "https://i7a507.p.ssafy.io/moweb-api";
       axios.post(API_URL + "/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
