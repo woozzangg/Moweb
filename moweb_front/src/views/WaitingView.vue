@@ -198,10 +198,6 @@
           ></canvas>
           <div id="main-container" class="container">
             <div id="session" v-if="session">
-              <!-- <div id="session-header">
-                <h1 id="session-title">{{ room_no }}</h1>
-              </div> -->
-
               <v-container>
                 <v-row>
                   <v-col>
@@ -290,7 +286,7 @@
           class="btnzip"
           style="height: 10%; margin: 4px; padding:2px; justify-content-center"
         >
-          <v-row>
+          <v-row style="margin: auto">
             <v-col>
               <v-btn @click="cameraBtnHandler">
                 <v-icon v-if="cameraOn" large>mdi-video</v-icon>
@@ -354,17 +350,16 @@
               </shot-modal>
             </v-col>
             <v-col align="right">
-              <v-btn
-                large
-                color="error"
-                id="buttonLeaveSession"
-                @click="leaveBtn"
+              <exit-modal
+                :is_admin="is_admin"
+                @leaveSession="leaveSession"
+                style="float: right; margin: auto"
               >
-                나가기
-              </v-btn>
+              </exit-modal>
             </v-col>
           </v-row>
         </v-container>
+
         <!-- <br /> -->
       </div>
       <!-- <v-spacer></v-spacer> -->
@@ -461,6 +456,7 @@ import LayerController from "@/components/LayerController.vue";
 import UserVideo from "@/components/UserVideo";
 import LayeredVideo from "@/components/LayeredVideo.vue";
 import ShotModal from "@/components/ShotModal.vue";
+import ExitModal from "@/components/ExitModal.vue";
 
 import VueChatScroll from "vue-chat-scroll";
 
@@ -529,6 +525,7 @@ export default {
     LayerController,
     LayeredVideo,
     ShotModal,
+    ExitModal,
   },
   computed: {
     inputVideo() {
