@@ -136,6 +136,18 @@ public class WebSocketController {
     }
 
     /**
+     * 카운트 다운
+     * 호스트가 촬영버튼 누르면 카운트다운 시작
+     * 다른 참가자한테도 뿌려서 카운트다운 보여줌
+     */
+    @MessageMapping("/shotCountdown")
+    public void shotCountdown(WebSocketMessage message){
+        message.setAction(10);
+        logger.info("start countdown");
+        sendingOperations.convertAndSend("/topic/moweb/room/"+message.getRoom_no(),message);
+    }
+
+    /**
      * 퇴장 처리를 위한 이벤트 리스너
      * 참가자가 퇴장하면 퇴장 알림을 보내주며 만약 호스트가 퇴장할 경우
      * 모든 참가자에게 퇴장 명령을 보낸다.
