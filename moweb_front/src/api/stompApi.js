@@ -46,6 +46,9 @@ const stompApi = {
   shotMode(message) {
     this.stomp.send(`/app/shotMode`, JSON.stringify(message));
   },
+  shotCountdown(message) {
+    this.stomp.send(`/app/shotCountdown`, JSON.stringify(message));
+  },
   shot(message) {
     this.stomp.send(`/app/shot`, JSON.stringify(message));
   },
