@@ -15,7 +15,7 @@ public class ImgController {
     private static final Logger logger = LoggerFactory.getLogger(ImgController.class);
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadImg(@RequestParam(value = "image", required = false) MultipartFile img) {
+    public ResponseEntity<String> uploadImg(@RequestParam("image") MultipartFile img) {
         String imgName = img.getOriginalFilename();
         String imgPath = Paths.get("").toAbsolutePath()+File.separator+"images"+File.separator;
         logger.info("파일이름: "+imgName);
