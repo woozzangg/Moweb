@@ -453,7 +453,7 @@ import Html2canvas from "html2canvas";
 import Kakaosdk from "vue-kakao-sdk";
 
 import shutterSoundSource from "@/assets/sounds/camera_click_sound.wav";
-import countdownSoundSource from "@/assets/sounds/countdown_sound.wav";
+import beepSoundSource from "@/assets/sounds/beep_sound.wav";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
@@ -506,7 +506,7 @@ export default {
       shot_cnt: 0,
 
       shutterSound: new Audio(shutterSoundSource),
-      countdownSound: new Audio(countdownSoundSource),
+      countdownSound: new Audio(beepSoundSource),
     };
   },
   components: {
@@ -587,7 +587,6 @@ export default {
         // 촬영하기
         case 7:
           console.log("shot!!!!!!");
-          this.shutterSound.play();
           this.shot_cnt = content.shot_cnt;
           this.takepic();
           break;
@@ -770,11 +769,15 @@ export default {
     // -------------------- shot start -------------------
     startShotCount() {
       this.count = 5000;
-      this.countdownSound.play();
       this.shotTick();
     },
     shotTick() {
       setTimeout(() => {
+        if (this.count > 0 && this.count % 1000 === 0) {
+          this.countdownSound.pause();
+          this.countdownSound.currentTime = 0;
+          this.countdownSound.play();
+        }
         this.count -= 50;
         if (!this.shotDialog) {
           // 촬영화면 닫으면 카운트 중단
@@ -787,6 +790,7 @@ export default {
         } else {
           // do something shot here
           console.log("shot!!!!");
+          this.shutterSound.play();
           if (this.is_admin) {
             stompApi.shot({
               room_no: this.room_no,
