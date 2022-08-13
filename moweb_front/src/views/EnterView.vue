@@ -1,10 +1,5 @@
 <template>
-  <v-container
-    class="border-style2"
-    d-flex
-    justify-space-around
-    style="width: 60%; margin: 50px auto"
-  >
+  <v-container class="enter_body" d-flex justify-space-around>
     <video v-show="false" ref="input_video"></video>
     <v-col cols="12">
       <v-row>
@@ -255,6 +250,15 @@ export default {
 </script>
 
 <style>
+.enter_body {
+  width: 60%;
+  margin: 50px auto;
+  border: 15px solid white;
+  border-radius: 15px;
+  background-color: white;
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
+}
+
 .border-style1 {
   border: 1px solid rgb(0, 0, 0);
 }
