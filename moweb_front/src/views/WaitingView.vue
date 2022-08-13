@@ -13,7 +13,8 @@
 
     <!-- 캠에서 가져온 소스비디오 -->
     <video v-show="false" ref="input_video"></video>
-
+    <canvas v-show="false" id="personal_canvas" width="960" height="720">
+    </canvas>
     <!-- webrtc를 통해 보낼 소스 -->
     <canvas
       v-show="false"
@@ -21,7 +22,6 @@
       id="output_canvas"
       :width="width"
       :height="height"
-      style="transform: rotateY(180deg)"
     ></canvas>
     <v-row d-flex fluid justify-space-around style="margin: 0px">
       <!-- 왼쪽 영역 -->
@@ -532,6 +532,11 @@ export default {
   mounted() {
     stompApi.connect(this.room_no, this.user_name, this.onSocketReceive);
     this.joinSession();
+    this.picturectx = document
+      .getElementById("personal_canvas")
+      .getContext("2d");
+    this.picturectx.scale(-1, 1);
+    this.picturectx.translate(-960, 0);
   },
   methods: {
     onSocketReceive(result) {
@@ -958,8 +963,8 @@ export default {
         onFrame: async () => {
           await selfieSegmentation.send({ image: this.inputVideo });
         },
-        width: 320,
-        height: 240,
+        width: 1280,
+        height: 960,
       });
       this.camera.start();
       return 1;
@@ -995,6 +1000,40 @@ export default {
       );
 
       this.ctx.restore();
+    },
+    //------------------------------------ 자신의 사진 누끼------------
+    async pictureBackground() {
+      if (!this.cameraOn) {
+        this.picturectx.clearRect(0, 0, 960, 720);
+        return;
+      }
+
+      const selfieSegmentation = new SelfieSegmentation({
+        locateFile: (file) => {
+          return `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`;
+        },
+      });
+      selfieSegmentation.setOptions({
+        modelSelection: 1,
+      });
+      selfieSegmentation.onResults(this.resultOption);
+
+      await selfieSegmentation.send({ image: this.inputVideo });
+
+      return 1;
+    },
+
+    // 배경제거 옵션
+    async resultOption(results) {
+      this.picturectx.save();
+      this.picturectx.clearRect(0, 0, 960, 720);
+      this.picturectx.drawImage(results.segmentationMask, 0, 0, 960, 720);
+
+      // Only overwrite missing pixels.
+      this.picturectx.globalCompositeOperation = "source-in";
+      await this.picturectx.drawImage(results.image, 0, 0, 960, 720);
+
+      this.picturectx.restore();
     },
     // 카메라 on/off
     async cameraBtnHandler() {
