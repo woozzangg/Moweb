@@ -392,7 +392,7 @@
         </div>
         <br />
         <!-- 채팅창 -->
-        <div ref="resultCanvas" no-gutters class="chat_body" v-chat-scroll>
+        <div no-gutters class="chat_body" v-chat-scroll>
           <div
             style="word-break: break-all"
             v-for="(chat, idx) in chatList"
@@ -753,11 +753,11 @@ export default {
         }
         var blob = new Blob([ab], { type: "image/png" });
 
-        var form = new FormData();
-        form.append("image", blob, name);
+        var formData = new FormData();
+        formData.append("image", blob, name);
 
       const API_URL = "https://i7a507.p.ssafy.io/moweb-api";
-      axios.post(API_URL + "/upload", form, {
+      axios.post(API_URL + "/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
