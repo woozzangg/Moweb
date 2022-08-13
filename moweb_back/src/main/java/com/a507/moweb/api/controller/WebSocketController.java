@@ -124,6 +124,18 @@ public class WebSocketController {
     }
 
     /**
+     * 호스트가 촬영하기 버튼을 누르면 촬영하기 위한 모달 창이 뜨고
+     * 다른 참가자에게 전달하여 다른 참가자들도 촬영하기 모달창이 뜬다.
+     * action 번호 9
+    */
+    @MessageMapping("/shotMode")
+    public void shotMode(WebSocketMessage message){
+        message.setAction(9);
+        logger.info("shot mode : " + message.isStatus());
+        sendingOperations.convertAndSend("/topic/moweb/room/"+message.getRoom_no(),message);
+    }
+
+    /**
      * 퇴장 처리를 위한 이벤트 리스너
      * 참가자가 퇴장하면 퇴장 알림을 보내주며 만약 호스트가 퇴장할 경우
      * 모든 참가자에게 퇴장 명령을 보낸다.
