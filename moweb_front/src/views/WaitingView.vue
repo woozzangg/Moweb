@@ -784,7 +784,7 @@ export default {
         if (this.count > 0) {
           this.shotTick();
         } else {
-          // do something shot here
+          this.uploadPhoto();
           console.log("shot!!!!");
         }
       }, 50);
