@@ -15,10 +15,7 @@
           </span>
         </div>
         <!-- <span class="logoTitle">순간뽀짝</span> -->
-        <div class="photoGroupOne">
-          <div class="cameraFrame"></div>
-          <div class="friends"></div>
-        </div>
+        <div class="friends"></div>
         <span class="explainOne"
           >친구들과 사진을 촬영하고<br />잊지 못할 추억을 만들어 보세요!</span
         ><span class="explainTwo"
@@ -167,29 +164,6 @@ body {
   font-size: 1rem;
   overflow: hidden;
 }
-.photoGroupOne {
-  width: 100%;
-  height: 100%;
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-  opacity: 1;
-  position: absolute;
-  top: 27%;
-  left: 16%;
-  overflow: hidden;
-}
-.cameraFrame {
-  width: 300px;
-  height: 300px;
-  background: url("@/assets/images/cameraFrame.png");
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-  opacity: 100%;
-  position: absolute;
-  overflow: hidden;
-}
 .friends {
   width: 270px;
   height: 270px;
@@ -198,29 +172,17 @@ body {
   background-position: center center;
   background-size: cover;
   opacity: 85%;
-  position: relative;
-  top: 0;
-  left: 2em;
+  position: absolute;
+  top: 18%;
+  left: 16%;
   overflow: hidden;
 }
 .explainOne {
   width: 100%;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 30%;
+  top: 20%;
   left: 58%;
-  font-family: SCDream;
-  font-weight: 3;
-  font-size: 2rem;
-  opacity: 1;
-  text-align: left;
-}
-.explainTwo {
-  width: 100%;
-  color: rgba(0, 0, 0, 1);
-  position: absolute;
-  top: 40%;
-  left: 14.5%;
   font-family: SCDream;
   font-weight: 3;
   font-size: 2rem;
@@ -236,9 +198,21 @@ body {
   background-size: cover;
   opacity: 1;
   position: absolute;
-  top: 40%;
-  left: 59%;
+  top: 30%;
+  left: 58%;
   overflow: hidden;
+}
+.explainTwo {
+  width: 100%;
+  color: rgba(0, 0, 0, 1);
+  position: absolute;
+  top: 31%;
+  left: 14.5%;
+  font-family: SCDream;
+  font-weight: 3;
+  font-size: 2rem;
+  opacity: 1;
+  text-align: left;
 }
 .containerFirst {
   width: 80%;
@@ -259,7 +233,7 @@ body {
   background-size: cover;
   opacity: 1;
   position: absolute;
-  top: 34.5%;
+  top: 51%;
   left: 15%;
   overflow: hidden;
 }
@@ -267,7 +241,7 @@ body {
   width: 130px;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 35.5%;
+  top: 51%;
   left: 62%;
   font-family: SCDream;
   font-weight: 5;
@@ -279,7 +253,7 @@ body {
   width: 450px;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 36.5%;
+  top: 51%;
   left: 62%;
   font-family: SCDream;
   font-weight: 3;
