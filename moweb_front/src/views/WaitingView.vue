@@ -13,7 +13,14 @@
 
     <!-- 캠에서 가져온 소스비디오 -->
     <video v-show="false" ref="input_video"></video>
-
+    <canvas
+      v-show="false"
+      id="personal_canvas"
+      width="960"
+      height="720"
+      ref="personal_canvas"
+    >
+    </canvas>
     <!-- webrtc를 통해 보낼 소스 -->
     <canvas
       v-show="false"
@@ -21,7 +28,6 @@
       id="output_canvas"
       :width="width"
       :height="height"
-      style="transform: rotateY(180deg)"
     ></canvas>
     <v-row d-flex fluid justify-space-around style="margin: 0px">
       <!-- 왼쪽 영역 -->
@@ -192,10 +198,6 @@
           ></canvas>
           <div id="main-container" class="container">
             <div id="session" v-if="session">
-              <div id="session-header">
-                <h1 id="session-title">{{ room_no }}</h1>
-              </div>
-
               <v-container>
                 <v-row>
                   <v-col>
@@ -239,6 +241,8 @@
                       height="480"
                       :backgroundCode="backGroundImg"
                       :layerSequence="layerSequence"
+                      :shotCnt="shot_cnt"
+                      ref="layeredVideo"
                     ></layered-video>
                   </v-row>
                   <v-row class="justify-space-around">
@@ -282,32 +286,80 @@
           class="btnzip"
           style="height: 10%; margin: 4px; padding:2px; justify-content-center"
         >
-          <div class="btncss" justify="center">
-            <v-btn @click="cameraBtnHandler">
-              {{ cameraBtnTxt }}
-            </v-btn>
-            <v-btn @click="micBtnHandler">
-              {{ micBtnTxt }}
-            </v-btn>
-            <v-btn
-              v-if="is_admin && page == 'waiting'"
-              v-bind:disabled="!allReady"
-              @click="startBtn"
-              >start</v-btn
-            >
-            <v-btn v-if="!is_admin && page == 'waiting'" @click="readyBtn"
-              >ready</v-btn
-            >
-            <v-btn elevation="9" v-if="page == 'result'" outlined tile rounded>
-              <button @click="savePhoto" style="margin: 10px">저장</button>
-            </v-btn>
-            <v-btn v-if="page == 'result'" class="pink white--text">
-              <button @click="sharePhoto" style="margin: 10px">공유</button>
-            </v-btn>
+          <v-row style="margin: auto">
+            <v-col>
+              <v-btn @click="cameraBtnHandler">
+                <v-icon v-if="cameraOn" large>mdi-video</v-icon>
+                <v-icon v-if="!cameraOn" large>mdi-video-off</v-icon>
+              </v-btn>
+              <v-btn @click="micBtnHandler">
+                <v-icon v-if="micOn" large>mdi-microphone</v-icon>
+                <v-icon v-if="!micOn" large>mdi-microphone-off</v-icon>
+              </v-btn>
+            </v-col>
+            <v-col align="center">
+              <v-btn
+                large
+                color="primary"
+                v-if="is_admin && page == 'waiting'"
+                v-bind:disabled="!allReady"
+                @click="startBtn"
+                style="width: 100%"
+              >
+                start
+              </v-btn>
+              <v-btn
+                large
+                color="primary"
+                v-if="!is_admin && page == 'waiting'"
+                @click="readyBtn"
+                style="width: 100%"
+              >
+                ready
+              </v-btn>
+              <v-btn
+                elevation="9"
+                v-if="page == 'result'"
+                outlined
+                tile
+                rounded
+              >
+                <button @click="savePhoto" style="margin: 10px">저장</button>
+              </v-btn>
+              <v-btn v-if="page == 'result'" class="pink white--text">
+                <button @click="sharePhoto" style="margin: 10px">공유</button>
+              </v-btn>
 
-            <v-btn id="buttonLeaveSession" @click="leaveBtn"> 나가기 </v-btn>
-          </div>
+              <!-- 촬영화면 다이얼로그  start -->
+              <shot-modal
+                v-if="page === 'shot'"
+                :dialogProp="shotDialog"
+                :count="count"
+                :isAdmin="is_admin"
+                @sendShotCountdown="sendShotCountdown"
+                @sendDialogChange="sendDialogChange"
+              >
+                <layered-video
+                  width="960"
+                  height="720"
+                  :backgroundCode="backGroundImg"
+                  :layerSequence="layerSequence"
+                  :shotCnt="shot_cnt"
+                >
+                </layered-video>
+              </shot-modal>
+            </v-col>
+            <v-col align="right">
+              <exit-modal
+                :is_admin="is_admin"
+                @leaveSession="leaveSession"
+                style="float: right; margin: auto"
+              >
+              </exit-modal>
+            </v-col>
+          </v-row>
         </v-container>
+
         <!-- <br /> -->
       </div>
       <!-- <v-spacer></v-spacer> -->
@@ -403,11 +455,16 @@ import stompApi from "@/api/stompApi.js";
 import LayerController from "@/components/LayerController.vue";
 import UserVideo from "@/components/UserVideo";
 import LayeredVideo from "@/components/LayeredVideo.vue";
+import ShotModal from "@/components/ShotModal.vue";
+import ExitModal from "@/components/ExitModal.vue";
 
 import VueChatScroll from "vue-chat-scroll";
 
 import Html2canvas from "html2canvas";
 import Kakaosdk from "vue-kakao-sdk";
+
+import shutterSoundSource from "@/assets/sounds/camera_click_sound.wav";
+import beepSoundSource from "@/assets/sounds/beep_sound.wav";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
@@ -455,12 +512,20 @@ export default {
       bg_code: "",
       waitingStyle: "",
       page: "waiting", // page가 waiting, shot, result로 변함에 따라 v-if로 교체.
+      count: 0,
+      shotDialog: false,
+      shot_cnt: 0,
+
+      shutterSound: new Audio(shutterSoundSource),
+      countdownSound: new Audio(beepSoundSource),
     };
   },
   components: {
     UserVideo,
     LayerController,
     LayeredVideo,
+    ShotModal,
+    ExitModal,
   },
   computed: {
     inputVideo() {
@@ -486,6 +551,11 @@ export default {
   mounted() {
     stompApi.connect(this.room_no, this.user_name, this.onSocketReceive);
     this.joinSession();
+    this.picturectx = document
+      .getElementById("personal_canvas")
+      .getContext("2d");
+    this.picturectx.scale(-1, 1);
+    this.picturectx.translate(-960, 0);
   },
   methods: {
     onSocketReceive(result) {
@@ -528,12 +598,30 @@ export default {
           break;
         // 촬영하기
         case 7:
+          console.log("shot!!!!!!");
+          this.shot_cnt = content.shot_cnt;
+          this.takepic();
+          if (this.shot_cnt === 4) {
+            this.page = "result";
+            this.shotDialog = false;
+          }
           break;
         // 방장이 나감
         case 8:
           console.log("BOOM!");
           alert("호스트가 방을 종료하였습니다.");
           this.leaveSession();
+          break;
+        // 촬영화면 다이얼로그 토글
+        case 9:
+          console.log("toggle shot dialog");
+          console.log(content);
+          this.shotDialog = content.status;
+          break;
+        // 카운트다운 시작
+        case 10:
+          console.log("start countDown!!");
+          this.startShotCount();
           break;
         default:
           break;
@@ -694,6 +782,52 @@ export default {
       });
     },
     // ---------------------------- ready end ------------------
+    // -------------------- shot start -------------------
+    startShotCount() {
+      this.count = 5000;
+      this.shotTick();
+    },
+    shotTick() {
+      this.countdownSound.pause();
+      this.countdownSound.currentTime = 0;
+      this.countdownSound.play();
+      setTimeout(() => {
+        this.count -= 1000;
+        if (!this.shotDialog) {
+          // 촬영화면 닫으면 카운트 중단
+          this.countdownSound.pause();
+          this.countdownSound.currentTime = 0;
+          this.count = 0;
+        } else if (this.count > 0) {
+          // 카운트
+          this.shotTick();
+        } else {
+          // do something shot here
+          console.log("shot!!!!");
+          this.shutterSound.play();
+          if (this.is_admin) {
+            stompApi.shot({
+              room_no: this.room_no,
+              shot_cnt: this.shot_cnt + 1,
+              bg_code: this.bg_code,
+            });
+          }
+        }
+      }, 1000);
+    },
+    sendShotCountdown() {
+      stompApi.shotCountdown({
+        room_no: this.room_no,
+      });
+    },
+    sendDialogChange(dialog) {
+      // 여기서 동기화를 위해 다이얼로그 전송
+      stompApi.shotMode({
+        room_no: this.room_no,
+        status: dialog,
+      });
+    },
+    // -------------------- shot end -------------------
     // -------------------- webrtc start ------------------
     joinSession() {
       // --- Get an OpenVidu object ---
@@ -857,8 +991,8 @@ export default {
         onFrame: async () => {
           await selfieSegmentation.send({ image: this.inputVideo });
         },
-        width: 320,
-        height: 240,
+        width: 960,
+        height: 720,
       });
       this.camera.start();
       return 1;
@@ -895,6 +1029,40 @@ export default {
 
       this.ctx.restore();
     },
+    //------------------------------------ 자신의 사진 누끼------------
+    async pictureBackground() {
+      if (!this.cameraOn) {
+        this.picturectx.clearRect(0, 0, 960, 720);
+        return;
+      }
+
+      const selfieSegmentation = new SelfieSegmentation({
+        locateFile: (file) => {
+          return `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`;
+        },
+      });
+      selfieSegmentation.setOptions({
+        modelSelection: 1,
+      });
+      selfieSegmentation.onResults(this.resultOption);
+
+      await selfieSegmentation.send({ image: this.inputVideo });
+
+      return 1;
+    },
+
+    // 배경제거 옵션
+    async resultOption(results) {
+      this.picturectx.save();
+      this.picturectx.clearRect(0, 0, 960, 720);
+      this.picturectx.drawImage(results.segmentationMask, 0, 0, 960, 720);
+
+      // Only overwrite missing pixels.
+      this.picturectx.globalCompositeOperation = "source-in";
+      await this.picturectx.drawImage(results.image, 0, 0, 960, 720);
+
+      this.picturectx.restore();
+    },
     // 카메라 on/off
     async cameraBtnHandler() {
       this.cameraOn = !this.cameraOn;
@@ -924,6 +1092,31 @@ export default {
       }
     },
     //----------------webrtc end----------------------
+    //--------------사진찍기 -----------------------
+    async takepic() {
+      // await this.pictureBackground();
+      // let canvas = this.$refs["personal_canvas"];
+      if (!this.is_admin) return; // 공유화면에서 사진찍을 때
+      const canvas = this.$refs.layeredVideo.$refs.layeredOutputCanvas;
+      const imgBase64 = canvas.toDataURL("image/png");
+      const decodImg = atob(imgBase64.split(",")[1]);
+
+      let array = [];
+      for (let i = 0; i < decodImg.length; i++) {
+        array.push(decodImg.charCodeAt(i));
+      }
+      const file = new Blob([new Uint8Array(array)], { type: "image/png" });
+      const fileName =
+        "canvas_img_" + this.room_no + "_" + this.shot_cnt + ".png";
+      let formData = new FormData();
+      formData.append("image", file, fileName);
+      const API_URL = "https://i7a507.p.ssafy.io/moweb-api";
+      axios.post(API_URL + "/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    },
   },
 };
 </script>
@@ -1005,7 +1198,7 @@ svg:hover {
 }
 .btncss {
   position: absolute;
-  left: 30%;
+  left: 35%;
 
   box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
 }

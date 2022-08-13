@@ -14,11 +14,7 @@
             >
           </span>
         </div>
-        <!-- <span class="logoTitle">순간뽀짝</span> -->
-        <div class="photoGroupOne">
-          <div class="cameraFrame"></div>
-          <div class="friends"></div>
-        </div>
+        <div class="friends"></div>
         <span class="explainOne"
           >친구들과 사진을 촬영하고<br />잊지 못할 추억을 만들어 보세요!</span
         ><span class="explainTwo"
@@ -53,6 +49,7 @@
       </div>
       <!-- </div> -->
     </body>
+    <footer></footer>
   </div>
 </template>
 <script>
@@ -141,17 +138,7 @@ body {
   opacity: 1;
   text-align: left;
 }
-/* .logoTitle {
-  width: 94rem;
-  color: rgba(0, 0, 0, 1);
-  position: absolute;
-  top: 0.3%;
-  left: 89%;
-  font-family: NanumGgeu;
-  font-size: 2rem;
-  opacity: 1;
-  text-align: left;
-} */
+
 .buttonForm {
   width: 218rem;
   height: 30rem;
@@ -167,29 +154,6 @@ body {
   font-size: 1rem;
   overflow: hidden;
 }
-.photoGroupOne {
-  width: 100%;
-  height: 100%;
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-  opacity: 1;
-  position: absolute;
-  top: 27%;
-  left: 16%;
-  overflow: hidden;
-}
-.cameraFrame {
-  width: 300px;
-  height: 300px;
-  background: url("@/assets/images/cameraFrame.png");
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-  opacity: 100%;
-  position: absolute;
-  overflow: hidden;
-}
 .friends {
   width: 270px;
   height: 270px;
@@ -198,16 +162,16 @@ body {
   background-position: center center;
   background-size: cover;
   opacity: 85%;
-  position: relative;
-  top: 0;
-  left: 2em;
+  position: absolute;
+  top: 18%;
+  left: 16%;
   overflow: hidden;
 }
 .explainOne {
   width: 100%;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 30%;
+  top: 20%;
   left: 58%;
   font-family: SCDream;
   font-weight: 3;
@@ -215,20 +179,8 @@ body {
   opacity: 1;
   text-align: left;
 }
-.explainTwo {
-  width: 100%;
-  color: rgba(0, 0, 0, 1);
-  position: absolute;
-  top: 40%;
-  left: 14.5%;
-  font-family: SCDream;
-  font-weight: 3;
-  font-size: 2rem;
-  opacity: 1;
-  text-align: left;
-}
 .photoGroupTwo {
-  width: 270px;
+  width: 300px;
   height: 270px;
   background: url("@/assets/images/photoGroupTwo.png");
   background-repeat: no-repeat;
@@ -236,30 +188,43 @@ body {
   background-size: cover;
   opacity: 1;
   position: absolute;
-  top: 40%;
-  left: 59%;
+  top: 30%;
+  left: 58%;
   overflow: hidden;
+}
+.explainTwo {
+  width: 100%;
+  color: rgba(0, 0, 0, 1);
+  position: absolute;
+  top: 31%;
+  left: 14.5%;
+  font-family: SCDream;
+  font-weight: 3;
+  font-size: 2rem;
+  opacity: 1;
+  text-align: left;
 }
 .containerFirst {
   width: 80%;
-  height: 12%;
+  height: 10%;
   background: rgba(236, 236, 236, 1);
   opacity: 1;
   position: absolute;
-  top: 50%;
+  top: 43%;
   left: 10%;
+  box-shadow: 0 2px 4px 0 rgba(14, 14, 14, 0.5);
   overflow: hidden;
 }
 .pictureFirst {
-  width: 640px;
-  height: 360px;
+  width: 560px;
+  height: 315px;
   background: url("@/assets/images/pictureFirst.png");
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
   opacity: 1;
   position: absolute;
-  top: 34.5%;
+  top: 44.5%;
   left: 15%;
   overflow: hidden;
 }
@@ -267,11 +232,11 @@ body {
   width: 130px;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 35.5%;
-  left: 62%;
+  top: 46.5%;
+  left: 60%;
   font-family: SCDream;
   font-weight: 5;
-  font-size: 33px;
+  font-size: 27px;
   opacity: 1;
   text-align: left;
 }
@@ -279,34 +244,35 @@ body {
   width: 450px;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 36.5%;
-  left: 62%;
+  top: 47.5%;
+  left: 60%;
   font-family: SCDream;
   font-weight: 3;
-  font-size: 30px;
+  font-size: 27px;
   opacity: 1;
   text-align: left;
 }
 .containerSecond {
   width: 80%;
-  height: 12%;
+  height: 10%;
   background: rgba(236, 236, 236, 1);
   opacity: 1;
   position: absolute;
-  top: 65%;
+  top: 58%;
   left: 10%;
+  box-shadow: 0 2px 4px 0 rgba(14, 14, 14, 0.5);
   overflow: hidden;
 }
 .pictureSecond {
-  width: 400px;
-  height: 400px;
+  width: 350px;
+  height: 350px;
   background: url("@/assets/images/pictureSecond.png");
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
   opacity: 1;
   position: absolute;
-  top: 45%;
+  top: 59%;
   left: 21%;
   overflow: hidden;
 }
@@ -314,11 +280,11 @@ body {
   width: 130px;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 46.5%;
-  left: 59%;
+  top: 61.5%;
+  left: 54%;
   font-family: SCDream;
   font-weight: 5;
-  font-size: 35px;
+  font-size: 27px;
   opacity: 1;
   text-align: left;
 }
@@ -326,34 +292,35 @@ body {
   width: 450px;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 47.5%;
-  left: 59%;
+  top: 62.5%;
+  left: 54%;
   font-family: SCDream;
   font-weight: 3;
-  font-size: 30px;
+  font-size: 27px;
   opacity: 1;
   text-align: left;
 }
 .containerThird {
   width: 80%;
-  height: 8%;
+  height: 10%;
   background: rgba(236, 236, 236, 1);
   opacity: 1;
   position: absolute;
-  top: 72%;
+  top: 73%;
   left: 10%;
+  box-shadow: 0 2px 4px 0 rgba(14, 14, 14, 0.5);
   overflow: hidden;
 }
 .pictureThird {
-  width: 640px;
-  height: 360px;
+  width: 560px;
+  height: 315px;
   background: url("@/assets/images/pictureThird.png");
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
   opacity: 1;
   position: absolute;
-  top: 56.5%;
+  top: 74.5%;
   left: 15%;
   overflow: hidden;
 }
@@ -361,11 +328,11 @@ body {
   width: 130px;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 58%;
+  top: 76.5%;
   left: 62%;
   font-family: SCDream;
   font-weight: 5;
-  font-size: 35px;
+  font-size: 27px;
   opacity: 1;
   text-align: left;
 }
@@ -373,21 +340,21 @@ body {
   width: 450px;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 59%;
+  top: 77.5%;
   left: 62%;
   font-family: SCDream;
   font-weight: 3;
-  font-size: 30px;
+  font-size: 27px;
   opacity: 1;
   text-align: left;
 }
 .containerLast {
   width: 80%;
   height: 8%;
-  background: rgba(236, 236, 236, 1);
+  background: rgb(255, 179, 179);
   opacity: 1;
   position: absolute;
-  top: 83%;
+  top: 88%;
   left: 10%;
   overflow: hidden;
 }
