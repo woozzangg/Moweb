@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +41,7 @@ public class ImgController {
     }
 
     @GetMapping(value = "/display")
-    public ResponseEntity<Resource> displayImg(@Param("filename") String imgName){
+    public ResponseEntity<Resource> displayImg(@RequestParam("imgName") String imgName){
         String imgPath = Paths.get("").toAbsolutePath()+File.separator+"images"+File.separator;
 
         Resource resource = new FileSystemResource(imgPath+imgName);
@@ -50,10 +49,8 @@ public class ImgController {
             return new ResponseEntity<Resource>(HttpStatus.INTERNAL_SERVER_ERROR);
 
         HttpHeaders header = new HttpHeaders();
-        Path path = null;
-
         try {
-            path = Paths.get(imgPath+imgName);
+            Path path = Paths.get(imgPath+imgName);
             header.add("Content-Type", Files.probeContentType(path));
             logger.info("파일 url 생성 성공");
             return new ResponseEntity<Resource>(resource, header, HttpStatus.OK);
