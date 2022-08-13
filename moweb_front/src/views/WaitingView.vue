@@ -731,6 +731,9 @@ export default {
       const el = this.$refs.resultCanvas;
       const options = {
         type: "dataURL",
+        useCORS: true,
+        proxy: "html2canvasproxy.php",
+        logging: true,
       };
       const result = await Html2canvas(el, options);
 
@@ -779,7 +782,11 @@ export default {
       console.log("결과화면 업로드");
 
       const canvas = this.$refs.resultCanvas;
-      Html2canvas(canvas).then(function (canvas) {
+      Html2canvas(canvas, {
+        useCORS: true,
+        proxy: "html2canvasproxy.php",
+        logging: true,
+      }).then((canvas) => {
         var image = canvas.toDataURL("image/png");
         var name = "canvas_img_" + this.room_no + "_result.png";
 
@@ -795,11 +802,12 @@ export default {
         var formData = new FormData();
         formData.append("image", blob, name);
 
-      const API_URL = "https://i7a507.p.ssafy.io/moweb-api";
-      axios.post(API_URL + "/upload", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+        const API_URL = "https://i7a507.p.ssafy.io/moweb-api";
+        axios.post(API_URL + "/upload", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
       });
     },
     linkBtn() {
