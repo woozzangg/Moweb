@@ -315,6 +315,24 @@
               <button @click="sharePhoto" style="margin: 10px">공유</button>
             </v-btn>
 
+            <!-- 촬영화면 다이얼로그  start -->
+            <shot-modal
+              v-if="page === 'shot'"
+              :dialogProp="shotDialog"
+              :count="count"
+              :isAdmin="is_admin"
+              @startShotCount="startShotCount"
+              @sendDialogChange="sendDialogChange"
+            >
+              <layered-video
+                width="960"
+                height="720"
+                :backgroundCode="backGroundImg"
+                :layerSequence="layerSequence"
+              ></layered-video>
+            </shot-modal>
+            <!-- 촬영화면 다이얼로그 end -->
+
             <v-btn
               large
               color="error"
@@ -420,6 +438,7 @@ import stompApi from "@/api/stompApi.js";
 import LayerController from "@/components/LayerController.vue";
 import UserVideo from "@/components/UserVideo";
 import LayeredVideo from "@/components/LayeredVideo.vue";
+import ShotModal from "@/components/ShotModal.vue";
 
 import VueChatScroll from "vue-chat-scroll";
 
@@ -472,12 +491,15 @@ export default {
       bg_code: "",
       waitingStyle: "",
       page: "waiting", // page가 waiting, shot, result로 변함에 따라 v-if로 교체.
+      count: 0,
+      shotDialog: false,
     };
   },
   components: {
     UserVideo,
     LayerController,
     LayeredVideo,
+    ShotModal,
   },
   computed: {
     inputVideo() {
@@ -711,6 +733,31 @@ export default {
       });
     },
     // ---------------------------- ready end ------------------
+    // -------------------- shot start -------------------
+    startShotCount() {
+      this.count = 5000;
+      this.shotTick();
+    },
+    shotTick() {
+      setTimeout(() => {
+        this.count -= 50;
+        if (this.count > 0) {
+          this.shotTick();
+        } else {
+          // do something shot here
+          console.log("shot!!!!");
+        }
+      }, 50);
+    },
+    sendDialogChange(dialog) {
+      // 여기서 동기화를 위해 다이얼로그 전송
+      // stompApi.shotMode({
+      //   room: this.room_no,
+      //   user_name: this.user_name,
+      //   status: dialog
+      // });
+    },
+    // -------------------- shot end -------------------
     // -------------------- webrtc start ------------------
     joinSession() {
       // --- Get an OpenVidu object ---
