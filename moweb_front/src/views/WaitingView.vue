@@ -445,6 +445,9 @@ import VueChatScroll from "vue-chat-scroll";
 import Html2canvas from "html2canvas";
 import Kakaosdk from "vue-kakao-sdk";
 
+import shutterSoundSource from "@/assets/sounds/camera_click_sound.wav";
+import countdownSoundSource from "@/assets/sounds/countdown_sound.wav";
+
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 const OPENVIDU_SERVER_URL = "https://i7a507.p.ssafy.io:8443";
@@ -494,6 +497,9 @@ export default {
       count: 0,
       shotDialog: false,
       shot_cnt: 0,
+
+      shutterSound: new Audio(shutterSoundSource),
+      countdownSound: new Audio(countdownSoundSource),
     };
   },
   components: {
@@ -574,6 +580,7 @@ export default {
         // 촬영하기
         case 7:
           console.log("shot!!!!!!");
+          this.shutterSound.play();
           this.shot_cnt = content.shot_cnt;
           break;
         // 방장이 나감
@@ -755,6 +762,7 @@ export default {
     // -------------------- shot start -------------------
     startShotCount() {
       this.count = 5000;
+      this.countdownSound.play();
       this.shotTick();
     },
     shotTick() {
@@ -762,6 +770,8 @@ export default {
         this.count -= 50;
         if (!this.shotDialog) {
           // 촬영화면 닫으면 카운트 중단
+          this.countdownSound.pause();
+          this.countdownSound.currentTime = 0;
           this.count = 0;
         } else if (this.count > 0) {
           // 카운트
