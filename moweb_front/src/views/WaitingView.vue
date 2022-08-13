@@ -13,7 +13,7 @@
 
     <!-- 캠에서 가져온 소스비디오 -->
     <video v-show="false" ref="input_video"></video>
-    <canvas v-show="true" id="personal_canvas" width="960" height="720">
+    <canvas v-show="false" id="personal_canvas" width="960" height="720">
     </canvas>
     <!-- webrtc를 통해 보낼 소스 -->
     <canvas
@@ -23,7 +23,6 @@
       :width="width"
       :height="height"
     ></canvas>
-    <v-btn @click="pictureBackground"> 촬영</v-btn>
     <v-row d-flex fluid justify-space-around style="margin: 0px">
       <!-- 왼쪽 영역 -->
       <div
