@@ -1,8 +1,7 @@
 <template>
-  <div id="app" style="height: 936px">
-    <router-link to="/">Home</router-link>
+  <v-app id="app" style="height: 100%">
     <router-view />
-  </div>
+  </v-app>
 </template>
 <script></script>
 

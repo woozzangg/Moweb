@@ -108,7 +108,7 @@ public class WebSocketController {
     @MessageMapping("/theme")
     public void theme(WebSocketMessage message) {
         message.setAction(6);
-        logger.info("theme : " + message.getBg_no());
+        logger.info("theme : " + message.getBg_code());
         sendingOperations.convertAndSend("/topic/moweb/room/"+message.getRoom_no(),message);
     }
 

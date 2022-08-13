@@ -173,27 +173,7 @@
                   height="600"
                   item-height="120"
                 >
-                  <template v-slot:default="{ item }">
-                    <v-list-item :key="item">
-                      <v-list-item-action>
-                        <v-btn fab small depressed color="primary">
-                          {{ item }}
-                        </v-btn>
-                      </v-list-item-action>
-
-                      <v-list-item-content>
-                        <v-list-item-title>
-                          User Database Record <strong>ID {{ item }}</strong>
-                        </v-list-item-title>
-                      </v-list-item-content>
-
-                      <v-list-item-action>
-                        <v-icon small> mdi-open-in-new </v-icon>
-                      </v-list-item-action>
-                    </v-list-item>
-
-                    <v-divider></v-divider>
-                  </template>
+                  배경색깔
                 </v-virtual-scroll>
               </v-card>
             </div>
@@ -212,9 +192,9 @@
           ></canvas>
           <div id="main-container" class="container">
             <div id="session" v-if="session">
-              <div id="session-header">
+              <!-- <div id="session-header">
                 <h1 id="session-title">{{ room_no }}</h1>
-              </div>
+              </div> -->
 
               <v-container>
                 <v-row>
@@ -224,7 +204,11 @@
                       v-if="videoSetting"
                       :stream-manager="publisher"
                     />
-                    <p v-show="readyStatus[user_name]" style="color: red">
+                    <p
+                      v-if="page == 'waiting'"
+                      v-show="readyStatus[user_name]"
+                      style="color: red"
+                    >
                       Ready
                     </p>
                   </v-col>
@@ -248,14 +232,47 @@
                 </v-row>
               </v-container>
               <v-container v-if="page == 'shot'">
-                <p>
-                  <layered-video
-                    width="640"
-                    height="480"
-                    :backgroundCode="backGroundImg"
-                    :layerSequence="layerSequence"
-                  ></layered-video></p
-              ></v-container>
+                <v-col>
+                  <v-row class="justify-space-around">
+                    <layered-video
+                      width="640"
+                      height="480"
+                      :backgroundCode="backGroundImg"
+                      :layerSequence="layerSequence"
+                    ></layered-video>
+                  </v-row>
+                  <v-row class="justify-space-around">
+                    <v-dialog
+                      transition="dialog-top-transition"
+                      max-width="320"
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn color="primary" v-bind="attrs" v-on="on"
+                          >배경 색상 선택</v-btn
+                        >
+                      </template>
+                      <template v-slot:default="dialog">
+                        <v-card min-height="370">
+                          <v-color-picker
+                            v-model="bg_code"
+                            dot-size="12"
+                            hide-mode-switch
+                            mode="hexa"
+                            style="margin: auto; padding-top: 10px"
+                          ></v-color-picker>
+                          <v-card-actions class="justify-end">
+                            <v-btn text @click="backGroundBtn">적용하기</v-btn>
+                            <v-btn text @click="dialog.value = false"
+                              >닫기</v-btn
+                            >
+                          </v-card-actions>
+                        </v-card>
+                      </template>
+                    </v-dialog>
+                  </v-row>
+                  <!--  -->
+                </v-col>
+              </v-container>
             </div>
           </div>
         </v-container>
@@ -265,23 +282,65 @@
           class="btnzip"
           style="height: 10%; margin: 4px; padding:2px; justify-content-center"
         >
-          <div class="btncss" justify="center">
+          <div style="float: left; position: absolute">
             <v-btn @click="cameraBtnHandler">
-              {{ cameraBtnTxt }}
+              <v-icon v-if="cameraOn" large>mdi-video</v-icon>
+              <v-icon v-if="!cameraOn" large>mdi-video-off</v-icon>
             </v-btn>
             <v-btn @click="micBtnHandler">
-              {{ micBtnTxt }}
+              <v-icon v-if="micOn" large>mdi-microphone</v-icon>
+              <v-icon v-if="!micOn" large>mdi-microphone-off</v-icon>
             </v-btn>
-            <v-btn v-if="is_admin" v-bind:disabled="!allReady">start</v-btn>
-            <v-btn v-if="!is_admin" @click="readyBtn">ready</v-btn>
-            <v-btn elevation="9" outlined tile rounded>
+          </div>
+          <div align="center">
+            <v-btn
+              large
+              color="primary"
+              v-if="is_admin && page == 'waiting'"
+              v-bind:disabled="!allReady"
+              @click="startBtn"
+              >start</v-btn
+            >
+            <v-btn
+              large
+              color="primary"
+              v-if="!is_admin && page == 'waiting'"
+              @click="readyBtn"
+              >ready</v-btn
+            >
+            <v-btn elevation="9" v-if="page == 'result'" outlined tile rounded>
               <button @click="savePhoto" style="margin: 10px">저장</button>
             </v-btn>
-            <v-btn class="pink white--text">
+            <v-btn v-if="page == 'result'" class="pink white--text">
               <button @click="sharePhoto" style="margin: 10px">공유</button>
             </v-btn>
 
-            <v-btn id="buttonLeaveSession" @click="leaveBtn"> 나가기 </v-btn>
+            <!-- 촬영화면 다이얼로그  start -->
+            <shot-modal
+              v-if="page === 'shot'"
+              :dialogProp="shotDialog"
+              :count="count"
+              :isAdmin="is_admin"
+              @startShotCount="startShotCount"
+              @sendDialogChange="sendDialogChange"
+            >
+              <layered-video
+                width="960"
+                height="720"
+                :backgroundCode="backGroundImg"
+                :layerSequence="layerSequence"
+              ></layered-video>
+            </shot-modal>
+            <!-- 촬영화면 다이얼로그 end -->
+
+            <v-btn
+              large
+              color="error"
+              id="buttonLeaveSession"
+              @click="leaveBtn"
+            >
+              나가기
+            </v-btn>
           </div>
         </v-container>
         <!-- <br /> -->
@@ -337,7 +396,7 @@
               width="30"
               height="30"
               viewBox="0 0 68 68"
-              fill="#CCCCCC"
+              fill="#757575"
               xmlns="http://www.w3.org/2000/svg"
             >
               <g clip-path="url(#clip0_26_10)">
@@ -379,6 +438,7 @@ import stompApi from "@/api/stompApi.js";
 import LayerController from "@/components/LayerController.vue";
 import UserVideo from "@/components/UserVideo";
 import LayeredVideo from "@/components/LayeredVideo.vue";
+import ShotModal from "@/components/ShotModal.vue";
 
 import VueChatScroll from "vue-chat-scroll";
 
@@ -427,16 +487,19 @@ export default {
       videoSetting: false,
       canvasStream: undefined,
 
-      backGroundImg: "#354521",
-
+      backGroundImg: "#3D939EFF",
+      bg_code: "",
       waitingStyle: "",
       page: "waiting", // page가 waiting, shot, result로 변함에 따라 v-if로 교체.
+      count: 0,
+      shotDialog: false,
     };
   },
   components: {
     UserVideo,
     LayerController,
     LayeredVideo,
+    ShotModal,
   },
   computed: {
     inputVideo() {
@@ -500,6 +563,7 @@ export default {
           break;
         // 배경 선택하기
         case 6:
+          this.backGroundImg = content.bg_code;
           break;
         // 촬영하기
         case 7:
@@ -513,6 +577,12 @@ export default {
         default:
           break;
       }
+    },
+    backGroundBtn() {
+      stompApi.theme({
+        room_no: this.room_no,
+        bg_code: this.bg_code,
+      });
     },
     // ---------------------------- 화면 전환 start --------------------------------
     mowebStart() {
@@ -663,6 +733,31 @@ export default {
       });
     },
     // ---------------------------- ready end ------------------
+    // -------------------- shot start -------------------
+    startShotCount() {
+      this.count = 5000;
+      this.shotTick();
+    },
+    shotTick() {
+      setTimeout(() => {
+        this.count -= 50;
+        if (this.count > 0) {
+          this.shotTick();
+        } else {
+          // do something shot here
+          console.log("shot!!!!");
+        }
+      }, 50);
+    },
+    sendDialogChange(dialog) {
+      // 여기서 동기화를 위해 다이얼로그 전송
+      // stompApi.shotMode({
+      //   room: this.room_no,
+      //   user_name: this.user_name,
+      //   status: dialog
+      // });
+    },
+    // -------------------- shot end -------------------
     // -------------------- webrtc start ------------------
     joinSession() {
       // --- Get an OpenVidu object ---
@@ -946,7 +1041,7 @@ svg {
 }
 
 svg:hover {
-  fill: #999999;
+  fill: #3c3c3c;
 }
 
 .linkbtn {
@@ -974,7 +1069,7 @@ svg:hover {
 }
 .btncss {
   position: absolute;
-  left: 30%;
+  left: 35%;
 
   box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
 }
