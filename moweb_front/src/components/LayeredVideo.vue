@@ -1,12 +1,11 @@
 <template>
-  <div class="layered-video">
+  <div>
     <canvas
       :width="width"
       :height="height"
       id="layered-output-canvas"
       ref="layeredOutputCanvas"
     ></canvas>
-    <div class="shot-count">{{ shotCnt }} / 4</div>
   </div>
 </template>
 
@@ -14,14 +13,7 @@
 import { chromaKey } from "@/utils/chromakey.js";
 
 export default {
-  props: [
-    "width",
-    "height",
-    "layerSequence",
-    "mapUserVideo",
-    "backgroundCode",
-    "shotCnt",
-  ],
+  props: ["width", "height", "layerSequence", "mapUserVideo", "backgroundCode"],
   data: function () {
     return {
       canvasContext: null,
@@ -95,14 +87,4 @@ export default {
 };
 </script>
 
-<style>
-.layered-video {
-  position: relative;
-}
-.shot-count {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  font-size: 1.5rem;
-}
-</style>
+<style></style>

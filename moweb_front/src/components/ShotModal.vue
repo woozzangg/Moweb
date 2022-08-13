@@ -1,14 +1,7 @@
 <template>
   <v-dialog v-model="dialog" width="fit-content" :persistent="!isAdmin">
     <template v-if="isAdmin" v-slot:activator="{ on, attrs }">
-      <v-btn
-        color="blue"
-        dark
-        large
-        v-bind="attrs"
-        v-on="on"
-        style="width: 100%"
-      >
+      <v-btn color="red lighten-2" dark v-bind="attrs" v-on="on">
         활영하기
       </v-btn>
     </template>
@@ -24,9 +17,16 @@
         >
           <img src="@/assets/images/photoCamera.svg" alt="" />
         </button>
-        <div class="count" v-else>
-          {{ count / 1000 }}
-        </div>
+        <v-progress-circular
+          :rotate="-90"
+          :size="200"
+          :width="15"
+          :value="(count / 10) % 100"
+          color="error"
+          v-else
+        >
+          {{ (count / 1000).toFixed(2) }}
+        </v-progress-circular>
       </div>
     </div>
   </v-dialog>
@@ -61,6 +61,12 @@ export default {
 </script>
 
 <style>
+.v-progress-circular {
+  font-size: 32px;
+}
+.v-progress-circular__overlay {
+  transition: none;
+}
 .shot-container {
   background-color: black;
   display: flex;
@@ -90,9 +96,5 @@ export default {
 }
 .shot-button:hover {
   background-color: lightgray;
-}
-.count {
-  color: white;
-  font-size: 5rem;
 }
 </style>

@@ -14,6 +14,7 @@
             >
           </span>
         </div>
+        <!-- <span class="logoTitle">순간뽀짝</span> -->
         <div class="friends"></div>
         <span class="explainOne"
           >친구들과 사진을 촬영하고<br />잊지 못할 추억을 만들어 보세요!</span
@@ -49,7 +50,6 @@
       </div>
       <!-- </div> -->
     </body>
-    <footer></footer>
   </div>
 </template>
 <script>
@@ -138,7 +138,17 @@ body {
   opacity: 1;
   text-align: left;
 }
-
+/* .logoTitle {
+  width: 94rem;
+  color: rgba(0, 0, 0, 1);
+  position: absolute;
+  top: 0.3%;
+  left: 89%;
+  font-family: NanumGgeu;
+  font-size: 2rem;
+  opacity: 1;
+  text-align: left;
+} */
 .buttonForm {
   width: 218rem;
   height: 30rem;
@@ -180,7 +190,7 @@ body {
   text-align: left;
 }
 .photoGroupTwo {
-  width: 300px;
+  width: 270px;
   height: 270px;
   background: url("@/assets/images/photoGroupTwo.png");
   background-repeat: no-repeat;
@@ -206,25 +216,24 @@ body {
 }
 .containerFirst {
   width: 80%;
-  height: 10%;
+  height: 12%;
   background: rgba(236, 236, 236, 1);
   opacity: 1;
   position: absolute;
-  top: 43%;
+  top: 50%;
   left: 10%;
-  box-shadow: 0 2px 4px 0 rgba(14, 14, 14, 0.5);
   overflow: hidden;
 }
 .pictureFirst {
-  width: 560px;
-  height: 315px;
+  width: 640px;
+  height: 360px;
   background: url("@/assets/images/pictureFirst.png");
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
   opacity: 1;
   position: absolute;
-  top: 44.5%;
+  top: 51%;
   left: 15%;
   overflow: hidden;
 }
@@ -232,11 +241,11 @@ body {
   width: 130px;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 46.5%;
-  left: 60%;
+  top: 51%;
+  left: 62%;
   font-family: SCDream;
   font-weight: 5;
-  font-size: 27px;
+  font-size: 33px;
   opacity: 1;
   text-align: left;
 }
@@ -244,35 +253,34 @@ body {
   width: 450px;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 47.5%;
-  left: 60%;
+  top: 51%;
+  left: 62%;
   font-family: SCDream;
   font-weight: 3;
-  font-size: 27px;
+  font-size: 30px;
   opacity: 1;
   text-align: left;
 }
 .containerSecond {
   width: 80%;
-  height: 10%;
+  height: 12%;
   background: rgba(236, 236, 236, 1);
   opacity: 1;
   position: absolute;
-  top: 58%;
+  top: 65%;
   left: 10%;
-  box-shadow: 0 2px 4px 0 rgba(14, 14, 14, 0.5);
   overflow: hidden;
 }
 .pictureSecond {
-  width: 350px;
-  height: 350px;
+  width: 400px;
+  height: 400px;
   background: url("@/assets/images/pictureSecond.png");
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
   opacity: 1;
   position: absolute;
-  top: 59%;
+  top: 45%;
   left: 21%;
   overflow: hidden;
 }
@@ -280,11 +288,11 @@ body {
   width: 130px;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 61.5%;
-  left: 54%;
+  top: 46.5%;
+  left: 59%;
   font-family: SCDream;
   font-weight: 5;
-  font-size: 27px;
+  font-size: 35px;
   opacity: 1;
   text-align: left;
 }
@@ -292,35 +300,34 @@ body {
   width: 450px;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 62.5%;
-  left: 54%;
+  top: 47.5%;
+  left: 59%;
   font-family: SCDream;
   font-weight: 3;
-  font-size: 27px;
+  font-size: 30px;
   opacity: 1;
   text-align: left;
 }
 .containerThird {
   width: 80%;
-  height: 10%;
+  height: 8%;
   background: rgba(236, 236, 236, 1);
   opacity: 1;
   position: absolute;
-  top: 73%;
+  top: 72%;
   left: 10%;
-  box-shadow: 0 2px 4px 0 rgba(14, 14, 14, 0.5);
   overflow: hidden;
 }
 .pictureThird {
-  width: 560px;
-  height: 315px;
+  width: 640px;
+  height: 360px;
   background: url("@/assets/images/pictureThird.png");
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
   opacity: 1;
   position: absolute;
-  top: 74.5%;
+  top: 56.5%;
   left: 15%;
   overflow: hidden;
 }
@@ -328,11 +335,11 @@ body {
   width: 130px;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 76.5%;
+  top: 58%;
   left: 62%;
   font-family: SCDream;
   font-weight: 5;
-  font-size: 27px;
+  font-size: 35px;
   opacity: 1;
   text-align: left;
 }
@@ -340,21 +347,21 @@ body {
   width: 450px;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 77.5%;
+  top: 59%;
   left: 62%;
   font-family: SCDream;
   font-weight: 3;
-  font-size: 27px;
+  font-size: 30px;
   opacity: 1;
   text-align: left;
 }
 .containerLast {
   width: 80%;
   height: 8%;
-  background: rgb(255, 179, 179);
+  background: rgba(236, 236, 236, 1);
   opacity: 1;
   position: absolute;
-  top: 88%;
+  top: 83%;
   left: 10%;
   overflow: hidden;
 }
