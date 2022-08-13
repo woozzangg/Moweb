@@ -777,18 +777,24 @@ export default {
     },
     async uploadResult() {
       console.log("결과화면 업로드");
-      const canvas = this.$refs.resultCanvas; //결과화면
-      const imgBase64 = canvas.toDataURL("image/png");
-      const decodImg = atob(imgBase64.split(",")[1]);
 
-      let array = [];
-      for (let i = 0; i < decodImg.length; i++) {
-        array.push(decodImg.charCodeAt(i));
-      }
-      const file = new Blob([new Uint8Array(array)], { type: "image/png" });
-      const fileName = "canvas_img_" + this.room_no + "_result.png";
-      let formData = new FormData();
-      formData.append("image", file, fileName);
+      const canvas = this.$refs.resultCanvas;
+      Html2canvas(canvas).then(function (canvas) {
+        var image = canvas.toDataURL("image/png");
+        var name = "canvas_img_" + this.room_no + "_result.png";
+
+        var byteString = atob(image.split(",")[1]);
+        var ab = new ArrayBuffer(byteString.length);
+        var ia = new Uint8Array(ab);
+
+        for (var i = 0; i < byteString.length; i++) {
+          ia[i] = byteString.charCodeAt(i);
+        }
+        var blob = new Blob([ab], { type: "image/png" });
+
+        var formData = new FormData();
+        formData.append("image", blob, name);
+
       const API_URL = "https://i7a507.p.ssafy.io/moweb-api";
       axios.post(API_URL + "/upload", formData, {
         headers: {
