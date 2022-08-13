@@ -360,7 +360,6 @@
         </v-container>
         <!-- <br /> -->
       </div>
-      <!-- <v-spacer></v-spacer> -->
       <!-- 오른쪽 영역 시작 -->
       <div style="width: 26%; margin: 5px auto 0px auto">
         <!-- 참여 멤버 -->
