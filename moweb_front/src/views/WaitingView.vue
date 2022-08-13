@@ -10,7 +10,6 @@
     "
   >
     <!-- row로 구간 나눔 -->
-
     <!-- 캠에서 가져온 소스비디오 -->
     <video v-show="false" ref="input_video"></video>
     <canvas
@@ -209,7 +208,7 @@
                     <p
                       v-if="page == 'waiting'"
                       v-show="readyStatus[user_name]"
-                      style="color: red"
+                      style="color: red; position: absolute"
                     >
                       Ready
                     </p>
@@ -221,12 +220,12 @@
                   >
                     <user-video :stream-manager="sub" />
                     <p
-                      v-show="
+                      v-if="
                         readyStatus[
                           JSON.parse(sub.stream.connection.data).clientData
                         ]
                       "
-                      style="color: red"
+                      style="color: red; position: absolute"
                     >
                       Ready
                     </p>
@@ -555,6 +554,9 @@ export default {
       .getContext("2d");
     this.picturectx.scale(-1, 1);
     this.picturectx.translate(-960, 0);
+    if (this.room_no == "undefined") {
+      this.$router.replace("/");
+    }
   },
   methods: {
     onSocketReceive(result) {
@@ -608,7 +610,10 @@ export default {
         // 방장이 나감
         case 8:
           console.log("BOOM!");
-          alert("호스트가 방을 종료하였습니다.");
+          this.$dialog.error({
+            text: "호스트가 방을 종료하였습니다.",
+            persistent: true,
+          });
           this.leaveSession();
           break;
         // 촬영화면 다이얼로그 토글
@@ -890,12 +895,6 @@ export default {
 
       window.addEventListener("beforeunload", this.leaveSession);
       window.addEventListener("popstate", this.leaveSession);
-    },
-    leaveBtn() {
-      if (this.is_admin) {
-        alert("방장이 나가면 방이 사라집니다.");
-      }
-      if (confirm("정말로 나가시겠습니까?")) this.leaveSession();
     },
     leaveSession() {
       // --- Leave the session by calling 'disconnect' method over the Session object ---
