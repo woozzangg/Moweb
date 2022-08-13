@@ -189,7 +189,6 @@
         <!-- # 결과화면 들어가는곳  -->
         <v-container class="webrtc" style="height: 85%; margin: 0px">
           <canvas
-            ref="resultCanvas"
             class="border-style1"
             width="320"
             height="240"
@@ -235,7 +234,7 @@
               </v-container>
               <v-container v-if="page == 'shot'">
                 <v-col>
-                  <v-row class="justify-space-around">
+                  <v-row ref="resultCanvas" class="justify-space-around">
                     <layered-video
                       width="640"
                       height="480"
@@ -362,7 +361,6 @@
 
         <!-- <br /> -->
       </div>
-      <!-- <v-spacer></v-spacer> -->
       <!-- 오른쪽 영역 시작 -->
       <div style="width: 26%; margin: 5px auto 0px auto">
         <!-- 참여 멤버 -->
@@ -470,6 +468,8 @@ axios.defaults.headers.post["Content-Type"] = "application/json";
 
 const OPENVIDU_SERVER_URL = "https://i7a507.p.ssafy.io:8443";
 const OPENVIDU_SERVER_SECRET = "MY_SECRET";
+
+const SERVER_URL = "http://localhost:8080/moweb-api";
 
 const apiKey = "59074e20c9d80e6e5200a4bd60122af7";
 Vue.use(Kakaosdk, { apiKey });
@@ -721,6 +721,36 @@ export default {
             },
           },
         ],
+      });
+    },
+    async uploadPhoto() {
+      console.log("사진 업로드");
+
+      const canvas = this.$refs.resultCanvas;
+      Html2canvas(canvas).then(function (canvas) {
+        var image = canvas.toDataURL("image/png");
+        var name = "result.png";
+
+        console.log(image);
+
+        var byteString = atob(image.split(",")[1]);
+        var ab = new ArrayBuffer(byteString.length);
+        var ia = new Uint8Array(ab);
+
+        for (var i = 0; i < byteString.length; i++) {
+          ia[i] = byteString.charCodeAt(i);
+        }
+        var blob = new Blob([ab], { type: "image/png" });
+
+        var form = new FormData();
+        form.append("image", blob, name);
+
+        axios
+          .post(`${SERVER_URL}/upload`, form, {
+            header: { "Content-Type": "multipart/form-data" },
+          })
+          .then((response) => response.data)
+          .catch((err) => console.log(err));
       });
     },
     linkBtn() {
