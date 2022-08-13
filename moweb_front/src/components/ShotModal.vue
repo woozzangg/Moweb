@@ -17,16 +17,9 @@
         >
           <img src="@/assets/images/photoCamera.svg" alt="" />
         </button>
-        <v-progress-circular
-          :rotate="-90"
-          :size="200"
-          :width="15"
-          :value="(count / 10) % 100"
-          color="error"
-          v-else
-        >
-          {{ (count / 1000).toFixed(2) }}
-        </v-progress-circular>
+        <div class="count" v-else>
+          {{ count / 1000 }}
+        </div>
       </div>
     </div>
   </v-dialog>
@@ -61,12 +54,6 @@ export default {
 </script>
 
 <style>
-.v-progress-circular {
-  font-size: 32px;
-}
-.v-progress-circular__overlay {
-  transition: none;
-}
 .shot-container {
   background-color: black;
   display: flex;
@@ -96,5 +83,9 @@ export default {
 }
 .shot-button:hover {
   background-color: lightgray;
+}
+.count {
+  color: white;
+  font-size: 5rem;
 }
 </style>
