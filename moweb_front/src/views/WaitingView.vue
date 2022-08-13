@@ -772,13 +772,11 @@ export default {
       this.shotTick();
     },
     shotTick() {
+      this.countdownSound.pause();
+      this.countdownSound.currentTime = 0;
+      this.countdownSound.play();
       setTimeout(() => {
-        if (this.count > 0 && this.count % 1000 === 0) {
-          this.countdownSound.pause();
-          this.countdownSound.currentTime = 0;
-          this.countdownSound.play();
-        }
-        this.count -= 100;
+        this.count -= 1000;
         if (!this.shotDialog) {
           // 촬영화면 닫으면 카운트 중단
           this.countdownSound.pause();
@@ -799,7 +797,7 @@ export default {
             });
           }
         }
-      }, 100);
+      }, 1000);
     },
     sendShotCountdown() {
       stompApi.shotCountdown({
