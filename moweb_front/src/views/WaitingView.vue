@@ -241,6 +241,7 @@
                       height="480"
                       :backgroundCode="backGroundImg"
                       :layerSequence="layerSequence"
+                      :shotCnt="shot_cnt"
                       ref="layeredVideo"
                     ></layered-video>
                   </v-row>
@@ -600,6 +601,10 @@ export default {
           console.log("shot!!!!!!");
           this.shot_cnt = content.shot_cnt;
           this.takepic();
+          if (this.shot_cnt === 4) {
+            this.page = "result";
+            this.shotDialog = false;
+          }
           break;
         // 방장이 나감
         case 8:
