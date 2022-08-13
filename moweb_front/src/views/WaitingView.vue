@@ -13,7 +13,13 @@
 
     <!-- 캠에서 가져온 소스비디오 -->
     <video v-show="false" ref="input_video"></video>
-    <canvas v-show="false" id="personal_canvas" width="960" height="720">
+    <canvas
+      v-show="false"
+      id="personal_canvas"
+      width="960"
+      height="720"
+      ref="personal_canvas"
+    >
     </canvas>
     <!-- webrtc를 통해 보낼 소스 -->
     <canvas
@@ -239,6 +245,7 @@
                       height="480"
                       :backgroundCode="backGroundImg"
                       :layerSequence="layerSequence"
+                      ref="layeredVideo"
                     ></layered-video>
                   </v-row>
                   <v-row class="justify-space-around">
@@ -581,6 +588,7 @@ export default {
         case 7:
           console.log("shot!!!!!!");
           this.shot_cnt = content.shot_cnt;
+          this.takepic();
           break;
         // 방장이 나감
         case 8:
@@ -783,11 +791,13 @@ export default {
           // do something shot here
           console.log("shot!!!!");
           this.shutterSound.play();
-          stompApi.shot({
-            room_no: this.room_no,
-            shot_cnt: this.shot_cnt + 1,
-            bg_code: this.bg_code,
-          });
+          if (this.is_admin) {
+            stompApi.shot({
+              room_no: this.room_no,
+              shot_cnt: this.shot_cnt + 1,
+              bg_code: this.bg_code,
+            });
+          }
         }
       }, 50);
     },
@@ -967,8 +977,8 @@ export default {
         onFrame: async () => {
           await selfieSegmentation.send({ image: this.inputVideo });
         },
-        width: 1280,
-        height: 960,
+        width: 960,
+        height: 720,
       });
       this.camera.start();
       return 1;
@@ -1068,6 +1078,31 @@ export default {
       }
     },
     //----------------webrtc end----------------------
+    //--------------사진찍기 -----------------------
+    async takepic() {
+      // await this.pictureBackground();
+      // let canvas = this.$refs["personal_canvas"];
+      if (!this.is_admin) return; // 공유화면에서 사진찍을 때
+      const canvas = this.$refs.layeredVideo.$refs.layeredOutputCanvas;
+      const imgBase64 = canvas.toDataURL("image/png");
+      const decodImg = atob(imgBase64.split(",")[1]);
+
+      let array = [];
+      for (let i = 0; i < decodImg.length; i++) {
+        array.push(decodImg.charCodeAt(i));
+      }
+      const file = new Blob([new Uint8Array(array)], { type: "image/png" });
+      const fileName =
+        "canvas_img_" + this.room_no + "_" + this.shot_cnt + ".png";
+      let formData = new FormData();
+      formData.append("image", file, fileName);
+      const API_URL = "https://i7a507.p.ssafy.io/moweb-api";
+      axios.post(API_URL + "/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    },
   },
 };
 </script>
