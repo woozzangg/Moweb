@@ -1,14 +1,6 @@
 <template>
   <!-- 컨테이너 시작 -->
-  <v-container
-    class="border-style2"
-    style="
-      width: 85%;
-      min-height: 800px;
-      margin: 20px auto 0px auto;
-      padding: 0px;
-    "
-  >
+  <v-container class="app_body">
     <!-- row로 구간 나눔 -->
     <!-- 캠에서 가져온 소스비디오 -->
     <video v-show="false" ref="input_video"></video>
@@ -393,7 +385,6 @@
           <v-btn
             d-flex
             class="linkbtn"
-            outlined
             rounded
             color="primary"
             @click="linkBtn"
@@ -1203,6 +1194,17 @@ export default {
 </script>
 
 <style>
+.app_body {
+  width: 85%;
+  min-height: 800px;
+  margin: 20px auto 0px auto;
+  padding: 0px;
+  border: 15px solid white;
+  border-radius: 15px;
+  background-color: white;
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
+}
+
 video {
   transform: rotateY(180deg);
 }
@@ -1213,8 +1215,8 @@ video {
   margin: auto;
   overflow-y: auto;
   box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
-  background-color: #ecb7a5;
-  border-radius: 15px;
+  background-color: #fffefc;
+  border-radius: 15px 15px 0px 0px;
   padding: 1.4rem;
 }
 
@@ -1222,10 +1224,8 @@ video {
   display: flex;
   justify-content: space-between;
   padding: 1.4rem;
-  background: #f7cee7;
-  /* border-radius: 30px 30px 24px 24px; */
-
-  border-radius: 15px;
+  background: #fffefc;
+  border-radius: 0px 0px 15px 15px;
   box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
 }
 
@@ -1262,20 +1262,18 @@ svg:hover {
   background-color: #faf4aa;
   border-radius: 15px;
 
-  box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
 }
 .webrtc {
   background-color: #fff0f0;
   border-radius: 15px;
   padding: 2px;
 
-  box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
 }
 .btnzip {
   width: 99%;
   position: relative;
-
-  box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
 }
 .btncss {
   position: absolute;
