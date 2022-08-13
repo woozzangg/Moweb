@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div class="layered-video">
     <canvas
       :width="width"
       :height="height"
       id="layered-output-canvas"
       ref="layeredOutputCanvas"
     ></canvas>
-    <div class="shot-cnt" :style="styleSet">{{ shotCnt }} / 4</div>
+    <div class="shot-count">{{ shotCnt }} / 4</div>
   </div>
 </template>
 
@@ -25,12 +25,6 @@ export default {
   data: function () {
     return {
       canvasContext: null,
-      styleSet: {
-        position: "relative",
-        top: `${-this.height}px`,
-        left: "10px",
-        "text-align": "left",
-      },
     };
   },
   computed: {},
@@ -101,4 +95,14 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.layered-video {
+  position: relative;
+}
+.shot-count {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 1.5rem;
+}
+</style>
