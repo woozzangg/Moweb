@@ -289,7 +289,7 @@
           <!-- 채팅창 -->
           <div no-gutters class="chat_body" v-chat-scroll>
             <div
-              style="word-wrap: break-word"
+              class="chat_message"
               v-for="(chat, idx) in chatList"
               :key="idx"
             >
@@ -1088,16 +1088,22 @@ video {
   margin: auto;
   overflow-y: auto;
   box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
-  background-color: #fffefc;
+  background-color: #d5deeb;
   border-radius: 15px 15px 0px 0px;
   padding: 1.4rem;
+}
+
+.chat_message {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  word-wrap: break-word;
 }
 
 .form {
   display: flex;
   justify-content: space-between;
   padding: 1.4rem;
-  background: #fffefc;
+  background: #d5deeb;
   border-radius: 0px 0px 15px 15px;
   box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
 }
@@ -1132,7 +1138,7 @@ svg:hover {
   margin: 3px 3px;
 }
 .members {
-  background-color: #faf4aa;
+  background-color: #d5deeb;
   border-radius: 15px;
 
   box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
