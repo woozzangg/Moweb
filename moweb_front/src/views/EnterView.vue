@@ -97,6 +97,7 @@ export default {
           })
         )
         .then(({ data }) => {
+          this.camera.stop();
           if (data.room_no > 0) {
             this.$router.replace({
               name: "waiting",
