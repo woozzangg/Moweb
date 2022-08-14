@@ -1,5 +1,10 @@
 <template>
-  <v-dialog v-model="dialog" width="fit-content" :persistent="!isAdmin">
+  <v-dialog
+    v-model="dialog"
+    hide-overlay
+    width="fit-content"
+    :persistent="!isAdmin"
+  >
     <template v-if="isAdmin" v-slot:activator="{ on, attrs }">
       <v-btn
         color="blue"
