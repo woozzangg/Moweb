@@ -1,40 +1,100 @@
 <template>
-  <v-container class="enter_body" d-flex justify-space-around>
-    <video v-show="false" ref="input_video"></video>
-    <v-col cols="12">
+  <div>
+    <v-container class="enter_head">
       <v-row>
+        <v-col>
+          <div>순간뽀짝</div>
+          <div>모여봐요 웹캠으로</div>
+        </v-col>
+        <v-col align="center">
+          <h1>입장하기</h1>
+        </v-col>
+        <v-col align="right">
+          <h1>Moweb</h1>
+        </v-col>
+      </v-row>
+    </v-container>
+    <v-container class="enter_body" d-flex justify-space-around>
+      <video v-show="false" ref="input_video"></video>
+      <v-col cols="12">
+        <v-row>
+          <canvas
+            class="output_canvas"
+            id="output_canvas"
+            :width="width"
+            :height="height"
+            style="
+              transform: rotateY(180deg);
+              margin: auto;
+              border-style: groove;
+            "
+            justify="center"
+          ></canvas>
+        </v-row>
+        <v-row style="margin: 5px">
+          <input
+            placeholder="닉네임 입력"
+            v-model="user_name"
+            style="border-style: solid; margin: 20px auto 10px auto"
+          />
+        </v-row>
+        <v-row fluid no-gutters rows="2" style="margin: 4px; padding: 0px">
+          <v-btn
+            v-if="!url"
+            @click="createRoom"
+            style="border-style: solid; margin: auto"
+            >방만들기</v-btn
+          >
+          <v-btn
+            v-if="url"
+            @click="joinRoom"
+            style="border-style: solid; margin: auto"
+            >방입장하기</v-btn
+          >
+        </v-row>
+      </v-col>
+    </v-container>
+  </div>
+  <!-- 대안~~~~~~~~~~~~~~~~~~~~ -->
+  <!-- <v-container class="border-style1" d-flex justify-space-around>
+    <div style="margin: 50px 0px 0px 0px">
+      <div class="mx-auto">이름 들어갈 곳</div>
+      <div >
         <canvas
-          class="output_canvas"
-          id="output_canvas"
-          :width="width"
-          :height="height"
-          style="transform: rotateY(180deg); margin: auto; border-style: groove"
-          justify="center"
+          mx="auto"
+          class="border-style1"
+          width="640"
+          height="480"
+          style="background-color: #ff0000; margin: 20px 0px 0px 50px"
         ></canvas>
-      </v-row>
-      <v-row style="margin: 5px">
-        <input
-          placeholder="닉네임 입력"
-          v-model="user_name"
-          style="border-style: solid; margin: 20px auto 10px auto"
-        />
-      </v-row>
-      <v-row fluid no-gutters rows="2" style="margin: 4px; padding: 0px">
-        <v-btn
-          v-if="!url"
-          @click="createRoom"
-          style="border-style: solid; margin: auto"
-          >방만들기</v-btn
+      </div>
+      <div >
+        <v-input>닉네임 입력창</v-input>
+      </div>
+      <div>
+        <v-row
+          fluid
+          no-gutters
+          rows="2"
+          class="border-style1"
+          style="margin: 4px"
         >
-        <v-btn
-          v-if="url"
-          @click="joinRoom"
-          style="border-style: solid; margin: auto"
-          >방입장하기</v-btn
-        >
-      </v-row>
-    </v-col>
-  </v-container>
+          버튼 모음집
+          <v-btn elevation="10" outlined tile rounded>
+            <router-link to="/shot" style="margin: 10px">shot으로</router-link>
+
+            <router-view />
+          </v-btn>
+          <v-btn class="pink white--text">
+            <router-link to="/waiting" style="margin: 10px"
+              >waiting으로</router-link
+            >
+            |
+          </v-btn>
+        </v-row>
+      </div>
+    </div>
+  </v-container> -->
 </template>
 
 <script>
@@ -215,11 +275,15 @@ export default {
 <style>
 .enter_body {
   width: 60%;
-  margin: 50px auto;
+  margin: 0 auto;
   border: 15px solid white;
   border-radius: 15px;
   background-color: white;
   box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
+}
+.enter_head {
+  width: 60%;
+  margin: 20px auto;
 }
 
 .border-style1 {

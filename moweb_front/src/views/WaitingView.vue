@@ -1,302 +1,324 @@
 <template>
   <!-- 컨테이너 시작 -->
-  <v-container class="app_body">
-    <!-- row로 구간 나눔 -->
-    <!-- 캠에서 가져온 소스비디오 -->
-    <video v-show="false" ref="input_video"></video>
-    <canvas
-      v-show="false"
-      id="personal_canvas"
-      width="960"
-      height="720"
-      ref="personal_canvas"
-    >
-    </canvas>
-    <!-- webrtc를 통해 보낼 소스 -->
-    <canvas
-      v-show="false"
-      class="output_canvas"
-      id="output_canvas"
-      :width="width"
-      :height="height"
-    ></canvas>
-    <v-row d-flex fluid justify-space-around style="margin: 0px">
-      <!-- 왼쪽 영역 -->
-      <div
-        no-gutters
-        style="width: 71%; margin: 5px auto 0px auto; min-height: 750px"
+  <v-container>
+    <v-container class="app_head">
+      <v-row>
+        <v-col>
+          <div>순간뽀짝</div>
+          <div>모여봐요 웹캠으로</div>
+        </v-col>
+        <v-col align="center">
+          <h1 v-if="page === 'waiting'">대기실</h1>
+          <h1 v-else-if="shotDialog">사진찍기</h1>
+          <h1 v-else-if="page === 'shot'">촬영준비</h1>
+          <h1 v-else-if="page === 'result'">결과</h1>
+        </v-col>
+        <v-col align="right">
+          <h1>Moweb</h1>
+        </v-col>
+      </v-row>
+    </v-container>
+    <v-container class="app_body">
+      <!-- row로 구간 나눔 -->
+      <!-- 캠에서 가져온 소스비디오 -->
+      <video v-show="false" ref="input_video"></video>
+      <canvas
+        v-show="false"
+        id="personal_canvas"
+        width="960"
+        height="720"
+        ref="personal_canvas"
       >
-        <v-container class="webrtc" style="height: 85%; margin: 0px">
-          <div
-            ref="resultCanvas"
-            width="720"
-            height="540"
-            style="margin: 5px"
-            v-if="page == 'result'"
-          >
-            <table style="margin: auto; background: black">
-              <tr>
-                <td style="padding: 12px">
-                  <img :src="resultImg[0]" width="320" height="240" />
-                </td>
-                <td style="padding: 12px">
-                  <img :src="resultImg[1]" width="320" height="240" />
-                </td>
-              </tr>
-              <tr>
-                <td style="padding: 12px">
-                  <img :src="resultImg[2]" width="320" height="240" />
-                </td>
-                <td style="padding: 12px">
-                  <img :src="resultImg[3]" width="320" height="240" />
-                </td>
-              </tr>
-            </table>
-          </div>
-          <div id="main-container" class="container">
-            <div id="session" v-if="session">
-              <v-container>
-                <v-row>
+      </canvas>
+      <!-- webrtc를 통해 보낼 소스 -->
+      <canvas
+        v-show="false"
+        class="output_canvas"
+        id="output_canvas"
+        :width="width"
+        :height="height"
+      ></canvas>
+      <v-row d-flex fluid justify-space-around style="margin: 0px">
+        <!-- 왼쪽 영역 -->
+        <div
+          no-gutters
+          style="width: 71%; margin: 5px auto 0px auto; min-height: 750px"
+        >
+          <v-container class="webrtc" style="height: 85%; margin: 0px">
+            <div
+              ref="resultCanvas"
+              width="720"
+              height="540"
+              style="margin: 5px"
+              v-if="page == 'result'"
+            >
+              <table style="margin: auto; background: black">
+                <tr>
+                  <td style="padding: 12px">
+                    <img :src="resultImg[0]" width="320" height="240" />
+                  </td>
+                  <td style="padding: 12px">
+                    <img :src="resultImg[1]" width="320" height="240" />
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px">
+                    <img :src="resultImg[2]" width="320" height="240" />
+                  </td>
+                  <td style="padding: 12px">
+                    <img :src="resultImg[3]" width="320" height="240" />
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div id="main-container" class="container">
+              <div id="session" v-if="session">
+                <v-container>
+                  <v-row>
+                    <v-col>
+                      <user-video
+                        :style="waitingStyle"
+                        v-if="videoSetting"
+                        :stream-manager="publisher"
+                      />
+                      <p
+                        v-if="page == 'waiting'"
+                        v-show="readyStatus[user_name]"
+                        style="color: red; position: absolute"
+                      >
+                        Ready
+                      </p>
+                    </v-col>
+                    <v-col
+                      v-show="page == 'waiting'"
+                      v-for="sub in subscribers"
+                      :key="sub.stream.connection.connectionId"
+                    >
+                      <user-video :stream-manager="sub" />
+                      <p
+                        v-if="
+                          readyStatus[
+                            JSON.parse(sub.stream.connection.data).clientData
+                          ]
+                        "
+                        style="color: red; position: absolute"
+                      >
+                        Ready
+                      </p>
+                    </v-col>
+                  </v-row>
+                </v-container>
+                <v-container v-if="page == 'shot'">
                   <v-col>
-                    <user-video
-                      :style="waitingStyle"
-                      v-if="videoSetting"
-                      :stream-manager="publisher"
-                    />
-                    <p
-                      v-if="page == 'waiting'"
-                      v-show="readyStatus[user_name]"
-                      style="color: red; position: absolute"
-                    >
-                      Ready
-                    </p>
+                    <v-row class="justify-space-around">
+                      <layered-video
+                        width="640"
+                        height="480"
+                        :backgroundCode="backGroundImg"
+                        :layerSequence="layerSequence"
+                        :shotCnt="shot_cnt"
+                        ref="layeredVideo"
+                      ></layered-video>
+                    </v-row>
+                    <v-row class="justify-space-around">
+                      <v-dialog
+                        transition="dialog-top-transition"
+                        max-width="320"
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn color="primary" v-bind="attrs" v-on="on"
+                            >배경 색상 선택</v-btn
+                          >
+                        </template>
+                        <template v-slot:default="dialog">
+                          <v-card min-height="370">
+                            <v-color-picker
+                              v-model="bg_code"
+                              dot-size="12"
+                              hide-mode-switch
+                              mode="hexa"
+                              style="margin: auto; padding-top: 10px"
+                            ></v-color-picker>
+                            <v-card-actions class="justify-end">
+                              <v-btn text @click="backGroundBtn"
+                                >적용하기</v-btn
+                              >
+                              <v-btn text @click="dialog.value = false"
+                                >닫기</v-btn
+                              >
+                            </v-card-actions>
+                          </v-card>
+                        </template>
+                      </v-dialog>
+                    </v-row>
                   </v-col>
-                  <v-col
-                    v-show="page == 'waiting'"
-                    v-for="sub in subscribers"
-                    :key="sub.stream.connection.connectionId"
+                </v-container>
+              </div>
+            </div>
+          </v-container>
+
+          <v-container
+            no-gutters
+            class="btnzip"
+            style="height: 10%; margin: 4px; padding:2px; justify-content-center"
+          >
+            <v-row style="margin: auto">
+              <v-col>
+                <v-btn @click="cameraBtnHandler">
+                  <v-icon v-if="cameraOn" large>mdi-video</v-icon>
+                  <v-icon v-if="!cameraOn" large>mdi-video-off</v-icon>
+                </v-btn>
+                <v-btn @click="micBtnHandler">
+                  <v-icon v-if="micOn" large>mdi-microphone</v-icon>
+                  <v-icon v-if="!micOn" large>mdi-microphone-off</v-icon>
+                </v-btn>
+              </v-col>
+              <v-col align="center">
+                <v-btn
+                  large
+                  color="primary"
+                  v-if="is_admin && page == 'waiting'"
+                  v-bind:disabled="!allReady"
+                  @click="startBtn"
+                  style="width: 100%"
+                >
+                  start
+                </v-btn>
+                <v-btn
+                  large
+                  color="primary"
+                  v-if="!is_admin && page == 'waiting'"
+                  @click="readyBtn"
+                  style="width: 100%"
+                >
+                  ready
+                </v-btn>
+                <v-btn
+                  elevation="9"
+                  v-if="page == 'result'"
+                  @click="savePhoto"
+                  outlined
+                  tile
+                  rounded
+                >
+                  저장
+                </v-btn>
+                <v-btn
+                  v-if="page == 'result'"
+                  class="pink white--text"
+                  @click="sharePhoto"
+                >
+                  공유
+                </v-btn>
+
+                <!-- 촬영화면 다이얼로그  start -->
+                <shot-modal
+                  v-if="page === 'shot'"
+                  :dialogProp="shotDialog"
+                  :count="count"
+                  :isAdmin="is_admin"
+                  @sendShotCountdown="sendShotCountdown"
+                  @sendDialogChange="sendDialogChange"
+                >
+                  <layered-video
+                    width="960"
+                    height="720"
+                    :backgroundCode="backGroundImg"
+                    :layerSequence="layerSequence"
+                    :shotCnt="shot_cnt"
                   >
-                    <user-video :stream-manager="sub" />
-                    <p
-                      v-if="
-                        readyStatus[
-                          JSON.parse(sub.stream.connection.data).clientData
-                        ]
-                      "
-                      style="color: red; position: absolute"
-                    >
-                      Ready
-                    </p>
-                  </v-col>
-                </v-row>
-              </v-container>
-              <v-container v-if="page == 'shot'">
-                <v-col>
-                  <v-row class="justify-space-around">
-                    <layered-video
-                      width="640"
-                      height="480"
-                      :backgroundCode="backGroundImg"
-                      :layerSequence="layerSequence"
-                      :shotCnt="shot_cnt"
-                      ref="layeredVideo"
-                    ></layered-video>
-                  </v-row>
-                  <v-row class="justify-space-around">
-                    <v-dialog
-                      transition="dialog-top-transition"
-                      max-width="320"
-                    >
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn color="primary" v-bind="attrs" v-on="on"
-                          >배경 색상 선택</v-btn
-                        >
-                      </template>
-                      <template v-slot:default="dialog">
-                        <v-card min-height="370">
-                          <v-color-picker
-                            v-model="bg_code"
-                            dot-size="12"
-                            hide-mode-switch
-                            mode="hexa"
-                            style="margin: auto; padding-top: 10px"
-                          ></v-color-picker>
-                          <v-card-actions class="justify-end">
-                            <v-btn text @click="backGroundBtn">적용하기</v-btn>
-                            <v-btn text @click="dialog.value = false"
-                              >닫기</v-btn
-                            >
-                          </v-card-actions>
-                        </v-card>
-                      </template>
-                    </v-dialog>
-                  </v-row>
-                </v-col>
-              </v-container>
+                  </layered-video>
+                </shot-modal>
+              </v-col>
+              <v-col align="right">
+                <exit-modal
+                  :is_admin="is_admin"
+                  @leaveSession="leaveSession"
+                  style="float: right; margin: auto"
+                >
+                </exit-modal>
+              </v-col>
+            </v-row>
+          </v-container>
+        </div>
+        <!-- 오른쪽 영역 시작 -->
+        <div style="width: 26%; margin: 5px auto 0px auto">
+          <!-- 참여 멤버 -->
+          <div no-gutters class="members" style="height: 30%; margin: auto">
+            <!-- 이거 링크 버튼임 -->
+            <v-btn
+              d-flex
+              class="linkbtn"
+              rounded
+              color="primary"
+              @click="linkBtn"
+              position="absolute"
+            >
+              링크
+            </v-btn>
+            <br />
+            <layer-controller
+              :layerSequence="layerSequence"
+              :isAdmin="is_admin"
+              :roomNo="room_no"
+              @sendLayer="sendLayer"
+            ></layer-controller>
+          </div>
+          <br />
+          <!-- 채팅창 -->
+          <div no-gutters class="chat_body" v-chat-scroll>
+            <div
+              style="word-break: break-all"
+              v-for="(chat, idx) in chatList"
+              :key="idx"
+            >
+              <h4>{{ chat }}</h4>
             </div>
           </div>
-        </v-container>
-
-        <v-container
-          no-gutters
-          class="btnzip"
-          style="height: 10%; margin: 4px; padding:2px; justify-content-center"
-        >
-          <v-row style="margin: auto">
-            <v-col>
-              <v-btn @click="cameraBtnHandler">
-                <v-icon v-if="cameraOn" large>mdi-video</v-icon>
-                <v-icon v-if="!cameraOn" large>mdi-video-off</v-icon>
-              </v-btn>
-              <v-btn @click="micBtnHandler">
-                <v-icon v-if="micOn" large>mdi-microphone</v-icon>
-                <v-icon v-if="!micOn" large>mdi-microphone-off</v-icon>
-              </v-btn>
-            </v-col>
-            <v-col align="center">
-              <v-btn
-                large
-                color="primary"
-                v-if="is_admin && page == 'waiting'"
-                v-bind:disabled="!allReady"
-                @click="startBtn"
-                style="width: 100%"
+          <!-- 채팅입력 -->
+          <div class="form">
+            <input
+              class="form_input"
+              type="text"
+              placeholder="채팅을 입력하세요."
+              v-model="message"
+              @keyup.enter="sendMessage"
+            />
+            <div @click="sendMessage" class="form_submit">
+              <svg
+                width="30"
+                height="30"
+                viewBox="0 0 68 68"
+                fill="#757575"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                start
-              </v-btn>
-              <v-btn
-                large
-                color="primary"
-                v-if="!is_admin && page == 'waiting'"
-                @click="readyBtn"
-                style="width: 100%"
-              >
-                ready
-              </v-btn>
-              <v-btn
-                elevation="9"
-                v-if="page == 'result'"
-                @click="savePhoto"
-                outlined
-                tile
-                rounded
-              >
-                저장
-              </v-btn>
-              <v-btn
-                v-if="page == 'result'"
-                class="pink white--text"
-                @click="sharePhoto"
-              >
-                공유
-              </v-btn>
-
-              <!-- 촬영화면 다이얼로그  start -->
-              <shot-modal
-                v-if="page === 'shot'"
-                :dialogProp="shotDialog"
-                :count="count"
-                :isAdmin="is_admin"
-                @sendShotCountdown="sendShotCountdown"
-                @sendDialogChange="sendDialogChange"
-              >
-                <layered-video
-                  width="960"
-                  height="720"
-                  :backgroundCode="backGroundImg"
-                  :layerSequence="layerSequence"
-                  :shotCnt="shot_cnt"
-                >
-                </layered-video>
-              </shot-modal>
-            </v-col>
-            <v-col align="right">
-              <exit-modal
-                :is_admin="is_admin"
-                @leaveSession="leaveSession"
-                style="float: right; margin: auto"
-              >
-              </exit-modal>
-            </v-col>
-          </v-row>
-        </v-container>
-      </div>
-      <!-- 오른쪽 영역 시작 -->
-      <div style="width: 26%; margin: 5px auto 0px auto">
-        <!-- 참여 멤버 -->
-        <div no-gutters class="members" style="height: 30%; margin: auto">
-          <!-- 이거 링크 버튼임 -->
-          <v-btn
-            d-flex
-            class="linkbtn"
-            rounded
-            color="primary"
-            @click="linkBtn"
-            position="absolute"
-          >
-            링크
-          </v-btn>
-          <br />
-          <layer-controller
-            :layerSequence="layerSequence"
-            :isAdmin="is_admin"
-            :roomNo="room_no"
-            @sendLayer="sendLayer"
-          ></layer-controller>
-        </div>
-        <br />
-        <!-- 채팅창 -->
-        <div no-gutters class="chat_body" v-chat-scroll>
-          <div
-            style="word-break: break-all"
-            v-for="(chat, idx) in chatList"
-            :key="idx"
-          >
-            <h4>{{ chat }}</h4>
-          </div>
-        </div>
-        <!-- 채팅입력 -->
-        <div class="form">
-          <input
-            class="form_input"
-            type="text"
-            placeholder="채팅을 입력하세요."
-            v-model="message"
-            @keyup.enter="sendMessage"
-          />
-          <div @click="sendMessage" class="form_submit">
-            <svg
-              width="30"
-              height="30"
-              viewBox="0 0 68 68"
-              fill="#757575"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <g clip-path="url(#clip0_26_10)">
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M48.0833 19.799C48.619 20.3347 48.806 21.127 48.5665 21.8457L35.8385 60.0294C35.5946 60.7614 34.9513 61.2877 34.1855 61.382C33.4198 61.4763 32.6681 61.1217 32.2539 60.4707L22.593 45.2893L7.41158 35.6285C6.76065 35.2142 6.40604 34.4625 6.50031 33.6968C6.59458 32.931 7.12092 32.2878 7.85287 32.0438L46.0366 19.3159C46.7553 19.0763 47.5476 19.2633 48.0833 19.799ZM26.5903 44.1204L33.3726 54.7782L42.0926 28.6181L26.5903 44.1204ZM39.2642 25.7897L23.7619 41.292L13.1041 34.5097L39.2642 25.7897Z"
-                  fill=""
-                />
-              </g>
-              <defs>
-                <clipPath id="clip0_26_10">
-                  <rect
-                    width="48"
-                    height="48"
-                    fill="white"
-                    transform="translate(33.9412) rotate(45)"
+                <g clip-path="url(#clip0_26_10)">
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M48.0833 19.799C48.619 20.3347 48.806 21.127 48.5665 21.8457L35.8385 60.0294C35.5946 60.7614 34.9513 61.2877 34.1855 61.382C33.4198 61.4763 32.6681 61.1217 32.2539 60.4707L22.593 45.2893L7.41158 35.6285C6.76065 35.2142 6.40604 34.4625 6.50031 33.6968C6.59458 32.931 7.12092 32.2878 7.85287 32.0438L46.0366 19.3159C46.7553 19.0763 47.5476 19.2633 48.0833 19.799ZM26.5903 44.1204L33.3726 54.7782L42.0926 28.6181L26.5903 44.1204ZM39.2642 25.7897L23.7619 41.292L13.1041 34.5097L39.2642 25.7897Z"
+                    fill=""
                   />
-                </clipPath>
-              </defs>
-            </svg>
+                </g>
+                <defs>
+                  <clipPath id="clip0_26_10">
+                    <rect
+                      width="48"
+                      height="48"
+                      fill="white"
+                      transform="translate(33.9412) rotate(45)"
+                    />
+                  </clipPath>
+                </defs>
+              </svg>
+            </div>
           </div>
         </div>
-      </div>
-    </v-row>
+      </v-row>
+    </v-container>
   </v-container>
 </template>
+
 <script>
 import Vue from "vue";
 
@@ -1042,12 +1064,16 @@ export default {
 .app_body {
   width: 85%;
   min-height: 800px;
-  margin: 20px auto 0px auto;
+  margin: 0 auto;
   padding: 0px;
   border: 15px solid white;
   border-radius: 15px;
   background-color: white;
   box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
+}
+.app_head {
+  width: 85%;
+  margin: 10px auto;
 }
 
 video {
