@@ -1,6 +1,8 @@
 <template>
   <div>
-    <head> </head>
+    <head>
+      <title>모여봐요 웹캠으로</title>
+    </head>
     <body>
       <div class="frame">
         <div class="photoOne"></div>
@@ -47,8 +49,19 @@
         </span>
         <div class="containerLast"></div>
       </div>
-      <!-- </div> -->
-      <div style="cursor: pointer" onclick="window.scrollTo(0,0);">TOP</div>
+      <div
+        style="
+          cursor: pointer;
+          position: fixed;
+          top: 92%;
+          right: 2%;
+          border-radius: 50%;
+          background-color: #8aa9c678;
+        "
+        onclick="window.scrollTo(0,0);"
+      >
+        <v-icon x-large> mdi-chevron-double-up </v-icon>
+      </div>
     </body>
     <footer></footer>
   </div>

@@ -10,7 +10,6 @@
       :width="width"
       :height="height"
       :id="canvasId"
-      style=""
       :style="talkingCss"
     />
   </div>

@@ -67,8 +67,6 @@ export default {
 .layer_container {
   padding: 20px;
 }
-.layer_list {
-}
 .layer_item {
   padding: 4px;
   vertical-align: middle;
