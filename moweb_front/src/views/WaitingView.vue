@@ -26,158 +26,6 @@
         no-gutters
         style="width: 71%; margin: 5px auto 0px auto; min-height: 750px"
       >
-        <!-- //////////// 여기서 v-if나 v-show로  if else 걸어서 두기 -->
-        <!-- ///////// 정상화면 row 9 , 2 -->
-        <!-- # WebRTC 화면 부분 -->
-        <!-- <v-row
-          no-gutters
-          rows="9"
-          fluid
-          class="border-style1"
-          style="margin: 5px"
-        >
-          <canvas
-            class="border-style1"
-            width="320"
-            height="240"
-            style="background-color: #00ff00; margin: 5px"
-          ></canvas>
-          <canvas
-            class="border-style1"
-            width="320"
-            height="240"
-            style="background-color: #ff0000; margin: 5px"
-          ></canvas>
-          <canvas
-            class="border-style1"
-            width="320"
-            height="240"
-            style="background-color: #ff0000; margin: 5px"
-          ></canvas>
-          <canvas
-            class="border-style1"
-            width="320"
-            height="240"
-            style="background-color: #004400; margin: 5px"
-          ></canvas>
-          <canvas
-            class="border-style1"
-            width="320"
-            height="240"
-            style="background-color: #f00; margin: 5px"
-          ></canvas>
-          <canvas
-            class="border-style1"
-            width="320"
-            height="240"
-            style="background-color: #ff0000; margin: 5px"
-          ></canvas>
-          <canvas
-            class="border-style1"
-            width="320"
-            height="240"
-            style="background-color: #ff0000; margin: 5px"
-          ></canvas>
-          WebRTC 화면이 들어올 곳
-        </v-row>
-
-        <v-row
-          fluid
-          no-gutters
-          rows="2"
-          class="border-style1"
-          style="margin: 4px"
-        >
-          버튼 모음집
-          <v-btn elevation="9" outlined tile rounded>
-            <router-link to="/shot" style="margin: 10px">shot으로</router-link>
-
-            <router-view />
-          </v-btn>
-          <v-btn class="pink white--text">
-            <router-link to="/waiting" style="margin: 10px"
-              >waiting으로</router-link
-            >
-            |
-          </v-btn>
-        </v-row> -->
-
-        <!-- 촬영화면 들어가는곳 -->
-        <!-- # 배경선택 들어갔을때 화면 col 나눈 후 ㅇㅇ -->
-
-        <!-- <v-row>
-          <v-col
-            no-gutters
-            fluid
-            cols="8"
-            class="border-style1"
-            style="margin: 20px auto 0px auto"
-          >
-            <v-row
-              no-gutters
-              rows="9"
-              fluid
-              class="border-style1"
-              style="margin: 5px"
-            >
-              <canvas
-                class="border-style1"
-                width="640"
-                height="480"
-                style="background-color: #619bed; margin: 20px 0px 0px 50px"
-              ></canvas>
-              <br />
-
-              WebRTC 화면이 들어올 곳
-            </v-row>
-            <br />
-            <v-row
-              fluid
-              no-gutters
-              rows="2"
-              class="border-style1"
-              style="margin: 4px"
-            >
-              버튼 모음집
-              <v-btn elevation="10" outlined tile rounded>
-                <router-link to="/shot" style="margin: 10px"
-                  >shot으로</router-link
-                >
-
-                <router-view />
-              </v-btn>
-              <v-btn class="pink white--text">
-                <router-link to="/waiting" style="margin: 10px"
-                  >waiting으로</router-link
-                >
-                |
-              </v-btn>
-            </v-row>
-          </v-col>
-
-          <v-col
-            no-gutters
-            fluid
-            cols="3"
-            class="border-style1"
-            style="margin: 20px auto 0px auto"
-          >
-            <div>
-              <v-card elevation="16" max-width="400" class="mx-auto, mt-auto">
-                <v-virtual-scroll
-                  :bench="benched"
-                  :items="items"
-                  height="600"
-                  item-height="120"
-                >
-                  배경색깔
-                </v-virtual-scroll>
-              </v-card>
-            </div>
-          </v-col>
-        </v-row> -->
-
-        <!-- # 결과화면 들어가는곳  -->
         <v-container class="webrtc" style="height: 85%; margin: 0px">
           <div
             ref="resultCanvas"
@@ -283,7 +131,6 @@
                       </template>
                     </v-dialog>
                   </v-row>
-                  <!--  -->
                 </v-col>
               </v-container>
             </div>
@@ -373,14 +220,11 @@
             </v-col>
           </v-row>
         </v-container>
-
-        <!-- <br /> -->
       </div>
       <!-- 오른쪽 영역 시작 -->
       <div style="width: 26%; margin: 5px auto 0px auto">
         <!-- 참여 멤버 -->
         <div no-gutters class="members" style="height: 30%; margin: auto">
-          <!-- 이거 버튼 왜 안먹냐 오른쪽으로 붙는거-->
           <!-- 이거 링크 버튼임 -->
           <v-btn
             d-flex
@@ -623,11 +467,14 @@ export default {
         // 방장이 나감
         case 8:
           console.log("BOOM!");
-          this.$dialog.error({
-            text: "호스트가 방을 종료하였습니다.",
-            persistent: true,
-          });
-          this.leaveSession();
+          this.$dialog
+            .error({
+              text: "호스트가 방을 종료하였습니다.",
+              persistent: false,
+            })
+            .then(() => {
+              this.leaveSession();
+            });
           break;
         // 촬영화면 다이얼로그 토글
         case 9:
@@ -702,11 +549,11 @@ export default {
       }
     },
     async savePhoto() {
-      var date = new Date();
-      var year = String(date.getFullYear());
-      var yy = year.substring(2, 4);
-      var month = new String(date.getMonth() + 1);
-      var day = new String(date.getDate());
+      let date = new Date();
+      let year = String(date.getFullYear());
+      let yy = year.substring(2, 4);
+      let month = new String(date.getMonth() + 1);
+      let day = new String(date.getDate());
 
       if (month.length == 1) {
         month = "0" + month;
@@ -715,7 +562,7 @@ export default {
         day = "0" + day;
       }
 
-      var today = yy + month + day;
+      let today = yy + month + day;
 
       console.log("저장중...");
 
@@ -743,7 +590,6 @@ export default {
       this.uploadResult();
 
       const fileName = "canvas_img_" + this.room_no + "_result.png";
-      const API_URL = "https://i7a507.p.ssafy.io/moweb-api";
       const fileUrl = API_URL + "/display?imgName=" + fileName;
 
       this.$kakao.Link.sendDefault({
@@ -778,22 +624,21 @@ export default {
         proxy: "html2canvasproxy.php",
         logging: true,
       }).then((canvas) => {
-        var image = canvas.toDataURL("image/png");
-        var name = "canvas_img_" + this.room_no + "_result.png";
+        let image = canvas.toDataURL("image/png");
+        let name = "canvas_img_" + this.room_no + "_result.png";
 
-        var byteString = atob(image.split(",")[1]);
-        var ab = new ArrayBuffer(byteString.length);
-        var ia = new Uint8Array(ab);
+        let byteString = atob(image.split(",")[1]);
+        let ab = new ArrayBuffer(byteString.length);
+        let ia = new Uint8Array(ab);
 
-        for (var i = 0; i < byteString.length; i++) {
+        for (let i = 0; i < byteString.length; i++) {
           ia[i] = byteString.charCodeAt(i);
         }
-        var blob = new Blob([ab], { type: "image/png" });
+        let blob = new Blob([ab], { type: "image/png" });
 
-        var formData = new FormData();
+        let formData = new FormData();
         formData.append("image", blob, name);
 
-        const API_URL = "https://i7a507.p.ssafy.io/moweb-api";
         axios.post(API_URL + "/upload", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -1166,8 +1011,8 @@ export default {
     //----------------webrtc end----------------------
     //--------------사진찍기 -----------------------
     async takepic() {
-      // await this.pictureBackground();
-      // let canvas = this.$refs["personal_canvas"];
+      // await this.pictureBackground(); // 각자의 사진으로 할때
+      // let canvas = this.$refs["personal_canvas"]; // 각자의 사진으로 할때
       if (!this.is_admin) return; // 공유화면에서 사진찍을 때
       const canvas = this.$refs.layeredVideo.$refs.layeredOutputCanvas;
       const imgBase64 = canvas.toDataURL("image/png");
