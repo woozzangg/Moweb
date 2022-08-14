@@ -221,8 +221,6 @@
                   v-if="page == 'result'"
                   @click="savePhoto"
                   outlined
-                  tile
-                  rounded
                 >
                   저장
                 </v-btn>
@@ -583,19 +581,20 @@ export default {
     },
     async savePhoto() {
       let date = new Date();
+
       let year = String(date.getFullYear());
-      let yy = year.substring(2, 4);
-      let month = date.getMonth() + "1";
-      let day = date.getDate() + "";
+      year = year.substring(2, 4);
+      let month = date.getMonth() + 1;
+      month = month >= 10 ? month : "0" + month;
+      let day = date.getDate();
+      day = day >= 10 ? day : "0" + day;
+      let hour = date.getHours();
+      hour = hour >= 10 ? hour : "0" + hour;
+      let min = date.getMinutes();
+      let sec = date.getSeconds();
+      sec = sec >= 10 ? sec : "0" + sec;
 
-      if (month.length == 1) {
-        month = "0" + month;
-      }
-      if (day.length == 1) {
-        day = "0" + day;
-      }
-
-      let today = yy + month + day;
+      let timestamp = year + month + day + hour + min + sec;
 
       const el = this.$refs.resultCanvas;
       const options = {
@@ -607,7 +606,7 @@ export default {
       const result = await Html2canvas(el, options);
 
       const link = document.createElement("a");
-      link.setAttribute("download", "moweb_" + today + ".png");
+      link.setAttribute("download", "moweb_" + timestamp + ".png");
       link.setAttribute(
         "href",
         result.toDataURL("image/png").replace("image/png", "image/octet-stream")
