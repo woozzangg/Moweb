@@ -34,7 +34,7 @@
           no-gutters
           style="width: 71%; margin: 5px auto 0px auto; min-height: 750px"
         >
-          <v-container class="webrtc" style="height: 92%; margin: 0px">
+          <v-container class="webrtc" style="min-height: 85%; margin: 0px">
             <div
               style="margin: auto; width: 100%; height: 100%; display: flex"
               v-if="page == 'result'"
@@ -97,8 +97,8 @@
             >
               <div id="session">
                 <v-container>
-                  <v-row>
-                    <v-col>
+                  <v-row style="justify-content: center">
+                    <v-col style="flex-grow: 0">
                       <user-video
                         :style="waitingStyle"
                         v-if="videoSetting"
@@ -113,10 +113,10 @@
                       </p>
                     </v-col>
                     <v-col
+                      style="flex-grow: 0"
                       v-show="page == 'waiting'"
                       v-for="sub in subscribers"
                       :key="sub.stream.connection.connectionId"
-                      style="max-width: 401px"
                     >
                       <user-video :stream-manager="sub" />
                       <p
@@ -222,8 +222,6 @@
                   v-if="page == 'result'"
                   @click="savePhoto"
                   outlined
-                  tile
-                  rounded
                 >
                   저장
                 </v-btn>
@@ -271,6 +269,7 @@
           <div no-gutters class="members" style="height: 33%; margin: auto">
             <!-- 이거 링크 버튼임 -->
             <v-btn
+              v-if="page == 'waiting'"
               d-flex
               class="linkbtn"
               rounded
@@ -280,19 +279,19 @@
             >
               링크
             </v-btn>
-            <br />
             <layer-controller
               :layerSequence="layerSequence"
               :isAdmin="is_admin"
               :roomNo="room_no"
               @sendLayer="sendLayer"
+              :page="page"
             ></layer-controller>
           </div>
           <br />
           <!-- 채팅창 -->
           <div no-gutters class="chat_body" v-chat-scroll>
             <div
-              style="word-wrap: break-word"
+              class="chat_message"
               v-for="(chat, idx) in chatList"
               :key="idx"
             >
@@ -506,14 +505,8 @@ export default {
           break;
         // 방장이 나감
         case 8:
-          this.$dialog
-            .error({
-              text: "호스트가 방을 종료하였습니다.",
-              persistent: false,
-            })
-            .then(() => {
-              this.leaveSession();
-            });
+          console.log("BOOM!");
+          alert("호스트가 방을 종료했습니다.", this.leaveSession());
           break;
         // 촬영화면 다이얼로그 토글
         case 9:
@@ -584,19 +577,20 @@ export default {
     },
     async savePhoto() {
       let date = new Date();
+
       let year = String(date.getFullYear());
-      let yy = year.substring(2, 4);
-      let month = date.getMonth() + "1";
-      let day = date.getDate() + "";
+      year = year.substring(2, 4);
+      let month = date.getMonth() + 1;
+      month = month >= 10 ? month : "0" + month;
+      let day = date.getDate();
+      day = day >= 10 ? day : "0" + day;
+      let hour = date.getHours();
+      hour = hour >= 10 ? hour : "0" + hour;
+      let min = date.getMinutes();
+      let sec = date.getSeconds();
+      sec = sec >= 10 ? sec : "0" + sec;
 
-      if (month.length == 1) {
-        month = "0" + month;
-      }
-      if (day.length == 1) {
-        day = "0" + day;
-      }
-
-      let today = yy + month + day;
+      let timestamp = year + month + day + hour + min + sec;
 
       const el = this.$refs.resultCanvas;
       const options = {
@@ -608,7 +602,7 @@ export default {
       const result = await Html2canvas(el, options);
 
       const link = document.createElement("a");
-      link.setAttribute("download", "moweb_" + today + ".png");
+      link.setAttribute("download", "moweb_" + timestamp + ".png");
       link.setAttribute(
         "href",
         result.toDataURL("image/png").replace("image/png", "image/octet-stream")
@@ -1090,16 +1084,22 @@ video {
   margin: auto;
   overflow-y: auto;
   box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
-  background-color: #fffefc;
+  background-color: #f0f2f5;
   border-radius: 15px 15px 0px 0px;
   padding: 1.4rem;
+}
+
+.chat_message {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  word-wrap: break-word;
 }
 
 .form {
   display: flex;
   justify-content: space-between;
   padding: 1.4rem;
-  background: #fffefc;
+  background: #f0f2f5;
   border-radius: 0px 0px 15px 15px;
   box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
 }

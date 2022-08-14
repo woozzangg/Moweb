@@ -1,6 +1,7 @@
 <template>
   <div class="layer_container">
-    <h3 class="layer_title">참가자 목록</h3>
+    <h3 v-if="page == 'waiting'" class="layer_title">참가자 목록</h3>
+    <h3 v-else class="layer_title">레이어 순서</h3>
     <draggable
       class="layer_list"
       :list="dragLayerSequence"
@@ -29,7 +30,7 @@ import draggable from "vuedraggable";
 
 export default {
   // 레이어 순서, 방장 여부, prop으로 받음
-  props: ["layerSequence", "isAdmin", "roomNo"],
+  props: ["layerSequence", "isAdmin", "roomNo", "page"],
   components: {
     draggable,
   },
