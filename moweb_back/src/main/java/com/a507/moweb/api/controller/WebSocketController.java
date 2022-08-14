@@ -21,9 +21,9 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 public class WebSocketController extends NullPointerException {
     private static final Logger logger = LoggerFactory.getLogger(WebSocketController.class);
     private final SimpMessageSendingOperations sendingOperations;
-    private static final String root = "/topic/moweb/room/";
+    private static final String ROOTURL = "/topic/moweb/room/";
     @Autowired
-    private transient RoomService roomService;
+    private transient final RoomService roomService;
 
     /**
      * 채팅방에 유저가 입장하면 입장 메세지를 해당 방 참가자 전원에게 보내준다.
@@ -49,7 +49,7 @@ public class WebSocketController extends NullPointerException {
             message.setUsers(roomService.userList(message.getRoom_no()));
 
             logger.info("User connected : {}" ,message.getUser_name());
-            sendingOperations.convertAndSend(root+message.getRoom_no(),message);
+            sendingOperations.convertAndSend(ROOTURL+message.getRoom_no(),message);
         }
     }
 
@@ -61,7 +61,7 @@ public class WebSocketController extends NullPointerException {
     public void chat(WebSocketMessage message) {
         message.setAction(1);
         logger.info("send message : {}", message.getUser_name());
-        sendingOperations.convertAndSend(root+message.getRoom_no(),message);
+        sendingOperations.convertAndSend(ROOTURL+message.getRoom_no(),message);
     }
 
     /**
@@ -80,7 +80,7 @@ public class WebSocketController extends NullPointerException {
             logger.info("{} : ydaer", message.getUser_name());
         }
 
-        sendingOperations.convertAndSend(root+message.getRoom_no(),message);
+        sendingOperations.convertAndSend(ROOTURL+message.getRoom_no(),message);
     }
 
     /**
@@ -92,7 +92,7 @@ public class WebSocketController extends NullPointerException {
         message.setAction(4);
         roomService.cantJoin(message.getRoom_no());
         logger.info("moweb start");
-        sendingOperations.convertAndSend(root+message.getRoom_no(),message);
+        sendingOperations.convertAndSend(ROOTURL+message.getRoom_no(),message);
     }
 
     /**
@@ -104,7 +104,7 @@ public class WebSocketController extends NullPointerException {
         message.setAction(5);
         roomService.layer(message.getRoom_no(), message.getUsers());
         logger.info("layer change");
-        sendingOperations.convertAndSend(root+message.getRoom_no(),message);
+        sendingOperations.convertAndSend(ROOTURL+message.getRoom_no(),message);
     }
 
     /**
@@ -115,7 +115,7 @@ public class WebSocketController extends NullPointerException {
     public void theme(WebSocketMessage message) {
         message.setAction(6);
         logger.info("theme : {}", message.getBg_code());
-        sendingOperations.convertAndSend(root+message.getRoom_no(),message);
+        sendingOperations.convertAndSend(ROOTURL+message.getRoom_no(),message);
     }
 
     /**
@@ -127,7 +127,7 @@ public class WebSocketController extends NullPointerException {
         message.setAction(7);
         logger.info("shot_cnt : {}", message.getShot_cnt());
         logger.info("shot start");
-        sendingOperations.convertAndSend(root+message.getRoom_no(),message);
+        sendingOperations.convertAndSend(ROOTURL+message.getRoom_no(),message);
     }
 
     /**
@@ -139,7 +139,7 @@ public class WebSocketController extends NullPointerException {
     public void shotMode(WebSocketMessage message){
         message.setAction(9);
         logger.info("shot mode : {}", message.isStatus());
-        sendingOperations.convertAndSend(root+message.getRoom_no(),message);
+        sendingOperations.convertAndSend(ROOTURL+message.getRoom_no(),message);
     }
 
     /**
@@ -151,7 +151,7 @@ public class WebSocketController extends NullPointerException {
     public void shotCountdown(WebSocketMessage message){
         message.setAction(10);
         logger.info("start countdown");
-        sendingOperations.convertAndSend(root+message.getRoom_no(),message);
+        sendingOperations.convertAndSend(ROOTURL+message.getRoom_no(),message);
     }
 
     /**
@@ -188,13 +188,13 @@ public class WebSocketController extends NullPointerException {
             logger.info("User Disconnected : {}", user_name);
             headerAccessor.getSessionAttributes().clear();
 
-            sendingOperations.convertAndSend(root+message.getRoom_no(),message);
+            sendingOperations.convertAndSend(ROOTURL+message.getRoom_no(),message);
 
             if(roomService.isHost(room_no, user_name)) {
                 message.setAction(8);
                 roomService.cantJoin(room_no);
                 logger.info("room {} : BOOM!", room_no);
-                sendingOperations.convertAndSend(root+message.getRoom_no(),message);
+                sendingOperations.convertAndSend(ROOTURL+message.getRoom_no(),message);
             }
         }
     }
