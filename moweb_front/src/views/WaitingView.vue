@@ -117,7 +117,6 @@
                       v-show="page == 'waiting'"
                       v-for="sub in subscribers"
                       :key="sub.stream.connection.connectionId"
-                      style="max-width: 401px"
                     >
                       <user-video :stream-manager="sub" />
                       <p
