@@ -117,6 +117,7 @@
                       v-show="page == 'waiting'"
                       v-for="sub in subscribers"
                       :key="sub.stream.connection.connectionId"
+                      style="max-width: 401px"
                     >
                       <user-video :stream-manager="sub" />
                       <p
@@ -188,13 +189,13 @@
           >
             <v-row style="margin: auto">
               <v-col>
-                <v-btn @click="cameraBtnHandler" v-if="page != 'result'">
-                  <v-icon v-if="cameraOn" large>mdi-video</v-icon>
-                  <v-icon v-if="!cameraOn" large>mdi-video-off</v-icon>
+                <v-btn @click="cameraBtnHandler" v-if="page != 'result'" large>
+                  <v-icon v-if="cameraOn" x-large>mdi-video</v-icon>
+                  <v-icon v-if="!cameraOn" x-large>mdi-video-off</v-icon>
                 </v-btn>
-                <v-btn @click="micBtnHandler">
-                  <v-icon v-if="micOn" large>mdi-microphone</v-icon>
-                  <v-icon v-if="!micOn" large>mdi-microphone-off</v-icon>
+                <v-btn @click="micBtnHandler" large>
+                  <v-icon v-if="micOn" x-large>mdi-microphone</v-icon>
+                  <v-icon v-if="!micOn" x-large>mdi-microphone-off</v-icon>
                 </v-btn>
               </v-col>
               <v-col align="center">
@@ -266,9 +267,9 @@
           </v-container>
         </div>
         <!-- 오른쪽 영역 시작 -->
-        <div style="width: 26%; margin: 5px auto 0px auto">
+        <div style="width: 26%; margin: 5px auto px auto">
           <!-- 참여 멤버 -->
-          <div no-gutters class="members" style="height: 30%; margin: auto">
+          <div no-gutters class="members" style="height: 33%; margin: auto">
             <!-- 이거 링크 버튼임 -->
             <v-btn
               v-if="page == 'waiting'"
@@ -293,7 +294,7 @@
           <!-- 채팅창 -->
           <div no-gutters class="chat_body" v-chat-scroll>
             <div
-              style="word-break: break-all"
+              style="word-wrap: break-word"
               v-for="(chat, idx) in chatList"
               :key="idx"
             >
@@ -466,19 +467,15 @@ export default {
   methods: {
     async onSocketReceive(result) {
       const content = JSON.parse(result.body);
-      console.log("socket received!");
-      console.log(content);
       switch (content.action) {
         // 채팅방 입장 알림
         case 0:
-          console.log("new user entered!!");
           this.chatList.push("[알림] " + content.chat_msg);
           this.users = content.users;
           this.readyJoin(content.users);
           break;
         // 채팅
         case 1:
-          console.log(`${content.user_name} said ${content.chat_msg}`);
           this.chatList.push(content.user_name + ": " + content.chat_msg);
           break;
         // 준비
@@ -495,7 +492,6 @@ export default {
           break;
         // 레이어 변경하기
         case 5:
-          console.log("layer changed!!");
           this.users = content.users;
           break;
         // 배경 선택하기
@@ -504,7 +500,6 @@ export default {
           break;
         // 촬영하기
         case 7:
-          console.log("shot!!!!!!");
           this.shot_cnt = content.shot_cnt;
           await this.takepic();
           if (this.shot_cnt === 4) {
@@ -518,13 +513,10 @@ export default {
           break;
         // 촬영화면 다이얼로그 토글
         case 9:
-          console.log("toggle shot dialog");
-          console.log(content);
           this.shotDialog = content.status;
           break;
         // 카운트다운 시작
         case 10:
-          console.log("start countDown!!");
           this.startShotCount();
           break;
         default:
@@ -544,7 +536,6 @@ export default {
     },
     sendMessage() {
       if (this.user_name !== "" && this.message !== "") {
-        console.log("Send message:" + this.message);
         if (stompApi.stomp && stompApi.stomp.connected) {
           stompApi.chat({
             user_name: this.user_name,
@@ -571,7 +562,6 @@ export default {
               ".png"
           )
           .then(async (res) => {
-            console.log(res.request.responseURL);
             this.resultImg.push(res.request.responseURL);
           });
       }
@@ -579,7 +569,6 @@ export default {
 
     // ----------------------------- 화면 전환 end --------------------------------
     sendLayer(userNames) {
-      console.log("Send layer change:" + userNames);
       if (stompApi.stomp && stompApi.stomp.connected) {
         stompApi.layer({
           room_no: this.room_no,
@@ -605,8 +594,6 @@ export default {
 
       let today = yy + month + day;
 
-      console.log("저장중...");
-
       const el = this.$refs.resultCanvas;
       const options = {
         type: "dataURL",
@@ -623,11 +610,8 @@ export default {
         result.toDataURL("image/png").replace("image/png", "image/octet-stream")
       );
       link.click();
-
-      console.log("moweb_" + today + ".png 저장완료");
     },
     async sharePhoto() {
-      console.log("공유하기");
       this.uploadResult();
 
       const fileName = "canvas_img_" + this.room_no + "_result.png";
@@ -657,8 +641,6 @@ export default {
       });
     },
     async uploadResult() {
-      console.log("결과화면 업로드");
-
       const resultCanvas = this.$refs.resultCanvas;
       Html2canvas(resultCanvas, {
         useCORS: true,
@@ -767,7 +749,6 @@ export default {
           this.shotTick();
         } else {
           // do something shot here
-          console.log("shot!!!!");
           this.shutterSound.play();
           if (this.is_admin) {
             stompApi.shot({
@@ -796,6 +777,8 @@ export default {
     joinSession() {
       // --- Get an OpenVidu object ---
       this.OV = new OpenVidu();
+
+      this.OV.enableProdMode();
 
       // --- Init a session ---
       this.session = this.OV.initSession();
@@ -845,7 +828,7 @@ export default {
             this.videoSetting = true;
           })
           .catch((error) => {
-            console.log(
+            console.error(
               "There was an error connecting to the session:",
               error.code,
               error.message

@@ -7,7 +7,7 @@
 
 <style>
 #app {
-  background-color: beige;
+  background-color: #e8f0ff;
 }
 /* font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
