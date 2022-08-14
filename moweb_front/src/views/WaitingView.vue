@@ -34,7 +34,7 @@
           no-gutters
           style="width: 71%; margin: 5px auto 0px auto; min-height: 750px"
         >
-          <v-container class="webrtc" style="height: 92%; margin: 0px">
+          <v-container class="webrtc" style="min-height: 85%; margin: 0px">
             <div
               style="margin: auto; width: 100%; height: 100%; display: flex"
               v-if="page == 'result'"
@@ -97,8 +97,8 @@
             >
               <div id="session">
                 <v-container>
-                  <v-row>
-                    <v-col>
+                  <v-row style="justify-content: center">
+                    <v-col style="flex-grow: 0">
                       <user-video
                         :style="waitingStyle"
                         v-if="videoSetting"
@@ -113,6 +113,7 @@
                       </p>
                     </v-col>
                     <v-col
+                      style="flex-grow: 0"
                       v-show="page == 'waiting'"
                       v-for="sub in subscribers"
                       :key="sub.stream.connection.connectionId"
@@ -271,6 +272,7 @@
           <div no-gutters class="members" style="height: 33%; margin: auto">
             <!-- 이거 링크 버튼임 -->
             <v-btn
+              v-if="page == 'waiting'"
               d-flex
               class="linkbtn"
               rounded
@@ -280,12 +282,12 @@
             >
               링크
             </v-btn>
-            <br />
             <layer-controller
               :layerSequence="layerSequence"
               :isAdmin="is_admin"
               :roomNo="room_no"
               @sendLayer="sendLayer"
+              :page="page"
             ></layer-controller>
           </div>
           <br />
@@ -506,14 +508,8 @@ export default {
           break;
         // 방장이 나감
         case 8:
-          this.$dialog
-            .error({
-              text: "호스트가 방을 종료하였습니다.",
-              persistent: false,
-            })
-            .then(() => {
-              this.leaveSession();
-            });
+          console.log("BOOM!");
+          alert("호스트가 방을 종료했습니다.", this.leaveSession());
           break;
         // 촬영화면 다이얼로그 토글
         case 9:
