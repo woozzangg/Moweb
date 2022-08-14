@@ -11,9 +11,9 @@
           <span class="serviceTitle">모여봐요 웹캠으로</span
           ><span class="engTitle">Moweb</span>
           <span class="buttonForm">
-            <router-link to="/enter" style="text-decoration: none"
-              ><v-btn outlined x-large>시작하기</v-btn></router-link
-            >
+            <router-link to="/enter" style="text-decoration: none">
+              <div button class="startBtn">시작하기</div>
+            </router-link>
           </span>
         </div>
         <div class="friends"></div>
@@ -49,18 +49,8 @@
         </span>
         <div class="containerLast"></div>
       </div>
-      <div
-        style="
-          cursor: pointer;
-          position: fixed;
-          top: 92%;
-          right: 2%;
-          border-radius: 50%;
-          background-color: #8aa9c678;
-        "
-        onclick="window.scrollTo(0,0);"
-      >
-        <v-icon x-large> mdi-chevron-double-up </v-icon>
+      <div class="arrow" onclick="window.scrollTo(0,0);">
+        <v-icon x-large color="white"> mdi-chevron-double-up </v-icon>
       </div>
     </body>
     <footer></footer>
@@ -89,9 +79,24 @@ body {
   left: 0px;
   overflow: hidden;
 }
+.arrow {
+  cursor: pointer;
+  position: fixed;
+  top: 92%;
+  right: 2%;
+  border-radius: 50%;
+  background-color: #30a4b0;
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.2);
+}
+.arrow:hover {
+  background-color: #008b99;
+}
+
 .photoOne {
   width: 147px;
   height: 390px;
+  min-width: 147px;
+  min-height: 390px;
   background: url("@/assets/images/photoOne.jpg");
   background-repeat: no-repeat;
   background-position: center center;
@@ -106,6 +111,8 @@ body {
 .photoTwo {
   width: 147px;
   height: 390px;
+  min-width: 147px;
+  min-height: 390px;
   background: url("@/assets/images/photoTwo.jpg");
   background-repeat: no-repeat;
   background-position: center center;
@@ -153,8 +160,8 @@ body {
   text-align: left;
 }
 
-.buttonForm {
-  width: 218rem;
+.startBtn {
+  width: 230rem;
   height: 30rem;
   background-repeat: no-repeat;
   background-position: center center;
@@ -163,11 +170,27 @@ body {
   position: absolute;
   top: 17rem;
   left: 15rem;
-  font-family: SCDream;
-  font-weight: 4;
-  font-size: 1rem;
   overflow: hidden;
+  text-align: center;
+  color: white;
+  background-color: #30a4b0;
+  border-radius: 15px;
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.2);
+  line-height: 5rem;
+  font-family: SCDream;
+  font-weight: 6;
+  letter-spacing: 2px;
+  font-size: 25px;
+  width: 10rem;
+  height: 5rem;
 }
+.startBtn:hover {
+  background-color: #008b99;
+  font-size: 0;
+  background-size: cover;
+  background: url(@/assets/images/cameraStartColorSmall.png) center no-repeat;
+}
+
 .friends {
   width: 270px;
   height: 270px;
@@ -226,6 +249,7 @@ body {
   position: absolute;
   top: 43%;
   left: 10%;
+  border-radius: 15px;
   box-shadow: 0 2px 4px 0 rgba(14, 14, 14, 0.5);
   overflow: hidden;
 }
@@ -274,6 +298,7 @@ body {
   position: absolute;
   top: 58%;
   left: 10%;
+  border-radius: 15px;
   box-shadow: 0 2px 4px 0 rgba(14, 14, 14, 0.5);
   overflow: hidden;
 }
@@ -322,6 +347,7 @@ body {
   position: absolute;
   top: 73%;
   left: 10%;
+  border-radius: 15px;
   box-shadow: 0 2px 4px 0 rgba(14, 14, 14, 0.5);
   overflow: hidden;
 }
