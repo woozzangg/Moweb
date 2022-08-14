@@ -1084,7 +1084,7 @@ video {
   margin: auto;
   overflow-y: auto;
   box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
-  background-color: #d5deeb;
+  background-color: #f0f2f5;
   border-radius: 15px 15px 0px 0px;
   padding: 1.4rem;
 }
@@ -1099,7 +1099,7 @@ video {
   display: flex;
   justify-content: space-between;
   padding: 1.4rem;
-  background: #d5deeb;
+  background: #f0f2f5;
   border-radius: 0px 0px 15px 15px;
   box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
 }
@@ -1134,7 +1134,7 @@ svg:hover {
   margin: 3px 3px;
 }
 .members {
-  background-color: #d5deeb;
+  background-color: #faf4aa;
   border-radius: 15px;
 
   box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
