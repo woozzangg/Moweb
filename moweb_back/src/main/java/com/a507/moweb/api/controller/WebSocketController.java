@@ -20,10 +20,10 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 @RequiredArgsConstructor
 public class WebSocketController extends NullPointerException {
     private static final Logger logger = LoggerFactory.getLogger(WebSocketController.class);
-    @Autowired
-    private RoomService roomService;
     private final SimpMessageSendingOperations sendingOperations;
-    private final String root = "/topic/moweb/room/";
+    private static final String root = "/topic/moweb/room/";
+    @Autowired
+    private transient RoomService roomService;
 
     /**
      * 채팅방에 유저가 입장하면 입장 메세지를 해당 방 참가자 전원에게 보내준다.
@@ -34,11 +34,15 @@ public class WebSocketController extends NullPointerException {
     public void enter(WebSocketMessage message, SimpMessageHeaderAccessor headerAccessor) {
         message.setAction(0);
         if(message.getUser_name() != null && message.getRoom_no() != 0) {
-            if(headerAccessor.getSessionAttributes() != null) {
-                //보내는 사람 가져와서 웹소켓 세션에 user_name으로 저장
-                headerAccessor.getSessionAttributes().put("user_name", message.getUser_name());
-                //방번호 가져와서 웹소켓 세션에 room_no로 저장
-                headerAccessor.getSessionAttributes().put("room_no", message.getRoom_no());
+            try {
+                if(headerAccessor.getSessionAttributes() != null) {
+                    //보내는 사람 가져와서 웹소켓 세션에 user_name으로 저장
+                    headerAccessor.getSessionAttributes().put("user_name", message.getUser_name());
+                    //방번호 가져와서 웹소켓 세션에 room_no로 저장
+                    headerAccessor.getSessionAttributes().put("room_no", message.getRoom_no());
+                }
+            }catch (Exception e) {
+                logger.info(e.toString());
             }
             //입장 메세지 채팅메세지에 추가
             message.setChat_msg(message.getUser_name()+ "님이 입장하였습니다.");
@@ -161,11 +165,16 @@ public class WebSocketController extends NullPointerException {
         //연결된 모든 클라이언트에게 사용자 퇴장 이벤트 처리
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         //웹소켓 세션에서 user_name과 방번호 가져오기
+
         String user_name = null;
         int room_no = 0;
-        if(headerAccessor.getSessionAttributes() != null) {
-            user_name = headerAccessor.getSessionAttributes().get("user_name").toString();
-            room_no = (int) headerAccessor.getSessionAttributes().get("room_no");
+        try{
+            if(headerAccessor.getSessionAttributes() != null) {
+                user_name = headerAccessor.getSessionAttributes().get("user_name").toString();
+                room_no = (int) headerAccessor.getSessionAttributes().get("room_no");
+            }
+        }catch (Exception e) {
+            logger.info(e.toString());
         }
         WebSocketMessage message = new WebSocketMessage();
         if(user_name != null) {
