@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -33,7 +35,8 @@ public class RoomServiceImpl implements RoomService {
         RoomInfo roomInfo = new RoomInfo();                         //DB에 저장할 방 정보 생성
         roomInfo.setActive(true);                                  //방 정보 활성화 상태 기본값=true
         roomInfo.setUrl(url);                                       //방 url 등록
-        LocalDateTime now2 = LocalDateTime.now();                   //방 생성 시각 가져오기
+        ZoneId zoneId = ZoneId.of("Asia/Seoul");                //한국 표준시 기준으로
+        ZonedDateTime now2 = ZonedDateTime.now(zoneId);                   //방 생성 시각 가져오기
         String now = now2.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
         roomInfo.setCreate_time(now);                               //방 생성 시간 입력
 
