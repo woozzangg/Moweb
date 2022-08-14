@@ -222,8 +222,6 @@
                   v-if="page == 'result'"
                   @click="savePhoto"
                   outlined
-                  tile
-                  rounded
                 >
                   저장
                 </v-btn>
@@ -293,7 +291,7 @@
           <!-- 채팅창 -->
           <div no-gutters class="chat_body" v-chat-scroll>
             <div
-              style="word-wrap: break-word"
+              class="chat_message"
               v-for="(chat, idx) in chatList"
               :key="idx"
             >
@@ -579,19 +577,20 @@ export default {
     },
     async savePhoto() {
       let date = new Date();
+
       let year = String(date.getFullYear());
-      let yy = year.substring(2, 4);
-      let month = date.getMonth() + "1";
-      let day = date.getDate() + "";
+      year = year.substring(2, 4);
+      let month = date.getMonth() + 1;
+      month = month >= 10 ? month : "0" + month;
+      let day = date.getDate();
+      day = day >= 10 ? day : "0" + day;
+      let hour = date.getHours();
+      hour = hour >= 10 ? hour : "0" + hour;
+      let min = date.getMinutes();
+      let sec = date.getSeconds();
+      sec = sec >= 10 ? sec : "0" + sec;
 
-      if (month.length == 1) {
-        month = "0" + month;
-      }
-      if (day.length == 1) {
-        day = "0" + day;
-      }
-
-      let today = yy + month + day;
+      let timestamp = year + month + day + hour + min + sec;
 
       const el = this.$refs.resultCanvas;
       const options = {
@@ -603,7 +602,7 @@ export default {
       const result = await Html2canvas(el, options);
 
       const link = document.createElement("a");
-      link.setAttribute("download", "moweb_" + today + ".png");
+      link.setAttribute("download", "moweb_" + timestamp + ".png");
       link.setAttribute(
         "href",
         result.toDataURL("image/png").replace("image/png", "image/octet-stream")
@@ -1085,16 +1084,22 @@ video {
   margin: auto;
   overflow-y: auto;
   box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
-  background-color: #fffefc;
+  background-color: #d5deeb;
   border-radius: 15px 15px 0px 0px;
   padding: 1.4rem;
+}
+
+.chat_message {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  word-wrap: break-word;
 }
 
 .form {
   display: flex;
   justify-content: space-between;
   padding: 1.4rem;
-  background: #fffefc;
+  background: #d5deeb;
   border-radius: 0px 0px 15px 15px;
   box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
 }
@@ -1129,7 +1134,7 @@ svg:hover {
   margin: 3px 3px;
 }
 .members {
-  background-color: #faf4aa;
+  background-color: #d5deeb;
   border-radius: 15px;
 
   box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
