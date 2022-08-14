@@ -41,6 +41,7 @@
         <v-row fluid no-gutters rows="2" style="margin: 4px; padding: 0px">
           <v-btn
             v-if="!url"
+            id="createRoomBtn"
             @click="createRoom"
             style="border-style: solid; margin: auto"
             >방만들기</v-btn
@@ -86,9 +87,18 @@ export default {
     this.url = this.$route.params.url;
   },
   methods: {
-    createRoom() {
+    btnOn() {
+      const btn = document.getElementById("createRoomBtn");
+      btn.disabled = false;
+    },
+    async btnOff() {
+      const btn = document.getElementById("createRoomBtn");
+      btn.disabled = true;
+    },
+    async createRoom() {
       if (!this.alertDialog) return;
       if (!this.nameCheck()) return;
+      await this.btnOff();
       axios
         .post(
           API_URL + "/room/create",
@@ -108,6 +118,8 @@ export default {
                 url: ROOT_URL + data.url,
               },
             });
+          } else {
+            this.btnOn();
           }
         })
         .catch((err) => {
