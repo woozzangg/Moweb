@@ -156,7 +156,7 @@
           >
             <v-row style="margin: auto">
               <v-col>
-                <v-btn @click="cameraBtnHandler">
+                <v-btn @click="cameraBtnHandler" v-if="page != 'result'">
                   <v-icon v-if="cameraOn" large>mdi-video</v-icon>
                   <v-icon v-if="!cameraOn" large>mdi-video-off</v-icon>
                 </v-btn>
@@ -532,6 +532,7 @@ export default {
 
     async page2Result() {
       this.page = "result";
+      this.camera.stop();
       this.shotDialog = false;
       for (let i = 1; i <= 4; i++) {
         await axios
