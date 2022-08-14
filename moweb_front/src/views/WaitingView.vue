@@ -53,6 +53,8 @@
               v-if="page == 'result'"
             >
               <table style="margin: auto; background: black">
+                <th></th>
+                <th></th>
                 <tr>
                   <td style="padding: 12px">
                     <img :src="resultImg[0]" width="320" height="240" />
@@ -414,7 +416,7 @@ export default {
     },
     // 배경선택부분
     items() {
-      return Array.from({ length: this.length }, (k, v) => v + 1);
+      return Array.from({ length: this.length }, (_k, v) => v + 1);
     },
     length() {
       return 20;
@@ -574,8 +576,8 @@ export default {
       let date = new Date();
       let year = String(date.getFullYear());
       let yy = year.substring(2, 4);
-      let month = new String(date.getMonth() + 1);
-      let day = new String(date.getDate());
+      let month = date.getMonth() + "1";
+      let day = date.getDate() + "";
 
       if (month.length == 1) {
         month = "0" + month;
@@ -640,8 +642,8 @@ export default {
     async uploadResult() {
       console.log("결과화면 업로드");
 
-      const canvas = this.$refs.resultCanvas;
-      Html2canvas(canvas, {
+      const resultCanvas = this.$refs.resultCanvas;
+      Html2canvas(resultCanvas, {
         useCORS: true,
         proxy: "html2canvasproxy.php",
         logging: true,
@@ -1062,7 +1064,6 @@ export default {
 
 <style>
 .app_body {
-  width: 85%;
   min-height: 800px;
   margin: 0 auto;
   padding: 0px;
