@@ -55,7 +55,6 @@ export default {
       // 드래그 종료 이벤트
       // 이전 인덱스랑 새 인덱스가 다르면 layer 변경 websocket 호출
       if (event.newIndex !== event.oldIndex) {
-        console.log("layer dragged!");
         this.$emit("sendLayer", this.dragLayerSequence);
       }
     },
@@ -66,8 +65,6 @@ export default {
 <style>
 .layer_container {
   padding: 20px;
-}
-.layer_list {
 }
 .layer_item {
   padding: 4px;

@@ -1,7 +1,6 @@
 import axios from "axios";
 
 const baseURL = "https://i7a507.p.ssafy.io/moweb-api";
-//const baseURL = "http://localhost:8080/moweb-api";
 
 const restApi = {
   instance: axios.create({

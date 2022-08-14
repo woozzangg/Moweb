@@ -1,40 +1,61 @@
 <template>
-  <v-container class="enter_body" d-flex justify-space-around>
-    <video v-show="false" ref="input_video"></video>
-    <v-col cols="12">
+  <div>
+    <v-container class="enter_head">
       <v-row>
-        <canvas
-          class="output_canvas"
-          id="output_canvas"
-          :width="width"
-          :height="height"
-          style="transform: rotateY(180deg); margin: auto; border-style: groove"
-          justify="center"
-        ></canvas>
+        <v-col>
+          <div>순간뽀짝</div>
+          <div>모여봐요 웹캠으로</div>
+        </v-col>
+        <v-col align="center">
+          <h1>입장하기</h1>
+        </v-col>
+        <v-col align="right">
+          <h1>Moweb</h1>
+        </v-col>
       </v-row>
-      <v-row style="margin: 5px">
-        <input
-          placeholder="닉네임 입력"
-          v-model="user_name"
-          style="border-style: solid; margin: 20px auto 10px auto"
-        />
-      </v-row>
-      <v-row fluid no-gutters rows="2" style="margin: 4px; padding: 0px">
-        <v-btn
-          v-if="!url"
-          @click="createRoom"
-          style="border-style: solid; margin: auto"
-          >방만들기</v-btn
-        >
-        <v-btn
-          v-if="url"
-          @click="joinRoom"
-          style="border-style: solid; margin: auto"
-          >방입장하기</v-btn
-        >
-      </v-row>
-    </v-col>
-  </v-container>
+    </v-container>
+    <v-container class="enter_body" d-flex justify-space-around>
+      <video v-show="false" ref="input_video"></video>
+      <v-col cols="12">
+        <v-row>
+          <canvas
+            class="output_canvas"
+            id="output_canvas"
+            :width="width"
+            :height="height"
+            style="
+              transform: rotateY(180deg);
+              margin: auto;
+              border-style: groove;
+            "
+            justify="center"
+          ></canvas>
+        </v-row>
+        <v-row style="margin: 5px">
+          <input
+            placeholder="닉네임 입력"
+            v-model="user_name"
+            style="border-style: solid; margin: 20px auto 10px auto"
+          />
+        </v-row>
+        <v-row fluid no-gutters rows="2" style="margin: 4px; padding: 0px">
+          <v-btn
+            v-if="!url"
+            id="createRoomBtn"
+            @click="createRoom"
+            style="border-style: solid; margin: auto"
+            >방만들기</v-btn
+          >
+          <v-btn
+            v-if="url"
+            @click="joinRoom"
+            style="border-style: solid; margin: auto"
+            >방입장하기</v-btn
+          >
+        </v-row>
+      </v-col>
+    </v-container>
+  </div>
 </template>
 
 <script>
@@ -66,9 +87,18 @@ export default {
     this.url = this.$route.params.url;
   },
   methods: {
-    createRoom() {
+    btnOn() {
+      const btn = document.getElementById("createRoomBtn");
+      btn.disabled = false;
+    },
+    async btnOff() {
+      const btn = document.getElementById("createRoomBtn");
+      btn.disabled = true;
+    },
+    async createRoom() {
       if (!this.alertDialog) return;
       if (!this.nameCheck()) return;
+      await this.btnOff();
       axios
         .post(
           API_URL + "/room/create",
@@ -77,6 +107,7 @@ export default {
           })
         )
         .then(({ data }) => {
+          this.camera.stop();
           if (data.room_no > 0) {
             this.$router.replace({
               name: "waiting",
@@ -87,10 +118,12 @@ export default {
                 url: ROOT_URL + data.url,
               },
             });
+          } else {
+            this.btnOn();
           }
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
         });
     },
     joinRoom() {
@@ -141,7 +174,7 @@ export default {
           }
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
         });
     },
     async removeBG() {
@@ -215,11 +248,15 @@ export default {
 <style>
 .enter_body {
   width: 60%;
-  margin: 50px auto;
+  margin: 0 auto;
   border: 15px solid white;
   border-radius: 15px;
   background-color: white;
   box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
+}
+.enter_head {
+  width: 60%;
+  margin: 20px auto;
 }
 
 .border-style1 {
