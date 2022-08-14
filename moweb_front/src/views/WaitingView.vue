@@ -34,7 +34,7 @@
           no-gutters
           style="width: 71%; margin: 5px auto 0px auto; min-height: 750px"
         >
-          <v-container class="webrtc" style="height: 85%; margin: 0px">
+          <v-container class="webrtc" style="height: 92%; margin: 0px">
             <div
               style="margin: auto; width: 100%; height: 100%; display: flex"
               v-if="page == 'result'"
@@ -116,6 +116,7 @@
                       v-show="page == 'waiting'"
                       v-for="sub in subscribers"
                       :key="sub.stream.connection.connectionId"
+                      style="max-width: 401px"
                     >
                       <user-video :stream-manager="sub" />
                       <p
@@ -183,17 +184,17 @@
           <v-container
             no-gutters
             class="btnzip"
-            style="height: 10%; margin: 4px; padding:2px; justify-content-center"
+            style="height: 8%; margin: 4px; padding:2px; justify-content-center"
           >
             <v-row style="margin: auto">
               <v-col>
-                <v-btn @click="cameraBtnHandler" v-if="page != 'result'">
-                  <v-icon v-if="cameraOn" large>mdi-video</v-icon>
-                  <v-icon v-if="!cameraOn" large>mdi-video-off</v-icon>
+                <v-btn @click="cameraBtnHandler" v-if="page != 'result'" large>
+                  <v-icon v-if="cameraOn" x-large>mdi-video</v-icon>
+                  <v-icon v-if="!cameraOn" x-large>mdi-video-off</v-icon>
                 </v-btn>
-                <v-btn @click="micBtnHandler">
-                  <v-icon v-if="micOn" large>mdi-microphone</v-icon>
-                  <v-icon v-if="!micOn" large>mdi-microphone-off</v-icon>
+                <v-btn @click="micBtnHandler" large>
+                  <v-icon v-if="micOn" x-large>mdi-microphone</v-icon>
+                  <v-icon v-if="!micOn" x-large>mdi-microphone-off</v-icon>
                 </v-btn>
               </v-col>
               <v-col align="center">
@@ -265,9 +266,9 @@
           </v-container>
         </div>
         <!-- 오른쪽 영역 시작 -->
-        <div style="width: 26%; margin: 5px auto 0px auto">
+        <div style="width: 26%; margin: 5px auto px auto">
           <!-- 참여 멤버 -->
-          <div no-gutters class="members" style="height: 30%; margin: auto">
+          <div no-gutters class="members" style="height: 33%; margin: auto">
             <!-- 이거 링크 버튼임 -->
             <v-btn
               d-flex
