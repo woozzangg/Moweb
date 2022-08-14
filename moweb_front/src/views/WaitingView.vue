@@ -36,35 +36,66 @@
         >
           <v-container class="webrtc" style="height: 85%; margin: 0px">
             <div
-              ref="resultCanvas"
-              width="720"
-              height="540"
-              style="margin: 5px"
+              style="margin: auto; width: 100%; height: 100%; display: flex"
               v-if="page == 'result'"
             >
-              <table style="margin: auto; background: black">
+              <table
+                ref="resultCanvas"
+                style="margin: auto; background: black; align-items: center"
+              >
                 <th></th>
                 <th></th>
                 <tr>
-                  <td style="padding: 12px">
+                  <td style="padding: 12px 12px 0 12px">
                     <img :src="resultImg[0]" width="320" height="240" />
                   </td>
-                  <td style="padding: 12px">
+                  <td style="padding: 12px 12px 0 0">
                     <img :src="resultImg[1]" width="320" height="240" />
                   </td>
                 </tr>
                 <tr>
-                  <td style="padding: 12px">
+                  <td style="padding: 12px 12px 0 12px">
                     <img :src="resultImg[2]" width="320" height="240" />
                   </td>
-                  <td style="padding: 12px">
+                  <td style="padding: 12px 12px 0 0">
                     <img :src="resultImg[3]" width="320" height="240" />
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    style="padding: 12px 12px; text-align: left; color: white"
+                  >
+                    <span>모여봐요 웹캠으로</span>
+                    <span
+                      style="text-align: left; padding: 0 4px; font-size: 10px"
+                    >
+                      by 순간뽀짝
+                    </span>
+                  </td>
+                  <td
+                    style="
+                      vertical-align: middle;
+                      padding: 12px 12px;
+                      text-align: right;
+                      color: white;
+                    "
+                  >
+                    {{
+                      new Date()
+                        .toISOString()
+                        .split("T")[0]
+                        .replaceAll("-", ".")
+                    }}
                   </td>
                 </tr>
               </table>
             </div>
-            <div id="main-container" class="container">
-              <div id="session" v-if="session && page !== 'result'">
+            <div
+              id="main-container"
+              class="container"
+              v-if="session && page !== 'result'"
+            >
+              <div id="session">
                 <v-container>
                   <v-row>
                     <v-col>
