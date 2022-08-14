@@ -3,17 +3,7 @@
   <v-container>
     <v-container class="app_head">
       <v-row>
-        <v-col>
-          <div>순간뽀짝</div>
-          <div>모여봐요 웹캠으로</div>
-        </v-col>
         <v-col align="center">
-          <h1 v-if="page === 'waiting'">대기실</h1>
-          <h1 v-else-if="shotDialog">사진찍기</h1>
-          <h1 v-else-if="page === 'shot'">촬영준비</h1>
-          <h1 v-else-if="page === 'result'">결과</h1>
-        </v-col>
-        <v-col align="right">
           <h1>Moweb</h1>
         </v-col>
       </v-row>
@@ -74,7 +64,7 @@
               </table>
             </div>
             <div id="main-container" class="container">
-              <div id="session" v-if="session">
+              <div id="session" v-if="session && page !== 'result'">
                 <v-container>
                   <v-row>
                     <v-col>
@@ -1073,7 +1063,6 @@ export default {
   box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
 }
 .app_head {
-  width: 85%;
   margin: 10px auto;
 }
 
