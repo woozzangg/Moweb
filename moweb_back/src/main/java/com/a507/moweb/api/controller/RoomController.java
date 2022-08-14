@@ -2,15 +2,15 @@ package com.a507.moweb.api.controller;
 
 
 import com.a507.moweb.api.service.RoomService;
+import com.a507.moweb.common.model.Room;
 import com.a507.moweb.db.entity.RoomInfo;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.json.*;
+
+import java.util.Map;
 
 /**
  *  방 관련 API 요청 처리용 컨트롤러
@@ -33,7 +33,7 @@ public class RoomController {
         JSONObject res = new JSONObject();          //응답 JSON 객체 생성
         res.put("room_no", roomInfo.getRoom_no());  //방번호 저장
         res.put("url", roomInfo.getUrl());          //url 저장
-        return new ResponseEntity<>(res.toString(),HttpStatus.OK);
+        return new ResponseEntity<String>(res.toString(),HttpStatus.OK);
     }
 
     /**
@@ -49,6 +49,6 @@ public class RoomController {
         int room_no = roomService.joinRoom(req);    //방번호를 불러온다()
         JSONObject res = new JSONObject();
         res.put("room_no", room_no);
-        return new ResponseEntity<>(res.toString(), HttpStatus.OK);
+        return new ResponseEntity<String>(res.toString(), HttpStatus.OK);
     }
 }
