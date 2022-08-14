@@ -248,7 +248,7 @@
         <!-- 채팅창 -->
         <div no-gutters class="chat_body" v-chat-scroll>
           <div
-            style="word-break: break-all"
+            style="word-wrap: break-word"
             v-for="(chat, idx) in chatList"
             :key="idx"
           >
