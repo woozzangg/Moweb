@@ -23,7 +23,7 @@ public class WebSocketController extends NullPointerException {
     private final SimpMessageSendingOperations sendingOperations;
     private static final String ROOTURL = "/topic/moweb/room/";
     @Autowired
-    private transient final RoomService roomService;
+    private final transient RoomService roomService;
 
     /**
      * 채팅방에 유저가 입장하면 입장 메세지를 해당 방 참가자 전원에게 보내준다.
