@@ -32,7 +32,7 @@
         <!-- 왼쪽 영역 -->
         <div
           no-gutters
-          style="width: 71%; margin: 5px auto 0px auto; min-height: 750px"
+          style="width: 71%; margin: 5px auto 0px auto; min-height: 751px"
         >
           <v-container class="webrtc" style="min-height: 85%; margin: 0px">
             <div
