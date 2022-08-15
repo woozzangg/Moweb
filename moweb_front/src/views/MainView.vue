@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main-container">
     <head>
       <title>모여봐요 웹캠으로</title>
     </head>
@@ -63,6 +63,10 @@ export default {
 </script>
 
 <style>
+.main-container {
+  min-width: 1300px;
+  overflow-x: auto;
+}
 * {
   box-sizing: border-box;
 }

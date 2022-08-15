@@ -1,15 +1,8 @@
 <template>
-  <div>
-    <v-container class="enter_head">
+  <div class="enter-container">
+    <v-container class="enter-head">
       <v-row>
-        <v-col>
-          <div>순간뽀짝</div>
-          <div>모여봐요 웹캠으로</div>
-        </v-col>
         <v-col align="center">
-          <h1>입장하기</h1>
-        </v-col>
-        <v-col align="right">
           <h1>Moweb</h1>
         </v-col>
       </v-row>
@@ -246,17 +239,20 @@ export default {
 </script>
 
 <style>
+.enter-container {
+  min-width: 1000px;
+  overflow-x: auto;
+}
+.enter-head {
+  margin: 0 auto;
+}
 .enter_body {
-  width: 60%;
+  width: fit-content;
   margin: 0 auto;
   border: 15px solid white;
   border-radius: 15px;
   background-color: white;
   box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
-}
-.enter_head {
-  width: 60%;
-  margin: 20px auto;
 }
 
 .border-style1 {
