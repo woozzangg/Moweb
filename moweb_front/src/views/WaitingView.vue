@@ -1,6 +1,7 @@
 <template>
   <!-- 컨테이너 시작 -->
   <v-container class="app-container" style="padding: 0 0 30px">
+    <help-modal></help-modal>
     <v-container class="app_head">
       <v-row>
         <v-col align="center">
@@ -362,6 +363,7 @@ import UserVideo from "@/components/UserVideo";
 import LayeredVideo from "@/components/LayeredVideo.vue";
 import ShotModal from "@/components/ShotModal.vue";
 import ExitModal from "@/components/ExitModal.vue";
+import HelpModal from "@/components/HelpModal.vue";
 
 import VueChatScroll from "vue-chat-scroll";
 
@@ -431,6 +433,7 @@ export default {
     LayeredVideo,
     ShotModal,
     ExitModal,
+    HelpModal,
   },
   computed: {
     inputVideo() {
