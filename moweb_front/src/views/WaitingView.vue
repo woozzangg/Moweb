@@ -1,6 +1,6 @@
 <template>
   <!-- 컨테이너 시작 -->
-  <v-container>
+  <v-container class="app-container">
     <v-container class="app_head">
       <v-row>
         <v-col align="center">
@@ -1061,17 +1061,18 @@ export default {
 </script>
 
 <style>
+.app-container {
+  min-width: 1300px;
+  overflow-x: auto;
+}
 .app_body {
-  min-height: 800px;
+  min-width: 1200px;
   margin: 0 auto;
   padding: 0px;
   border: 15px solid white;
   border-radius: 15px;
   background-color: white;
   box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
-}
-.app_head {
-  margin: 10px auto;
 }
 
 video {
