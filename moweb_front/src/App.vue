@@ -37,6 +37,8 @@ nav a.router-link-exact-active {
 }
 .v-application {
   font-family: "SCDream", "NanumGgeu", sans-serif !important;
+  font-weight: 5;
+  font-size: 14px;
 }
 @font-face {
   font-family: "SCDream";

@@ -156,8 +156,8 @@
                         max-width="320"
                       >
                         <template v-slot:activator="{ on, attrs }">
-                          <v-btn color="primary" v-bind="attrs" v-on="on"
-                            >배경 색상 선택</v-btn
+                          <v-btn color="#cfb3ff" v-bind="attrs" v-on="on"
+                            >배경 바꾸기</v-btn
                           >
                         </template>
                         <template v-slot:default="dialog">
@@ -205,27 +205,31 @@
               </v-col>
               <div class="main_btn">
                 <v-btn
-                  color="blue"
-                  dark
+                  class="white--text"
                   large
+                  color="#30a4b0"
                   v-if="is_admin && page == 'waiting'"
                   v-bind:disabled="!allReady"
                   @click="startBtn"
                   style="width: 100%"
                 >
-                  start
+                  시작하기
                 </v-btn>
                 <v-btn
+                  class="white--text"
                   large
-                  color="primary"
+                  color="#30a4b0"
                   v-if="!is_admin && page == 'waiting'"
                   @click="readyBtn"
                   style="width: 100%"
                 >
-                  ready
+                  준비하기
                 </v-btn>
                 <div
                   class="save_btn"
+                  dark
+                  large
+                  color="#388c76"
                   v-if="page == 'result'"
                   @click="savePhoto"
                 >
@@ -233,11 +237,15 @@
                 </div>
                 <div
                   class="share_btn"
+                  dark
+                  large
+                  color="#7385fa"
                   v-if="page == 'result'"
                   @click="sharePhoto"
                 >
                   공유
                 </div>
+
                 <!-- 촬영화면 다이얼로그  start -->
                 <shot-modal
                   v-if="page === 'shot'"
@@ -278,7 +286,7 @@
               d-flex
               class="linkbtn"
               rounded
-              color="primary"
+              color="#21ad7a"
               @click="linkBtn"
               position="absolute"
             >
@@ -364,7 +372,6 @@ import LayeredVideo from "@/components/LayeredVideo.vue";
 import ShotModal from "@/components/ShotModal.vue";
 import ExitModal from "@/components/ExitModal.vue";
 import HelpModal from "@/components/HelpModal.vue";
-
 import VueChatScroll from "vue-chat-scroll";
 
 import Html2canvas from "html2canvas";
@@ -1096,9 +1103,9 @@ export default {
   min-width: 1200px;
   margin: 0 auto;
   padding: 0px;
-  border: 15px solid white;
+  border: 15px solid #e6ecfc;
   border-radius: 15px;
-  background-color: white;
+  background-color: #e6ecfc;
   box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
 }
 
@@ -1112,7 +1119,7 @@ video {
   margin: auto;
   overflow-y: auto;
   box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
-  background-color: #f0f2f5;
+  background-color: #d1ebe5;
   border-radius: 15px 15px 0px 0px;
   padding: 1.4rem;
 }
@@ -1162,13 +1169,13 @@ svg:hover {
   margin: 3px 3px;
 }
 .members {
-  background-color: #faf4aa;
+  background-color: #b8dbff;
   border-radius: 15px;
 
   box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
 }
 .webrtc {
-  background-color: #fff0f0;
+  background-color: #dee9ff;
   border-radius: 15px;
   padding: 2px;
 
