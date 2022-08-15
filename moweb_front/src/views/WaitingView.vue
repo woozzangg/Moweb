@@ -32,11 +32,16 @@
         <!-- 왼쪽 영역 -->
         <div
           no-gutters
-          style="width: 71%; margin: 5px auto 0px auto; min-height: 750px"
+          style="width: 71%; margin: 5px auto 0px auto; min-height: 751px"
         >
           <v-container class="webrtc" style="min-height: 85%; margin: 0px">
             <div
-              style="margin: auto; width: 100%; height: 100%; display: flex"
+              style="
+                margin: 20px auto;
+                width: 100%;
+                height: 100%;
+                display: flex;
+              "
               v-if="page == 'result'"
             >
               <table
@@ -218,6 +223,7 @@
                   ready
                 </v-btn>
                 <v-btn
+                  large
                   elevation="9"
                   v-if="page == 'result'"
                   @click="savePhoto"
@@ -226,6 +232,7 @@
                   저장
                 </v-btn>
                 <v-btn
+                  large
                   v-if="page == 'result'"
                   class="pink white--text"
                   @click="sharePhoto"
