@@ -202,10 +202,11 @@
                   <v-icon v-if="!micOn" x-large>mdi-microphone-off</v-icon>
                 </v-btn>
               </v-col>
-              <v-col align="center">
+              <div class="main_btn">
                 <v-btn
+                  color="blue"
+                  dark
                   large
-                  color="primary"
                   v-if="is_admin && page == 'waiting'"
                   v-bind:disabled="!allReady"
                   @click="startBtn"
@@ -222,24 +223,20 @@
                 >
                   ready
                 </v-btn>
-                <v-btn
-                  large
-                  elevation="9"
+                <div
+                  class="save_btn"
                   v-if="page == 'result'"
                   @click="savePhoto"
-                  outlined
                 >
                   저장
-                </v-btn>
-                <v-btn
-                  large
+                </div>
+                <div
+                  class="share_btn"
                   v-if="page == 'result'"
-                  class="pink white--text"
                   @click="sharePhoto"
                 >
                   공유
-                </v-btn>
-
+                </div>
                 <!-- 촬영화면 다이얼로그  start -->
                 <shot-modal
                   v-if="page === 'shot'"
@@ -258,7 +255,7 @@
                   >
                   </layered-video>
                 </shot-modal>
-              </v-col>
+              </div>
               <v-col align="right">
                 <exit-modal
                   :is_admin="is_admin"
@@ -1073,9 +1070,9 @@ export default {
   overflow-x: auto;
 }
 .app_head {
-  padding-top: 5px;
+  margin-top: -12px;
   font-family: NanumGgeu;
-  font-size: 3rem;
+  font-size: 2.4rem;
 }
 .app_body {
   min-width: 1200px;
@@ -1168,5 +1165,50 @@ svg:hover {
   left: 35%;
 
   box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
+}
+.main_btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30%;
+}
+
+.save_btn {
+  padding: 0.4rem 1rem 0.4rem 1rem;
+  display: flex;
+  height: 44px;
+  width: 40%;
+  font-size: 16px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: #f5f5f5;
+  border-radius: 4px;
+  box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
+    0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+}
+
+.save_btn:hover {
+  background: #dbdbdb;
+}
+
+.share_btn {
+  padding: 0.4rem 1rem 0.4rem 1rem;
+  display: flex;
+  height: 44px;
+  width: 40%;
+  font-size: 16px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  background: #30a4b0;
+  border-radius: 4px;
+  box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
+    0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+}
+
+.share_btn:hover {
+  background: #008b99;
 }
 </style>
