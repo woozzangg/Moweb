@@ -150,14 +150,17 @@
                         ref="layeredVideo"
                       ></layered-video>
                     </v-row>
-                    <v-row class="justify-space-around">
+                    <v-row
+                      class="justify-space-around"
+                      style="padding-top: 25px"
+                    >
                       <v-dialog
                         transition="dialog-top-transition"
                         max-width="320"
                       >
                         <template v-slot:activator="{ on, attrs }">
-                          <v-btn color="#cfb3ff" v-bind="attrs" v-on="on"
-                            >배경 바꾸기</v-btn
+                          <v-btn color="white" v-bind="attrs" v-on="on"
+                            ><v-icon large>mdi-palette</v-icon></v-btn
                           >
                         </template>
                         <template v-slot:default="dialog">
@@ -227,9 +230,7 @@
                 </v-btn>
                 <div
                   class="save_btn"
-                  dark
                   large
-                  color="#388c76"
                   v-if="page == 'result'"
                   @click="savePhoto"
                 >
@@ -239,7 +240,6 @@
                   class="share_btn"
                   dark
                   large
-                  color="#7385fa"
                   v-if="page == 'result'"
                   @click="sharePhoto"
                 >
@@ -286,7 +286,8 @@
               d-flex
               class="linkbtn"
               rounded
-              color="#21ad7a"
+              dark
+              color="#30a4b0"
               @click="linkBtn"
               position="absolute"
             >
@@ -684,14 +685,14 @@ export default {
     linkBtn() {
       if (!navigator.clipboard) {
         navigator.clipboard.writeText(this.url).then(() => {
-          this.$dialog.message.success(this.url, {
+          this.$dialog.message.info(this.url, {
             position: "top",
           });
         });
         return;
       }
       navigator.clipboard.writeText(this.url).then(() => {
-        this.$dialog.message.success("url 복사 완료!", {
+        this.$dialog.message.info("url 복사 완료!", {
           position: "top",
         });
       });
@@ -1103,9 +1104,9 @@ export default {
   min-width: 1200px;
   margin: 0 auto;
   padding: 0px;
-  border: 15px solid #e6ecfc;
+  border: 15px solid white;
   border-radius: 15px;
-  background-color: #e6ecfc;
+  background-color: white;
   box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
 }
 
@@ -1169,7 +1170,7 @@ svg:hover {
   margin: 3px 3px;
 }
 .members {
-  background-color: #b8dbff;
+  background-color: #d1ebe5;
   border-radius: 15px;
 
   box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
@@ -1207,14 +1208,15 @@ svg:hover {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  background: #f5f5f5;
+  color: black;
+  background: #d6d6d6;
   border-radius: 4px;
   box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
     0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
 }
 
 .save_btn:hover {
-  background: #dbdbdb;
+  background: #b5b5b5;
 }
 
 .share_btn {
