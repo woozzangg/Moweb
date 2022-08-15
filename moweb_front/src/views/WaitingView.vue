@@ -1040,10 +1040,10 @@ export default {
     //----------------webrtc end----------------------
     //--------------사진찍기 -----------------------
     async takepic() {
-      // await this.pictureBackground(); // 각자의 사진으로 할때
-      // let canvas = this.$refs["personal_canvas"]; // 각자의 사진으로 할때
-      if (!this.is_admin) return; // 공유화면에서 사진찍을 때
-      const canvas = this.$refs.layeredVideo.$refs.layeredOutputCanvas;
+      await this.pictureBackground(); // 각자의 사진으로 할때
+      let canvas = this.$refs["personal_canvas"]; // 각자의 사진으로 할때
+      // if (!this.is_admin) return; // 공유화면에서 사진찍을 때
+      // const canvas = this.$refs.layeredVideo.$refs.layeredOutputCanvas;
       const imgBase64 = canvas.toDataURL("image/png");
       const decodImg = atob(imgBase64.split(",")[1]);
 
@@ -1052,12 +1052,30 @@ export default {
         array.push(decodImg.charCodeAt(i));
       }
       const file = new Blob([new Uint8Array(array)], { type: "image/png" });
+      let layer = 0;
+      let shot_cnt = 0;
+      console.log(this.shot_cnt);
+      this.users.forEach((user) => {
+        if (user.user_name == this.user_name) {
+          layer = user.layer;
+        }
+      });
       const fileName =
-        "canvas_img_" + this.room_no + "_" + this.shot_cnt + ".png";
+        "canvas_img_" +
+        this.room_no +
+        "_" +
+        this.shot_cnt +
+        "_" +
+        layer +
+        ".png";
       let formData = new FormData();
       formData.append("image", file, fileName);
+      formData.append("shot_cnt", this.shot_cnt);
+      formData.append("layer", layer);
+      formData.append("room_no", this.room_no);
+      formData.append("bg_code", this.backGroundImg);
 
-      await axios.post(API_URL + "/upload", formData, {
+      await axios.post(API_URL + "/upload2", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
