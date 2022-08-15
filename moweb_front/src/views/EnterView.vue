@@ -17,11 +17,7 @@
             id="output_canvas"
             :width="width"
             :height="height"
-            style="
-              transform: rotateY(180deg);
-              margin: auto;
-              <!-- border: 2px solid #000000; -->
-            "
+            style="transform: rotateY(180deg); margin: auto"
             justify="center"
           ></canvas>
         </v-row>
@@ -252,17 +248,8 @@ export default {
   margin: 0 auto;
   padding-top: 5px;
   font-family: NanumGgeu;
-  font-size: 3rem;
+  font-size: 2.6rem;
 }
-/* .polaroid {
-  background: url("@/assets/images/favicon.png");
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-  opacity: 1;
-  position: absolute;
-  overflow: hidden;
-} */
 .enter_body {
   width: fit-content;
   margin: 10px auto;
@@ -298,7 +285,7 @@ img {
   width: calc(80% - 60px);
   background: #f0f2f5;
   border-radius: 15px 0px 0px 15px;
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .nickname_input:focus {
@@ -315,7 +302,7 @@ img {
   color: white;
   background: #30a4b0;
   border-radius: 0px 15px 15px 0px;
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .nickname_submit:hover {
