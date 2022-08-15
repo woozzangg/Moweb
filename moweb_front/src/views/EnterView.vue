@@ -132,7 +132,7 @@ export default {
           this.alertDialog = false;
           if (data.room_no == -2) {
             this.$dialog.error({
-              text: "들어갈수 없는 방입니다.",
+              text: "들어갈 수 없는 방입니다.",
               persistent: true,
             });
             this.$router.replace({ name: "main" });
@@ -326,6 +326,10 @@ img {
   border-radius: 0px 15px 15px 0px;
   font-weight: 7;
   letter-spacing: 2px;
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.nickname_submit:hover {
+  background: #008b99;
 }
 </style>
