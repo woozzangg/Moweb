@@ -1070,8 +1070,9 @@ export default {
   overflow-x: auto;
 }
 .app_head {
+  margin-top: -18px;
   font-family: NanumGgeu;
-  font-size: 2.4rem;
+  font-size: 2.6rem;
 }
 .app_body {
   min-width: 1200px;
@@ -1181,14 +1182,14 @@ svg:hover {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  background: #f0f2f5;
+  background: #f5f5f5;
   border-radius: 4px;
   box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
     0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
 }
 
 .save_btn:hover {
-  background: #dcdee0;
+  background: #dbdbdb;
 }
 
 .share_btn {
