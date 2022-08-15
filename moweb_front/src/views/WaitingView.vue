@@ -1,6 +1,6 @@
 <template>
   <!-- 컨테이너 시작 -->
-  <v-container class="app-container">
+  <v-container class="app-container" style="padding: 0 0 30px">
     <v-container class="app_head">
       <v-row>
         <v-col align="center">
