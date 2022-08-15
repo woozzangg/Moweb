@@ -5,7 +5,11 @@ import store from "./store";
 import vuetify from "./plugins/vuetify";
 import vuetifyDialog from "vuetify-dialog";
 
-Vue.use(vuetifyDialog);
+Vue.use(vuetifyDialog, {
+  context: {
+    vuetify,
+  },
+});
 Vue.config.productionTip = false;
 
 new Vue({

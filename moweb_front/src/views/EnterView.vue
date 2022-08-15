@@ -140,14 +140,21 @@ export default {
                 text: "방 인원이 가득찼습니다.",
                 persistent: true,
               })
-              .then(() => (this.alertDialog = true));
+              .then(() => {
+                this.alertDialog = true;
+                this.btnOn();
+              });
           } else if (data.room_no == 0) {
             this.$dialog
               .error({
                 text: "이름이 중복되었습니다.",
                 persistent: true,
               })
-              .then(() => (this.alertDialogg = true));
+              .then(() => {
+                console.log(this);
+                this.alertDialog = true;
+                this.btnOn();
+              });
           }
           if (data.room_no > 0) {
             this.camera.stop();
