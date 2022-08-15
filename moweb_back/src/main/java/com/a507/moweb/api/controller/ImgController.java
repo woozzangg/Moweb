@@ -66,12 +66,12 @@ public class ImgController {
         String imgName = img.getOriginalFilename();
         String imgPath = Paths.get("").toAbsolutePath()+File.separator+"images"+File.separator;
 
-        System.out.println(shot_cnt + " " + layer+ " "+ room_no + " " + bg_code);
         logger.info("파일이름: {}", imgName);
         logger.info("파일경로: {}", imgPath);
 
         try(FileOutputStream fos = new FileOutputStream(imgPath + imgName)) {
             fos.write(img.getBytes());
+            roomService.makePic(Integer.parseInt(room_no), Integer.parseInt(shot_cnt), bg_code);
             logger.info("파일 업로드 성공");
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (Exception e) {

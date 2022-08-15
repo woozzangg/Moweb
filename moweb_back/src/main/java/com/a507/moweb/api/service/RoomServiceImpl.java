@@ -9,6 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -143,7 +149,25 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public void makePic(int room_no, int shot_cnt) {
-        rooms.get(room_no).getShot_cnts()[shot_cnt-1]++;
+    public boolean makePic(int room_no, int shot_cnt, String bg_code) throws IOException {
+        int num = ++rooms.get(room_no).getShot_cnts()[shot_cnt-1];
+        if(num == rooms.get(room_no).getUsers().size()) {
+            String imgName = "canvas_img_"+room_no + "_" + shot_cnt;
+            String imgPath = Paths.get("").toAbsolutePath()+ File.separator+"images"+File.separator;
+            BufferedImage img = ImageIO.read(new File(imgPath+"_1.png"));
+            BufferedImage result = new BufferedImage(img.getWidth(), img.getHeight(), img.getType());
+            Graphics2D g = result.createGraphics();
+            g.setColor(Color.decode(bg_code));
+            g.fillRect(0, 0, img.getWidth(), img.getHeight());
+            for(int i = 1; i <= num; i++) {
+                img = ImageIO.read(new File(imgPath + "_" + i + ".png"));
+                g.drawImage(img,0, 0, null);
+            }
+            File file = new File(imgPath+imgName+".png");
+            ImageIO.write(result,"png",file);
+            return true;
+        }else {
+            return false;
+        }
     }
 }
