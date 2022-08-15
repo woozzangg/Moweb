@@ -298,4 +298,8 @@ img {
   border-radius: 0px 15px 15px 0px;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05);
 }
+
+.nickname_submit:hover {
+  background: #008b99;
+}
 </style>
