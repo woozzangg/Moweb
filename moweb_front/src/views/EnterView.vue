@@ -1,5 +1,6 @@
 <template>
   <div class="enter-container" style="padding: 0 0 30px">
+    <help-modal></help-modal>
     <v-container class="enter-head">
       <v-row>
         <v-col align="center">
@@ -26,6 +27,7 @@
             class="nickname_input"
             placeholder="닉네임 입력"
             v-model="user_name"
+            @keyup.enter="enter_key()"
           />
           <div
             v-if="!url"
@@ -49,11 +51,16 @@ import { Camera } from "@mediapipe/camera_utils";
 import { SelfieSegmentation } from "@mediapipe/selfie_segmentation";
 import axios from "axios";
 
+import HelpModal from "@/components/HelpModal.vue";
+
 const ROOT_URL = "https://i7a507.p.ssafy.io";
 const API_URL = "https://i7a507.p.ssafy.io/moweb-api";
 
 export default {
   name: "EnterView",
+  components: {
+    HelpModal,
+  },
   data() {
     return {
       width: 720,
@@ -127,7 +134,7 @@ export default {
           this.alertDialog = false;
           if (data.room_no == -2) {
             this.$dialog.error({
-              text: "들어갈수 없는 방입니다.",
+              text: "들어갈 수 없는 방입니다.",
               persistent: true,
             });
             this.$router.replace({ name: "main" });
@@ -144,7 +151,7 @@ export default {
           } else if (data.room_no == 0) {
             this.$dialog
               .error({
-                text: "이름이 중복되었습니다.",
+                text: "중복된 닉네임입니다.",
                 persistent: true,
               })
               .then(() => {
@@ -234,6 +241,13 @@ export default {
       }
       return flag;
     },
+    enter_key() {
+      if (this.url) {
+        this.joinRoom();
+      } else {
+        this.createRoom();
+      }
+    },
   },
 };
 </script>
@@ -279,11 +293,12 @@ img {
 
 .nickname_input {
   padding: 0.7rem;
-  font-size: 22px;
+  font-size: 23px;
   text-align: center;
   align-items: center;
   width: calc(80% - 60px);
   background: #f0f2f5;
+  font-weight: 6;
   border-radius: 15px 0px 0px 15px;
   box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
 }
@@ -294,7 +309,7 @@ img {
 
 .nickname_submit {
   padding: 0.4rem 1.5rem 0.4rem 1.5rem;
-  font-size: 22px;
+  font-size: 21px;
   letter-spacing: 1px;
   display: flex;
   align-items: center;
@@ -302,6 +317,8 @@ img {
   color: white;
   background: #30a4b0;
   border-radius: 0px 15px 15px 0px;
+  font-weight: 7;
+  letter-spacing: 2px;
   box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
 }
 
