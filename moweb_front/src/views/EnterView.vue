@@ -1,5 +1,5 @@
 <template>
-  <div class="enter-container">
+  <div class="enter-container" style="padding: 0 0 30px">
     <v-container class="enter-head">
       <v-row>
         <v-col align="center">
