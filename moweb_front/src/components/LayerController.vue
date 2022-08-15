@@ -76,7 +76,7 @@ export default {
   border-radius: 4px;
 }
 .layer_item:hover {
-  background-color: lightgray;
+  background-color: #b3c9c5;
   cursor: pointer;
 }
 .layer_no {

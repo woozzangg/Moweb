@@ -1,6 +1,6 @@
 <template>
   <div v-if="streamManager" style="position: relative">
-    <p style="position: absolute; margin: 0px 0px 0px 10px; font-size: 2rem">
+    <p style="position: absolute; margin: 3px 0px 0px 10px; font-size: 1.5rem">
       {{ clientData }}
     </p>
     <ov-video

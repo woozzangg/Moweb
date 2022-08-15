@@ -1,11 +1,13 @@
 <template>
-  <div class="enter-container">
+  <div class="enter-container" style="padding: 0 0 30px">
+    <help-modal></help-modal>
     <v-container class="enter-head">
       <v-row>
         <v-col align="center">
           <h1>Moweb</h1>
         </v-col>
       </v-row>
+      <div class="polaroid"></div>
     </v-container>
     <v-container class="enter_body" d-flex justify-space-around>
       <video v-show="false" ref="input_video"></video>
@@ -16,36 +18,29 @@
             id="output_canvas"
             :width="width"
             :height="height"
-            style="
-              transform: rotateY(180deg);
-              margin: auto;
-              border-style: groove;
-            "
+            style="transform: rotateY(180deg); margin: auto"
             justify="center"
           ></canvas>
         </v-row>
-        <v-row style="margin: 5px">
+        <div class="nickname">
           <input
+            class="nickname_input"
             placeholder="닉네임 입력"
             v-model="user_name"
-            style="border-style: solid; margin: 20px auto 10px auto"
+            @keyup.enter="enter_key()"
           />
-        </v-row>
-        <v-row fluid no-gutters rows="2" style="margin: 4px; padding: 0px">
-          <v-btn
+          <div
             v-if="!url"
+            class="nickname_submit"
             id="createRoomBtn"
             @click="createRoom"
-            style="border-style: solid; margin: auto"
-            >방만들기</v-btn
           >
-          <v-btn
-            v-if="url"
-            @click="joinRoom"
-            style="border-style: solid; margin: auto"
-            >방입장하기</v-btn
-          >
-        </v-row>
+            방만들기
+          </div>
+          <div v-if="url" class="nickname_submit" @click="joinRoom">
+            방입장하기
+          </div>
+        </div>
       </v-col>
     </v-container>
   </div>
@@ -56,11 +51,16 @@ import { Camera } from "@mediapipe/camera_utils";
 import { SelfieSegmentation } from "@mediapipe/selfie_segmentation";
 import axios from "axios";
 
+import HelpModal from "@/components/HelpModal.vue";
+
 const ROOT_URL = "https://i7a507.p.ssafy.io";
 const API_URL = "https://i7a507.p.ssafy.io/moweb-api";
 
 export default {
   name: "EnterView",
+  components: {
+    HelpModal,
+  },
   data() {
     return {
       width: 720,
@@ -134,7 +134,7 @@ export default {
           this.alertDialog = false;
           if (data.room_no == -2) {
             this.$dialog.error({
-              text: "들어갈수 없는 방입니다.",
+              text: "들어갈 수 없는 방입니다.",
               persistent: true,
             });
             this.$router.replace({ name: "main" });
@@ -144,14 +144,21 @@ export default {
                 text: "방 인원이 가득찼습니다.",
                 persistent: true,
               })
-              .then(() => (this.alertDialog = true));
+              .then(() => {
+                this.alertDialog = true;
+                this.btnOn();
+              });
           } else if (data.room_no == 0) {
             this.$dialog
               .error({
-                text: "이름이 중복되었습니다.",
+                text: "중복된 닉네임입니다.",
                 persistent: true,
               })
-              .then(() => (this.alertDialogg = true));
+              .then(() => {
+                console.log(this);
+                this.alertDialog = true;
+                this.btnOn();
+              });
           }
           if (data.room_no > 0) {
             this.camera.stop();
@@ -234,6 +241,13 @@ export default {
       }
       return flag;
     },
+    enter_key() {
+      if (this.url) {
+        this.joinRoom();
+      } else {
+        this.createRoom();
+      }
+    },
   },
 };
 </script>
@@ -241,20 +255,23 @@ export default {
 <style>
 .enter-container {
   min-width: 1000px;
+  min-height: 1000px;
   overflow-x: auto;
 }
 .enter-head {
   margin: 0 auto;
+  padding-top: 5px;
+  font-family: NanumGgeu;
+  font-size: 2.6rem;
 }
 .enter_body {
   width: fit-content;
-  margin: 0 auto;
-  border: 15px solid white;
+  margin: 10px auto;
   border-radius: 15px;
+  padding: 30px 50px;
   background-color: white;
   box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
 }
-
 .border-style1 {
   border: 1px solid rgb(0, 0, 0);
 }
@@ -266,5 +283,46 @@ export default {
 img {
   display: block;
   margin: 0px auto;
+}
+.nickname {
+  display: flex;
+  justify-content: center;
+  margin-top: 60px;
+  padding: 0.2rem;
+}
+
+.nickname_input {
+  padding: 0.7rem;
+  font-size: 23px;
+  text-align: center;
+  align-items: center;
+  width: calc(80% - 60px);
+  background: #f0f2f5;
+  font-weight: 6;
+  border-radius: 15px 0px 0px 15px;
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.nickname_input:focus {
+  outline: none;
+}
+
+.nickname_submit {
+  padding: 0.4rem 1.5rem 0.4rem 1.5rem;
+  font-size: 21px;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: white;
+  background: #30a4b0;
+  border-radius: 0px 15px 15px 0px;
+  font-weight: 7;
+  letter-spacing: 2px;
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.nickname_submit:hover {
+  background: #008b99;
 }
 </style>

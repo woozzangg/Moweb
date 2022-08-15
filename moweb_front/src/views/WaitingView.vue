@@ -1,6 +1,7 @@
 <template>
   <!-- 컨테이너 시작 -->
-  <v-container class="app-container">
+  <v-container class="app-container" style="padding: 0 0 30px">
+    <help-modal></help-modal>
     <v-container class="app_head">
       <v-row>
         <v-col align="center">
@@ -8,7 +9,7 @@
         </v-col>
       </v-row>
     </v-container>
-    <v-container class="app_body">
+    <v-container class="app_body" style="overflow: hidden">
       <!-- row로 구간 나눔 -->
       <!-- 캠에서 가져온 소스비디오 -->
       <video v-show="false" ref="input_video"></video>
@@ -32,11 +33,16 @@
         <!-- 왼쪽 영역 -->
         <div
           no-gutters
-          style="width: 71%; margin: 5px auto 0px auto; min-height: 750px"
+          style="width: 71%; margin: 5px auto 0px auto; min-height: 751px"
         >
           <v-container class="webrtc" style="min-height: 85%; margin: 0px">
             <div
-              style="margin: auto; width: 100%; height: 100%; display: flex"
+              style="
+                margin: 20px auto;
+                width: 100%;
+                height: 100%;
+                display: flex;
+              "
               v-if="page == 'result'"
             >
               <table
@@ -144,14 +150,17 @@
                         ref="layeredVideo"
                       ></layered-video>
                     </v-row>
-                    <v-row class="justify-space-around">
+                    <v-row
+                      class="justify-space-around"
+                      style="padding-top: 25px"
+                    >
                       <v-dialog
                         transition="dialog-top-transition"
                         max-width="320"
                       >
                         <template v-slot:activator="{ on, attrs }">
-                          <v-btn color="primary" v-bind="attrs" v-on="on"
-                            >배경 색상 선택</v-btn
+                          <v-btn color="white" v-bind="attrs" v-on="on"
+                            ><v-icon large>mdi-palette</v-icon></v-btn
                           >
                         </template>
                         <template v-slot:default="dialog">
@@ -197,41 +206,45 @@
                   <v-icon v-if="!micOn" x-large>mdi-microphone-off</v-icon>
                 </v-btn>
               </v-col>
-              <v-col align="center">
+              <div class="main_btn">
                 <v-btn
+                  class="white--text"
                   large
-                  color="primary"
+                  color="#30a4b0"
                   v-if="is_admin && page == 'waiting'"
                   v-bind:disabled="!allReady"
                   @click="startBtn"
                   style="width: 100%"
                 >
-                  start
+                  시작하기
                 </v-btn>
                 <v-btn
+                  class="white--text"
                   large
-                  color="primary"
+                  color="#30a4b0"
                   v-if="!is_admin && page == 'waiting'"
                   @click="readyBtn"
                   style="width: 100%"
                 >
-                  ready
+                  준비하기
                 </v-btn>
-                <v-btn
-                  elevation="9"
+                <div
+                  class="save_btn"
+                  large
                   v-if="page == 'result'"
                   @click="savePhoto"
-                  outlined
                 >
                   저장
-                </v-btn>
-                <v-btn
+                </div>
+                <div
+                  class="share_btn"
+                  dark
+                  large
                   v-if="page == 'result'"
-                  class="pink white--text"
                   @click="sharePhoto"
                 >
                   공유
-                </v-btn>
+                </div>
 
                 <!-- 촬영화면 다이얼로그  start -->
                 <shot-modal
@@ -251,7 +264,7 @@
                   >
                   </layered-video>
                 </shot-modal>
-              </v-col>
+              </div>
               <v-col align="right">
                 <exit-modal
                   :is_admin="is_admin"
@@ -273,7 +286,8 @@
               d-flex
               class="linkbtn"
               rounded
-              color="primary"
+              dark
+              color="#30a4b0"
               @click="linkBtn"
               position="absolute"
             >
@@ -358,7 +372,7 @@ import UserVideo from "@/components/UserVideo";
 import LayeredVideo from "@/components/LayeredVideo.vue";
 import ShotModal from "@/components/ShotModal.vue";
 import ExitModal from "@/components/ExitModal.vue";
-
+import HelpModal from "@/components/HelpModal.vue";
 import VueChatScroll from "vue-chat-scroll";
 
 import Html2canvas from "html2canvas";
@@ -427,6 +441,7 @@ export default {
     LayeredVideo,
     ShotModal,
     ExitModal,
+    HelpModal,
   },
   computed: {
     inputVideo() {
@@ -499,9 +514,9 @@ export default {
         case 7:
           this.shot_cnt = content.shot_cnt;
           await this.takepic();
-          if (this.shot_cnt === 4) {
-            this.page2Result();
-          }
+          // if (this.shot_cnt === 4) {
+          //   this.page2Result();
+          // }
           break;
         // 방장이 나감
         case 8:
@@ -515,6 +530,9 @@ export default {
         // 카운트다운 시작
         case 10:
           this.startShotCount();
+          break;
+        case 11:
+          this.page2Result();
           break;
         default:
           break;
@@ -670,14 +688,14 @@ export default {
     linkBtn() {
       if (!navigator.clipboard) {
         navigator.clipboard.writeText(this.url).then(() => {
-          this.$dialog.message.success(this.url, {
+          this.$dialog.message.info(this.url, {
             position: "top",
           });
         });
         return;
       }
       navigator.clipboard.writeText(this.url).then(() => {
-        this.$dialog.message.success("url 복사 완료!", {
+        this.$dialog.message.info("url 복사 완료!", {
           position: "top",
         });
       });
@@ -1033,10 +1051,10 @@ export default {
     //----------------webrtc end----------------------
     //--------------사진찍기 -----------------------
     async takepic() {
-      // await this.pictureBackground(); // 각자의 사진으로 할때
-      // let canvas = this.$refs["personal_canvas"]; // 각자의 사진으로 할때
-      if (!this.is_admin) return; // 공유화면에서 사진찍을 때
-      const canvas = this.$refs.layeredVideo.$refs.layeredOutputCanvas;
+      await this.pictureBackground(); // 각자의 사진으로 할때
+      let canvas = this.$refs["personal_canvas"]; // 각자의 사진으로 할때
+      // if (!this.is_admin) return; // 공유화면에서 사진찍을 때
+      // const canvas = this.$refs.layeredVideo.$refs.layeredOutputCanvas;
       const imgBase64 = canvas.toDataURL("image/png");
       const decodImg = atob(imgBase64.split(",")[1]);
 
@@ -1045,12 +1063,27 @@ export default {
         array.push(decodImg.charCodeAt(i));
       }
       const file = new Blob([new Uint8Array(array)], { type: "image/png" });
+      let layer = 0;
+      this.users.forEach((user, index) => {
+        if (user.user_name == this.user_name) {
+          layer = index + 1;
+        }
+      });
       const fileName =
-        "canvas_img_" + this.room_no + "_" + this.shot_cnt + ".png";
+        "canvas_img_" +
+        this.room_no +
+        "_" +
+        this.shot_cnt +
+        "_" +
+        layer +
+        ".png";
       let formData = new FormData();
       formData.append("image", file, fileName);
-
-      await axios.post(API_URL + "/upload", formData, {
+      formData.append("shot_cnt", this.shot_cnt);
+      formData.append("layer", layer);
+      formData.append("room_no", this.room_no);
+      formData.append("bg_code", this.backGroundImg);
+      await axios.post(API_URL + "/upload2", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -1064,6 +1097,11 @@ export default {
 .app-container {
   min-width: 1300px;
   overflow-x: auto;
+}
+.app_head {
+  margin-top: -12px;
+  font-family: NanumGgeu;
+  font-size: 2.4rem;
 }
 .app_body {
   min-width: 1200px;
@@ -1085,7 +1123,7 @@ video {
   margin: auto;
   overflow-y: auto;
   box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
-  background-color: #f0f2f5;
+  background-color: #d1ebe5;
   border-radius: 15px 15px 0px 0px;
   padding: 1.4rem;
 }
@@ -1135,13 +1173,13 @@ svg:hover {
   margin: 3px 3px;
 }
 .members {
-  background-color: #faf4aa;
+  background-color: #d1ebe5;
   border-radius: 15px;
 
   box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
 }
 .webrtc {
-  background-color: #fff0f0;
+  background-color: #dee9ff;
   border-radius: 15px;
   padding: 2px;
 
@@ -1156,5 +1194,51 @@ svg:hover {
   left: 35%;
 
   box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.05);
+}
+.main_btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30%;
+}
+
+.save_btn {
+  padding: 0.4rem 1rem 0.4rem 1rem;
+  display: flex;
+  height: 44px;
+  width: 40%;
+  font-size: 16px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: black;
+  background: #d6d6d6;
+  border-radius: 4px;
+  box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
+    0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+}
+
+.save_btn:hover {
+  background: #b5b5b5;
+}
+
+.share_btn {
+  padding: 0.4rem 1rem 0.4rem 1rem;
+  display: flex;
+  height: 44px;
+  width: 40%;
+  font-size: 16px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  background: #30a4b0;
+  border-radius: 4px;
+  box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
+    0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+}
+
+.share_btn:hover {
+  background: #008b99;
 }
 </style>
