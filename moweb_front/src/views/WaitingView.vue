@@ -1072,6 +1072,11 @@ export default {
   min-width: 1300px;
   overflow-x: auto;
 }
+.app_head {
+  padding-top: 5px;
+  font-family: NanumGgeu;
+  font-size: 3rem;
+}
 .app_body {
   min-width: 1200px;
   margin: 0 auto;

@@ -6,6 +6,7 @@
           <h1>Moweb</h1>
         </v-col>
       </v-row>
+      <div class="polaroid"></div>
     </v-container>
     <v-container class="enter_body" d-flex justify-space-around>
       <video v-show="false" ref="input_video"></video>
@@ -19,7 +20,7 @@
             style="
               transform: rotateY(180deg);
               margin: auto;
-              border-style: groove;
+              <!-- border: 2px solid #000000; -->
             "
             justify="center"
           ></canvas>
@@ -244,20 +245,32 @@ export default {
 <style>
 .enter-container {
   min-width: 1000px;
+  min-height: 1000px;
   overflow-x: auto;
 }
 .enter-head {
   margin: 0 auto;
+  padding-top: 5px;
+  font-family: NanumGgeu;
+  font-size: 3rem;
 }
+/* .polaroid {
+  background: url("@/assets/images/favicon.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  opacity: 1;
+  position: absolute;
+  overflow: hidden;
+} */
 .enter_body {
   width: fit-content;
-  margin: 0 auto;
-  border: 15px solid white;
+  margin: 10px auto;
   border-radius: 15px;
+  padding: 30px 50px;
   background-color: white;
   box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
 }
-
 .border-style1 {
   border: 1px solid rgb(0, 0, 0);
 }
@@ -273,14 +286,13 @@ img {
 .nickname {
   display: flex;
   justify-content: center;
-  margin-top: 30px;
+  margin-top: 60px;
   padding: 0.2rem;
 }
 
 .nickname_input {
-  border: none;
-  padding: 0.4rem;
-  font-size: 16px;
+  padding: 0.7rem;
+  font-size: 22px;
   text-align: center;
   align-items: center;
   width: calc(80% - 60px);
@@ -294,8 +306,8 @@ img {
 }
 
 .nickname_submit {
-  padding: 0.4rem 1rem 0.4rem 1rem;
-  font-size: 16px;
+  padding: 0.4rem 1.5rem 0.4rem 1.5rem;
+  font-size: 22px;
   letter-spacing: 1px;
   display: flex;
   align-items: center;
