@@ -1,5 +1,6 @@
 <template>
   <div class="main-container">
+    <help-modal></help-modal>
     <head>
       <title>모여봐요 웹캠으로</title>
     </head>
@@ -58,8 +59,11 @@
   </div>
 </template>
 <script>
+import HelpModal from "@/components/HelpModal.vue";
+
 export default {
   name: "MainView",
+  components: { HelpModal },
 };
 </script>
 
