@@ -10,7 +10,6 @@
       :width="width"
       :height="height"
       :id="canvasId"
-      style=""
       :style="talkingCss"
     />
   </div>
@@ -28,7 +27,7 @@ export default {
       height: 240,
       canvasId: this.client + "'s",
       talkingCss:
-        "posiotion: absolute; border-color: black; border-style: groove",
+        "posiotion: absolute; border-color: black; border-style: groove; border-radius:5px; box-shadow: 4px 4px #0000008c",
     };
   },
   props: {
@@ -83,10 +82,10 @@ export default {
     isTalking(boolean) {
       if (boolean) {
         this.talkingCss =
-          "posiotion: absolute; border-color: aqua; border-style: groove";
+          "posiotion: absolute; border-color: aqua; border-style: groove; border-radius:5px; box-shadow: 4px 4px #0000008c";
       } else {
         this.talkingCss =
-          "posiotion: absolute; border-color: black; border-style: groove ";
+          "posiotion: absolute; border-color: black; border-style: groove; border-radius:5px; box-shadow: 4px 4px #0000008c";
       }
     },
   },

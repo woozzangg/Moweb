@@ -1,6 +1,7 @@
 <template>
   <div class="layer_container">
-    <h3 class="layer_title">참가자 목록</h3>
+    <h3 v-if="page == 'waiting'" class="layer_title">참가자 목록</h3>
+    <h3 v-else class="layer_title">레이어 순서</h3>
     <draggable
       class="layer_list"
       :list="dragLayerSequence"
@@ -14,7 +15,10 @@
           :key="userName"
         >
           <div class="user_name">
-            <div>{{ userName }}</div>
+            <div>
+              <v-icon> mdi-menu-swap </v-icon>
+              {{ userName }}
+            </div>
             <div v-if="index === dragLayerSequence.length - 1">앞</div>
             <div v-else-if="index === 0">뒤</div>
           </div>
@@ -29,7 +33,7 @@ import draggable from "vuedraggable";
 
 export default {
   // 레이어 순서, 방장 여부, prop으로 받음
-  props: ["layerSequence", "isAdmin", "roomNo"],
+  props: ["layerSequence", "isAdmin", "roomNo", "page"],
   components: {
     draggable,
   },
@@ -55,7 +59,6 @@ export default {
       // 드래그 종료 이벤트
       // 이전 인덱스랑 새 인덱스가 다르면 layer 변경 websocket 호출
       if (event.newIndex !== event.oldIndex) {
-        console.log("layer dragged!");
         this.$emit("sendLayer", this.dragLayerSequence);
       }
     },
@@ -66,8 +69,6 @@ export default {
 <style>
 .layer_container {
   padding: 20px;
-}
-.layer_list {
 }
 .layer_item {
   padding: 4px;

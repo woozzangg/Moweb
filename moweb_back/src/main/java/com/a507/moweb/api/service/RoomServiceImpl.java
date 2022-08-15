@@ -9,9 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service("roomInfoService")
 public class RoomServiceImpl implements RoomService {
@@ -25,15 +29,22 @@ public class RoomServiceImpl implements RoomService {
         rooms = new HashMap<>();
     }
 
+    /**
+     * 방생성을 위해 호출되는 매서드
+     * 유저 정보를 받아 방을 생성한다
+     * 생성된 방은 DB에 저장되며 저장된 DB의 방 번호를 받아와
+     * 방 번호에 해당하는 room클래스를 생성해 유저를 저장한다.
+     */
     @Override
     public RoomInfo createRoom(String req) {
         User user = new User(new JSONObject(req).getString("user_name"), 1);                //호스트 유저 생성 레이어 번호는 1번
-        String url = "/room/" + UUID.randomUUID().toString();                  //랜덤 url 생성
-        Room room = new Room(user, url);                                 //방 생성 및 호스트 등록
+        StringBuilder url = new StringBuilder("/room/").append(UUID.randomUUID());   //랜덤 url 생성
+        Room room = new Room(user, url.toString());                                 //방 생성 및 호스트 등록
         RoomInfo roomInfo = new RoomInfo();                         //DB에 저장할 방 정보 생성
         roomInfo.setActive(true);                                  //방 정보 활성화 상태 기본값=true
-        roomInfo.setUrl(url);                                       //방 url 등록
-        LocalDateTime now2 = LocalDateTime.now();                   //방 생성 시각 가져오기
+        roomInfo.setUrl(url.toString());                                       //방 url 등록
+        ZoneId zoneId = ZoneId.of("Asia/Seoul");                //한국 표준시 기준으로
+        ZonedDateTime now2 = ZonedDateTime.now(zoneId);                   //방 생성 시각 가져오기
         String now = now2.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
         roomInfo.setCreate_time(now);                               //방 생성 시간 입력
 
@@ -44,6 +55,12 @@ public class RoomServiceImpl implements RoomService {
         return roomInfo;
     }
 
+    /**
+     * 방 참가를 위해 호출되는 매서드
+     * 유저정보를 받아 방에 참가한다
+     * url을 통해 DB에서 방 정보를 불러오며 해당하는 방에 대한 유효성 검사를 실시한다.
+     * 통과시 해당 방 번호로 입장한다. 또한 room클래스에 유저가 추가된다.
+     */
     @Override
     public int joinRoom(String req) {
         JSONObject ob = new JSONObject(req);      //가져온 데이터 변환
@@ -100,8 +117,9 @@ public class RoomServiceImpl implements RoomService {
     public boolean isHost(int room_no, String user_name) {
         if(rooms.get(room_no).getHost_name().equals(user_name)) {
             return true;
+        }else {
+            return false;
         }
-        return false;
     }
 
     @Override

@@ -7,7 +7,8 @@
 
 <style>
 #app {
-  background-color: beige;
+  background-color: #e8f0ff;
+  overflow-x: auto;
 }
 /* font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -22,7 +23,6 @@
   background-repeat: no-repeat;
   background-position: center; */
 /* } */
-
 nav {
   padding: 30px;
 }
