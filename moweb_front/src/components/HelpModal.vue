@@ -3,13 +3,14 @@
     <v-dialog v-model="dialog" width="1200">
       <template v-slot:activator="{ on, attrs }">
         <v-btn
+          fab
           class="help-modal-button"
-          color="red lighten-2"
+          color="white"
           dark
           v-bind="attrs"
           v-on="on"
         >
-          도움말
+          <v-icon large color="#3A3C40">mdi-lightbulb-question-outline</v-icon>
         </v-btn>
       </template>
       <v-stepper v-model="helpStep" vertical>
