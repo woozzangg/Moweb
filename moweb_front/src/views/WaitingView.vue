@@ -8,7 +8,7 @@
         </v-col>
       </v-row>
     </v-container>
-    <v-container class="app_body">
+    <v-container class="app_body" style="overflow: hidden">
       <!-- row로 구간 나눔 -->
       <!-- 캠에서 가져온 소스비디오 -->
       <video v-show="false" ref="input_video"></video>
@@ -1068,6 +1068,11 @@ export default {
 .app-container {
   min-width: 1300px;
   overflow-x: auto;
+}
+.app_head {
+  padding-top: 5px;
+  font-family: NanumGgeu;
+  font-size: 3rem;
 }
 .app_body {
   min-width: 1200px;
