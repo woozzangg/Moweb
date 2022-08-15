@@ -71,8 +71,10 @@ public class ImgController {
 
         try(FileOutputStream fos = new FileOutputStream(imgPath + imgName)) {
             fos.write(img.getBytes());
-            roomService.makePic(Integer.parseInt(room_no), Integer.parseInt(shot_cnt), bg_code);
             logger.info("파일 업로드 성공");
+            if(roomService.makePic(Integer.parseInt(room_no), Integer.parseInt(shot_cnt), bg_code)) {
+                logger.info("방번호 : " + room_no + " " + shot_cnt + "번째 사진 업로드 완료");
+            }
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (Exception e) {
             logger.info("파일 업로드 실패");
