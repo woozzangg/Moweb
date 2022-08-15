@@ -1070,9 +1070,9 @@ export default {
   overflow-x: auto;
 }
 .app_head {
-  margin-top: -18px;
+  margin-top: -12px;
   font-family: NanumGgeu;
-  font-size: 2.6rem;
+  font-size: 2.4rem;
 }
 .app_body {
   min-width: 1200px;
