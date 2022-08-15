@@ -30,6 +30,7 @@
             class="nickname_input"
             placeholder="닉네임 입력"
             v-model="user_name"
+            @keyup.enter="enter_key()"
           />
           <div
             v-if="!url"
@@ -148,7 +149,7 @@ export default {
           } else if (data.room_no == 0) {
             this.$dialog
               .error({
-                text: "이름이 중복되었습니다.",
+                text: "중복된 닉네임입니다.",
                 persistent: true,
               })
               .then(() => {
@@ -238,6 +239,13 @@ export default {
       }
       return flag;
     },
+    enter_key() {
+      if (this.url) {
+        this.joinRoom();
+      } else {
+        this.createRoom();
+      }
+    },
   },
 };
 </script>
@@ -292,11 +300,12 @@ img {
 
 .nickname_input {
   padding: 0.7rem;
-  font-size: 22px;
+  font-size: 23px;
   text-align: center;
   align-items: center;
   width: calc(80% - 60px);
   background: #f0f2f5;
+  font-weight: 6;
   border-radius: 15px 0px 0px 15px;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05);
 }
@@ -307,7 +316,7 @@ img {
 
 .nickname_submit {
   padding: 0.4rem 1.5rem 0.4rem 1.5rem;
-  font-size: 22px;
+  font-size: 21px;
   letter-spacing: 1px;
   display: flex;
   align-items: center;
@@ -315,6 +324,8 @@ img {
   color: white;
   background: #30a4b0;
   border-radius: 0px 15px 15px 0px;
+  font-weight: 7;
+  letter-spacing: 2px;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05);
 }
 </style>
