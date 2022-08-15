@@ -1,12 +1,13 @@
 <template>
-  <div>
+  <div class="main-container">
     <head>
       <title>모여봐요 웹캠으로</title>
     </head>
     <body>
       <div class="frame">
-        <div class="photoOne"></div>
-        <div class="photoTwo"></div>
+        <div class="photoBox">
+          <div class="photoFourCut"></div>
+        </div>
         <div class="titleForm">
           <span class="serviceTitle">모여봐요 웹캠으로</span
           ><span class="engTitle">Moweb</span>
@@ -63,6 +64,10 @@ export default {
 </script>
 
 <style>
+.main-container {
+  min-width: 1300px;
+  overflow-x: auto;
+}
 * {
   box-sizing: border-box;
 }
@@ -92,12 +97,10 @@ body {
   background-color: #008b99;
 }
 
-.photoOne {
-  width: 147px;
-  height: 390px;
-  min-width: 147px;
-  min-height: 390px;
-  background: url("@/assets/images/photoOne.jpg");
+.photoFourCut {
+  min-width: 330px;
+  min-height: 395px;
+  background: url("@/assets/images/photoFourCut.png");
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
@@ -105,39 +108,22 @@ body {
   position: absolute;
   top: 3%;
   left: 68%;
-  transform: rotate(-15deg);
-  overflow: hidden;
-}
-.photoTwo {
-  width: 147px;
-  height: 390px;
-  min-width: 147px;
-  min-height: 390px;
-  background: url("@/assets/images/photoTwo.jpg");
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-  opacity: 1;
-  position: absolute;
-  top: 2.5%;
-  left: 74%;
-  transform: rotate(11deg);
   overflow: hidden;
 }
 .titleForm {
-  width: 777rem;
+  min-width: 777rem;
   height: 100%;
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
   opacity: 1;
-  position: absolute;
+  position: relative;
   top: 3%;
   left: 20%;
   overflow: hidden;
 }
 .serviceTitle {
-  width: 777rem;
+  min-width: 777rem;
   color: rgba(0, 0, 0, 1);
   position: absolute;
   top: 3%;
