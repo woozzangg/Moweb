@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="enter-container">
     <v-container class="enter-head">
       <v-row>
         <v-col align="center">
@@ -239,16 +239,20 @@ export default {
 </script>
 
 <style>
+.enter-container {
+  min-width: 1000px;
+  overflow-x: auto;
+}
+.enter-head {
+  margin: 0 auto;
+}
 .enter_body {
-  width: 60%;
+  width: fit-content;
   margin: 0 auto;
   border: 15px solid white;
   border-radius: 15px;
   background-color: white;
   box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
-}
-.enter_head {
-  margin: 20px auto;
 }
 
 .border-style1 {
