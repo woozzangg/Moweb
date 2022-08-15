@@ -24,28 +24,24 @@
             justify="center"
           ></canvas>
         </v-row>
-        <v-row style="margin: 5px">
+        <div class="nickname">
           <input
+            class="nickname_input"
             placeholder="닉네임 입력"
             v-model="user_name"
-            style="border-style: solid; margin: 20px auto 10px auto"
           />
-        </v-row>
-        <v-row fluid no-gutters rows="2" style="margin: 4px; padding: 0px">
-          <v-btn
+          <div
             v-if="!url"
+            class="nickname_submit"
             id="createRoomBtn"
             @click="createRoom"
-            style="border-style: solid; margin: auto"
-            >방만들기</v-btn
           >
-          <v-btn
-            v-if="url"
-            @click="joinRoom"
-            style="border-style: solid; margin: auto"
-            >방입장하기</v-btn
-          >
-        </v-row>
+            방만들기
+          </div>
+          <div v-if="url" class="nickname_submit" @click="joinRoom">
+            방입장하기
+          </div>
+        </div>
       </v-col>
     </v-container>
   </div>
@@ -266,5 +262,40 @@ export default {
 img {
   display: block;
   margin: 0px auto;
+}
+.nickname {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  padding: 0.2rem;
+}
+
+.nickname_input {
+  border: none;
+  padding: 0.4rem;
+  font-size: 16px;
+  text-align: center;
+  align-items: center;
+  width: calc(80% - 60px);
+  background: #f0f2f5;
+  border-radius: 15px 0px 0px 15px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05);
+}
+
+.nickname_input:focus {
+  outline: none;
+}
+
+.nickname_submit {
+  padding: 0.4rem 1rem 0.4rem 1rem;
+  font-size: 16px;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: white;
+  background: #30a4b0;
+  border-radius: 0px 15px 15px 0px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05);
 }
 </style>
