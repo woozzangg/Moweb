@@ -1,5 +1,6 @@
 <template>
-  <div class="enter-container">
+  <div class="enter-container" style="padding: 0 0 30px">
+    <help-modal></help-modal>
     <v-container class="enter-head">
       <v-row>
         <v-col align="center">
@@ -17,11 +18,7 @@
             id="output_canvas"
             :width="width"
             :height="height"
-            style="
-              transform: rotateY(180deg);
-              margin: auto;
-              <!-- border: 2px solid #000000; -->
-            "
+            style="transform: rotateY(180deg); margin: auto"
             justify="center"
           ></canvas>
         </v-row>
@@ -54,11 +51,16 @@ import { Camera } from "@mediapipe/camera_utils";
 import { SelfieSegmentation } from "@mediapipe/selfie_segmentation";
 import axios from "axios";
 
+import HelpModal from "@/components/HelpModal.vue";
+
 const ROOT_URL = "https://i7a507.p.ssafy.io";
 const API_URL = "https://i7a507.p.ssafy.io/moweb-api";
 
 export default {
   name: "EnterView",
+  components: {
+    HelpModal,
+  },
   data() {
     return {
       width: 720,
@@ -260,17 +262,8 @@ export default {
   margin: 0 auto;
   padding-top: 5px;
   font-family: NanumGgeu;
-  font-size: 3rem;
+  font-size: 2.6rem;
 }
-/* .polaroid {
-  background: url("@/assets/images/favicon.png");
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-  opacity: 1;
-  position: absolute;
-  overflow: hidden;
-} */
 .enter_body {
   width: fit-content;
   margin: 10px auto;
@@ -307,7 +300,7 @@ img {
   background: #f0f2f5;
   font-weight: 6;
   border-radius: 15px 0px 0px 15px;
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .nickname_input:focus {
