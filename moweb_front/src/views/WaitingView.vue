@@ -1053,7 +1053,6 @@ export default {
       }
       const file = new Blob([new Uint8Array(array)], { type: "image/png" });
       let layer = 0;
-      console.log(this.shot_cnt);
       this.users.forEach((user) => {
         if (user.user_name == this.user_name) {
           layer = user.layer;
@@ -1073,7 +1072,6 @@ export default {
       formData.append("layer", layer);
       formData.append("room_no", this.room_no);
       formData.append("bg_code", this.backGroundImg);
-      let API_URL = "http://localhost:8080/moweb-api";
       await axios.post(API_URL + "/upload2", formData, {
         headers: {
           "Content-Type": "multipart/form-data",

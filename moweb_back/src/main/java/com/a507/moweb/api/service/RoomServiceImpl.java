@@ -149,18 +149,22 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public boolean makePic(int room_no, int shot_cnt, String bg_code) throws IOException {
+    public boolean makePic(int room_no, int shot_cnt, String bg_code, String imgPath) throws IOException {
         int num = ++rooms.get(room_no).getShot_cnts()[shot_cnt-1];
         if(num == rooms.get(room_no).getUsers().size()) {
             String imgName = "canvas_img_"+room_no + "_" + shot_cnt;
-            String imgPath = Paths.get("").toAbsolutePath()+ File.separator+"images"+File.separator;
-            BufferedImage img = ImageIO.read(new File(imgPath+"_1.png"));
+            BufferedImage img = ImageIO.read(new File(imgPath+imgName+"_1.png"));
             BufferedImage result = new BufferedImage(img.getWidth(), img.getHeight(), img.getType());
             Graphics2D g = result.createGraphics();
-            g.setColor(Color.decode(bg_code));
+            int R = Integer.decode("#"+bg_code.substring(1,3));
+            int G = Integer.decode("#"+bg_code.substring(3,5));
+            int B = Integer.decode("#"+bg_code.substring(5,7));
+            int alpha = Integer.decode("#"+bg_code.substring(7));
+            Color color = new Color(R,G,B,alpha);
+            g.setColor(color);
             g.fillRect(0, 0, img.getWidth(), img.getHeight());
             for(int i = 1; i <= num; i++) {
-                img = ImageIO.read(new File(imgPath + "_" + i + ".png"));
+                img = ImageIO.read(new File(imgPath+imgName + "_" + i + ".png"));
                 g.drawImage(img,0, 0, null);
             }
             File file = new File(imgPath+imgName+".png");

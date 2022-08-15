@@ -15,7 +15,6 @@ public class Room {
     private int room_no;                // 방 번호
     private String url;            // 방 url
     private String host_name;        // 호스트의 닉네임
-    private String[] bg_codes;      //배경색 코드
     private int[] shot_cnts;        //샷 카운트
     public Room(User user, String url) {
         super();
@@ -24,8 +23,6 @@ public class Room {
         users.put(user.getUser_name(), user);
         this.room_no = 0;
         this.url = url;
-        this.bg_codes = new String[4];
-        Arrays.fill(bg_codes, "#3D939EFF");
         this.shot_cnts = new int[4];
     }
 }
