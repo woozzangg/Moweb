@@ -1070,9 +1070,6 @@ export default {
   background-color: white;
   box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
 }
-.app_head {
-  margin: 10px auto;
-}
 
 video {
   transform: rotateY(180deg);
