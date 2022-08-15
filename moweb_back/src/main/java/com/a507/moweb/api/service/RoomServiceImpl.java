@@ -156,12 +156,7 @@ public class RoomServiceImpl implements RoomService {
             BufferedImage img = ImageIO.read(new File(imgPath+imgName+"_1.png"));
             BufferedImage result = new BufferedImage(img.getWidth(), img.getHeight(), img.getType());
             Graphics2D g = result.createGraphics();
-            int R = Integer.decode("#"+bg_code.substring(1,3));
-            int G = Integer.decode("#"+bg_code.substring(3,5));
-            int B = Integer.decode("#"+bg_code.substring(5,7));
-            int alpha = Integer.decode("#"+bg_code.substring(7));
-            Color color = new Color(R,G,B,alpha);
-            g.setColor(color);
+            g.setColor(Color.decode(bg_code));
             g.fillRect(0, 0, img.getWidth(), img.getHeight());
             for(int i = 1; i <= num; i++) {
                 img = ImageIO.read(new File(imgPath+imgName + "_" + i + ".png"));

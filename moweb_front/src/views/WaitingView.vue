@@ -423,8 +423,8 @@ export default {
       videoSetting: false,
       canvasStream: undefined,
 
-      backGroundImg: "#3D939EFF",
-      bg_code: "",
+      backGroundImg: "#3D939E",
+      bg_code: "#3D939E",
       waitingStyle: "",
       page: "waiting", // page가 waiting, shot, result로 변함에 따라 v-if로 교체.
       count: 0,
