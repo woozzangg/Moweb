@@ -506,9 +506,9 @@ export default {
         case 7:
           this.shot_cnt = content.shot_cnt;
           await this.takepic();
-          if (this.shot_cnt === 4) {
-            this.page2Result();
-          }
+          // if (this.shot_cnt === 4) {
+          //   this.page2Result();
+          // }
           break;
         // 방장이 나감
         case 8:
@@ -522,6 +522,9 @@ export default {
         // 카운트다운 시작
         case 10:
           this.startShotCount();
+          break;
+        case 11:
+          this.page2Result();
           break;
         default:
           break;
@@ -1053,9 +1056,9 @@ export default {
       }
       const file = new Blob([new Uint8Array(array)], { type: "image/png" });
       let layer = 0;
-      this.users.forEach((user) => {
+      this.users.forEach((user, index) => {
         if (user.user_name == this.user_name) {
-          layer = user.layer;
+          layer = index + 1;
         }
       });
       const fileName =
