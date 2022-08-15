@@ -141,4 +141,9 @@ public class RoomServiceImpl implements RoomService {
             roomInfoRepository.save(roomInfo);
         }
     }
+
+    @Override
+    public void makePic(int room_no, int shot_cnt) {
+        rooms.get(room_no).getShot_cnts()[shot_cnt-1]++;
+    }
 }

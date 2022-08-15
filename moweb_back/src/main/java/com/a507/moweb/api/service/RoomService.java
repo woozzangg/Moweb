@@ -17,4 +17,5 @@ public interface RoomService {
     boolean isHost(int room_no, String user_name);
     User[] userList(int room_no);
     void cantJoin(int room_no);
+    void makePic(int room_no, int shot_cnt);
 }
