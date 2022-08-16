@@ -1,7 +1,8 @@
 <template>
   <!-- 컨테이너 시작 -->
-  <v-container class="app-container" style="padding: 0 0px 30px 0px">
-    <help-modal></help-modal>
+
+  <v-container class="app-container" style="padding: 0px 0px 30px 0px">
+    <help-modal :page="page"></help-modal>
     <v-container class="app_head">
       <v-row>
         <v-col align="center">
@@ -295,7 +296,7 @@
               @click="linkBtn"
               position="absolute"
             >
-              링크
+              초대
             </v-btn>
             <layer-controller
               :layerSequence="layerSequence"
@@ -469,16 +470,21 @@ export default {
     this.is_admin = this.$route.params.is_admin;
   },
   mounted() {
-    stompApi.connect(this.room_no, this.user_name, this.onSocketReceive);
-    this.joinSession();
-    this.picturectx = document
-      .getElementById("personal_canvas")
-      .getContext("2d");
-    this.picturectx.scale(-1, 1);
-    this.picturectx.translate(-960, 0);
     if (this.room_no == "undefined") {
       this.$router.replace("/");
+    } else {
+      stompApi.connect(this.room_no, this.user_name, this.onSocketReceive);
+      this.joinSession();
+      this.picturectx = document
+        .getElementById("personal_canvas")
+        .getContext("2d");
+      this.picturectx.scale(-1, 1);
+      this.picturectx.translate(-960, 0);
     }
+
+    this.$dialog.message.info("초대 버튼을 눌러 주소를 복사할 수 있습니다.", {
+      position: "top",
+    });
   },
   methods: {
     async onSocketReceive(result) {
@@ -699,7 +705,7 @@ export default {
         return;
       }
       navigator.clipboard.writeText(this.url).then(() => {
-        this.$dialog.message.info("url 복사 완료!", {
+        this.$dialog.message.info("주소 복사 완료!", {
           position: "top",
         });
       });

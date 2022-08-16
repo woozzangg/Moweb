@@ -14,6 +14,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -121,11 +123,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public boolean isHost(int room_no, String user_name) {
-        if(rooms.get(room_no).getHost_name().equals(user_name)) {
-            return true;
-        }else {
-            return false;
-        }
+        return rooms.get(room_no).getHost_name().equals(user_name);
     }
 
     @Override
@@ -167,6 +165,18 @@ public class RoomServiceImpl implements RoomService {
             return true;
         }else {
             return false;
+        }
+    }
+
+    @Override
+    public void deletePic(int room_no) throws IOException {
+        for (int shot_cnt = 1; shot_cnt <= 4; shot_cnt++) {
+            for (int i = 1; i <= 6; i++) {
+                String imgName = "canvas_img_"+room_no + "_" + shot_cnt;
+                String imgPath = Paths.get("").toAbsolutePath()+File.separator+"images"+File.separator;
+                Path filePath = Paths.get(imgPath + imgName + "_" + i + ".png");
+                Files.deleteIfExists(filePath);
+            }
         }
     }
 }

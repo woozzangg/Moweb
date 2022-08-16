@@ -69,7 +69,7 @@ public class ImgController {
     }
 
     @PostMapping("/upload2")
-    public ResponseEntity<String> uploadImg2(@RequestParam("image") MultipartFile img, @RequestParam("shot_cnt") String shot_cnt, @RequestParam("layer") String layer, @RequestParam("room_no") String room_no, @RequestParam("bg_code") String bg_code) {
+    public ResponseEntity<String> uploadImg2(@RequestParam("image") MultipartFile img, @RequestParam("shot_cnt") String shot_cnt, @RequestParam("room_no") String room_no, @RequestParam("bg_code") String bg_code) {
         String imgName = img.getOriginalFilename();
         String imgPath = Paths.get("").toAbsolutePath()+File.separator+"images"+File.separator;
 
