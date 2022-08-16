@@ -89,12 +89,7 @@
                       color: white;
                     "
                   >
-                    {{
-                      new Date()
-                        .toISOString()
-                        .split("T")[0]
-                        .replaceAll("-", ".")
-                    }}
+                    {{ new Date().toLocaleDateString() }}
                   </td>
                 </tr>
               </table>
