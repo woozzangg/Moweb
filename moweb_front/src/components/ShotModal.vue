@@ -7,7 +7,7 @@
   >
     <template v-if="isAdmin" v-slot:activator="{ on, attrs }">
       <v-btn
-        color="blue"
+        color="#30a4b0"
         dark
         large
         v-bind="attrs"
