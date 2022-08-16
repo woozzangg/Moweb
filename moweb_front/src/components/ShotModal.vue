@@ -39,7 +39,7 @@
 
 <script>
 export default {
-  props: ["dialogProp", "isAdmin", "count"],
+  props: ["dialogProp", "isAdmin", "count", "shotBtnActive"],
   data: function () {
     return {
       dialog: false,
@@ -57,7 +57,8 @@ export default {
   },
   methods: {
     onShotButtonClick() {
-      if (this.isAdmin) {
+      if (this.isAdmin && this.shotBtnActive) {
+        this.$emit("shotBtndisActive");
         this.$emit("sendShotCountdown");
       }
     },
