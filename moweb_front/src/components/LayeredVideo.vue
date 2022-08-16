@@ -5,6 +5,7 @@
       :height="height"
       id="layered-output-canvas"
       ref="layeredOutputCanvas"
+      style="border-radius: 15px"
     ></canvas>
     <div class="shot-count">{{ shotCnt }} / 4</div>
   </div>

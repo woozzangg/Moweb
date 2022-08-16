@@ -7,22 +7,9 @@
 
 <style>
 #app {
-  background-color: #e8f0ff;
+  background-color: #d4e2ff;
   overflow-x: auto;
 }
-/* font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50; */
-/* height: 100vh;
-  overflow: hidden;
-  margin: 0; */
-/* background-image: url("./assets/background.jpg"); */
-/* background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center; */
-/* } */
 nav {
   padding: 30px;
 }

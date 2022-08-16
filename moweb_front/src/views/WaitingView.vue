@@ -40,12 +40,7 @@
         <div no-gutters style="width: 71%; margin: 0px auto; min-height: 750px">
           <v-container class="webrtc" style="min-height: 89%; margin: 0px">
             <div
-              style="
-                margin: 15px auto;
-                width: 100%;
-                height: 100%;
-                display: flex;
-              "
+              style="margin: auto; width: 100%; height: 100%; display: flex"
               v-if="page == 'result'"
             >
               <table
@@ -158,8 +153,8 @@
                         max-width="320"
                       >
                         <template v-slot:activator="{ on, attrs }">
-                          <v-btn color="white" v-bind="attrs" v-on="on"
-                            ><v-icon large>mdi-palette</v-icon></v-btn
+                          <v-btn color="info" large v-bind="attrs" v-on="on"
+                            >배경 색상 선택</v-btn
                           >
                         </template>
                         <template v-slot:default="dialog">
