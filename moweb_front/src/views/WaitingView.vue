@@ -466,15 +466,16 @@ export default {
     this.is_admin = this.$route.params.is_admin;
   },
   mounted() {
-    stompApi.connect(this.room_no, this.user_name, this.onSocketReceive);
-    this.joinSession();
-    this.picturectx = document
-      .getElementById("personal_canvas")
-      .getContext("2d");
-    this.picturectx.scale(-1, 1);
-    this.picturectx.translate(-960, 0);
     if (this.room_no == "undefined") {
       this.$router.replace("/");
+    } else {
+      stompApi.connect(this.room_no, this.user_name, this.onSocketReceive);
+      this.joinSession();
+      this.picturectx = document
+        .getElementById("personal_canvas")
+        .getContext("2d");
+      this.picturectx.scale(-1, 1);
+      this.picturectx.translate(-960, 0);
     }
 
     this.$dialog.message.info("초대 버튼을 눌러 주소를 복사할 수 있습니다.", {
