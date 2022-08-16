@@ -480,11 +480,12 @@ export default {
     this.url = this.$route.params.url;
     this.is_admin = this.$route.params.is_admin;
   },
-  mounted() {
+  async mounted() {
     if (this.room_no == "undefined") {
       this.$router.replace("/");
     } else {
       stompApi.connect(this.room_no, this.user_name, this.onSocketReceive);
+      await this.audioCheck();
       this.joinSession();
       this.picturectx = document
         .getElementById("personal_canvas")
@@ -498,6 +499,16 @@ export default {
     });
   },
   methods: {
+    async audioCheck() {
+      await navigator.mediaDevices
+        .getUserMedia({ audio: true })
+        .then(() => {
+          this.audioActive = true;
+        })
+        .catch(() => {
+          this.audioActive = false;
+        });
+    },
     async onSocketReceive(result) {
       const content = JSON.parse(result.body);
       switch (content.action) {
@@ -847,7 +858,7 @@ export default {
             this.canvasStream = canvas.captureStream(30);
             let videoTracks = this.canvasStream.getVideoTracks();
             let publisher = this.OV.initPublisher(undefined, {
-              audioSource: undefined, // The source of audio. If undefined default microphone
+              audioSource: this.audioActive ? undefined : false, // The source of audio. If undefined default microphone
               videoSource: videoTracks[0], // The source of video. If undefined default webcam
               publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
               publishVideo: true, // Whether you want to start publishing with your video enabled or not
