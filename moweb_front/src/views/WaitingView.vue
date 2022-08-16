@@ -156,7 +156,16 @@
                         max-width="320"
                       >
                         <template v-slot:activator="{ on, attrs }">
-                          <v-btn color="info" large v-bind="attrs" v-on="on"
+                          <v-btn
+                            color="info"
+                            large
+                            v-bind="attrs"
+                            v-on="on"
+                            style="
+                              font-weight: 6;
+                              letter-spacing: 2px;
+                              font-size: 1rem;
+                            "
                             >배경 색상 선택</v-btn
                           >
                         </template>

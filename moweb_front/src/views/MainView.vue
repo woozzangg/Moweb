@@ -117,7 +117,7 @@ body {
 }
 .titleForm {
   min-width: 777rem;
-  height: 100%;
+  height: 30rem;
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
@@ -131,7 +131,7 @@ body {
   min-width: 777rem;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 2.5%;
+  top: 25%;
   left: 0px;
   font-family: SCDream;
   font-weight: 5;
@@ -143,7 +143,7 @@ body {
   width: 106rem;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 1.5%;
+  top: 15%;
   left: 9px;
   font-family: NanumGgeu;
   font-size: 3rem;
@@ -389,16 +389,16 @@ body {
   text-align: center;
 }
 .pictureLast {
-  width: 1277px;
-  height: 186px;
+  width: 76rem;
+  height: 11rem;
   background: url("@/assets/images/pictureLast.png");
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
   opacity: 1;
   position: absolute;
-  left: 10%;
   top: 88%;
+  left: 10%;
   overflow: hidden;
 }
 </style>
