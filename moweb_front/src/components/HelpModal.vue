@@ -138,6 +138,25 @@
 
 <script>
 export default {
+  props: {
+    page: String,
+  },
+  mounted() {
+    if (this.page == "enter") {
+      this.model1 = 1;
+    } else if (this.page == "waiting") {
+      this.helpStep = 2;
+    }
+  },
+  watch: {
+    page() {
+      if (this.page == "shot") {
+        this.helpStep = 3;
+      } else if (this.page == "result") {
+        this.helpStep = 4;
+      }
+    },
+  },
   data: function () {
     return {
       dialog: false,
@@ -165,6 +184,8 @@ export default {
           ],
           image: "/help/step1-2.png",
         },
+      ],
+      step2: [
         {
           text: [
             "자, 이제 대기실에 입장하셨습니다.",
@@ -172,8 +193,6 @@ export default {
           ],
           image: "/help/step1-3.png",
         },
-      ],
-      step2: [
         {
           text: [
             "참가자들의 캠을 볼 수 있습니다.",
