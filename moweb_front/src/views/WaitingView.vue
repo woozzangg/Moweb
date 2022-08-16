@@ -265,8 +265,10 @@
                   :dialogProp="shotDialog"
                   :count="count"
                   :isAdmin="is_admin"
+                  :shotBtnActive="shotBtnActive"
                   @sendShotCountdown="sendShotCountdown"
                   @sendDialogChange="sendDialogChange"
+                  @shotBtndisActive="shotBtnActive = false"
                 >
                   <layered-video
                     width="960"
@@ -446,6 +448,7 @@ export default {
       resultImg: [],
       shutterSound: new Audio(shutterSoundSource),
       countdownSound: new Audio(dingSoundSource),
+      shotBtnActive: true,
     };
   },
   components: {
@@ -532,9 +535,7 @@ export default {
         case 7:
           this.shot_cnt = content.shot_cnt;
           await this.takepic();
-          // if (this.shot_cnt === 4) {
-          //   this.page2Result();
-          // }
+          this.shotBtnActive = true;
           break;
         // 방장이 나감
         case 8:
@@ -800,6 +801,7 @@ export default {
       });
     },
     sendDialogChange(dialog) {
+      this.shotBtnActive = true;
       // 여기서 동기화를 위해 다이얼로그 전송
       stompApi.shotMode({
         room_no: this.room_no,
@@ -1071,8 +1073,6 @@ export default {
     async takepic() {
       await this.pictureBackground(); // 각자의 사진으로 할때
       let canvas = this.$refs["personal_canvas"]; // 각자의 사진으로 할때
-      // if (!this.is_admin) return; // 공유화면에서 사진찍을 때
-      // const canvas = this.$refs.layeredVideo.$refs.layeredOutputCanvas;
       const imgBase64 = canvas.toDataURL("image/png");
       const decodImg = atob(imgBase64.split(",")[1]);
 
