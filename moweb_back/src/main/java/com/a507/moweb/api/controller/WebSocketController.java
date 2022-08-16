@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/moweb")
 @RequiredArgsConstructor
@@ -161,7 +163,7 @@ public class WebSocketController extends NullPointerException {
      * action 8
      */
     @EventListener
-    public void exit(SessionDisconnectEvent event) {
+    public void exit(SessionDisconnectEvent event) throws IOException {
         //연결된 모든 클라이언트에게 사용자 퇴장 이벤트 처리
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         //웹소켓 세션에서 user_name과 방번호 가져오기
@@ -195,6 +197,7 @@ public class WebSocketController extends NullPointerException {
                 roomService.cantJoin(room_no);
                 logger.info("room {} : BOOM!", room_no);
                 sendingOperations.convertAndSend(ROOTURL+message.getRoom_no(),message);
+                roomService.deletePic(room_no);
             }
         }
     }

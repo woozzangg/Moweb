@@ -169,12 +169,14 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public void deletePic(int room_no, int shot_cnt, String imgPath) throws IOException {
-        int num = rooms.get(room_no).getUsers().size();
-        for (int i = 1; i <= num; i++) {
-            String imgName = "canvas_img_"+room_no + "_" + shot_cnt;
-            Path filePath = Paths.get(imgPath + imgName + "_" + i + ",png");
-            Files.deleteIfExists(filePath);
+    public void deletePic(int room_no) throws IOException {
+        for (int shot_cnt = 1; shot_cnt <= 4; shot_cnt++) {
+            for (int i = 1; i <= 6; i++) {
+                String imgName = "canvas_img_"+room_no + "_" + shot_cnt;
+                String imgPath = Paths.get("").toAbsolutePath()+File.separator+"images"+File.separator;
+                Path filePath = Paths.get(imgPath + imgName + "_" + i + ".png");
+                Files.deleteIfExists(filePath);
+            }
         }
     }
 }
