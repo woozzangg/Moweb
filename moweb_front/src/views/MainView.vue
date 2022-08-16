@@ -49,7 +49,6 @@
           >촬영한 사진을 컴퓨터에 저장하고,<br />
           공유하기로 카카오톡에 자랑하세요!
         </span>
-        <!-- <div class="containerLast"></div> -->
         <span class="titleLast">우리가 만들었어요</span>
         <div class="pictureLast"></div>
       </div>
