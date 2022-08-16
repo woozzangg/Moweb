@@ -20,4 +20,5 @@ public interface RoomService {
     User[] userList(int room_no);
     void cantJoin(int room_no);
     boolean makePic(int room_no, int shot_cnt, String bg_code, String imgPath) throws IOException;
+    void deletePic(int room_no, int shot_cnt, String imgPath) throws  IOException;
 }

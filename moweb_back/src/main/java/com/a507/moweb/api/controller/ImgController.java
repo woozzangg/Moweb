@@ -75,12 +75,15 @@ public class ImgController {
 
         logger.info("파일이름: {}", imgName);
         logger.info("파일경로: {}", imgPath);
+        int room_noInt = Integer.parseInt(room_no);
+        int shot_cntInt = Integer.parseInt(shot_cnt);
 
         try(FileOutputStream fos = new FileOutputStream(imgPath + imgName)) {
             fos.write(img.getBytes());
             logger.info("파일 업로드 성공");
-            if(roomService.makePic(Integer.parseInt(room_no), Integer.parseInt(shot_cnt), bg_code, imgPath)) {
+            if(roomService.makePic(room_noInt, shot_cntInt, bg_code, imgPath)) {
                 logger.info("방번호 : " + room_no + " " + shot_cnt + "번째 사진 업로드 완료");
+                roomService.deletePic(room_noInt, shot_cntInt, imgPath);
                 if(Integer.parseInt(shot_cnt)==4){
                     WebSocketMessage message = new WebSocketMessage();
                     message.setAction(11);
