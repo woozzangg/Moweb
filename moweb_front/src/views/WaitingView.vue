@@ -99,7 +99,8 @@
             <div
               id="main-container"
               class="container"
-              v-if="session && page !== 'result'"
+              v-if="session"
+              v-show="page != 'result'"
             >
               <div id="session">
                 <v-container>
