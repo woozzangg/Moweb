@@ -153,8 +153,6 @@ body {
 }
 
 .startBtn {
-  width: 230rem;
-  height: 30rem;
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
@@ -177,10 +175,10 @@ body {
   height: 5rem;
 }
 .startBtn:hover {
-  background-color: #008b99;
-  font-size: 0;
   background-size: cover;
   background: url(@/assets/images/cameraStartColorSmall.png) center no-repeat;
+  background-color: #008b99;
+  font-size: 0;
 }
 
 .friends {
