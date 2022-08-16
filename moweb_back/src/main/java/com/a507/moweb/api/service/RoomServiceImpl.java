@@ -153,6 +153,7 @@ public class RoomServiceImpl implements RoomService {
             String imgName = "canvas_img_"+room_no + "_" + shot_cnt;
             BufferedImage img = ImageIO.read(new File(imgPath+imgName+"_1.png"));
             BufferedImage result = new BufferedImage(img.getWidth(), img.getHeight(), img.getType());
+            System.out.println(img.getType());
             Graphics2D g = result.createGraphics();
             g.setColor(Color.decode(bg_code));
             g.fillRect(0, 0, img.getWidth(), img.getHeight());
