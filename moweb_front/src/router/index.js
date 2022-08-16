@@ -1,28 +1,40 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import HomeView from "../views/HomeView.vue";
 
+import MainView from "../views/MainView.vue";
+import EnterView from "@/views/EnterView";
+import WaitingView from "@/views/WaitingView";
+import JoinView from "@/views/JoinView.vue";
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
-    name: "home",
-    component: HomeView,
+    name: "main",
+    component: MainView,
   },
   {
-    path: "/about",
-    name: "about",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
+    path: "/enter",
+    name: "enter",
+    component: EnterView,
+  },
+  {
+    path: "/waiting",
+    name: "waiting",
+    component: WaitingView,
+  },
+  {
+    path: "/room/*",
+    name: "join",
+    component: JoinView,
   },
 ];
 
 const router = new VueRouter({
   mode: "history",
+  scrollBehavior() {
+    return { x: 0, y: 0 };
+  },
   base: process.env.BASE_URL,
   routes,
 });

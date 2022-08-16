@@ -1,0 +1,23 @@
+version: "3"
+services:
+  moweb_back:
+    build:
+      context: ./moweb_back
+    container_name: moweb_back
+    ports:
+      - 8080:8080
+    volumes:
+      - ./images:/images:rw
+    environment:
+      - db.url=${db_url}
+      - db.username=${db_username}
+      - db.password=${db_password}
+      - db.dbname=${db_dbname}
+      - hosturl=${hosturl}
+    network_mode: "host"
+  moweb_front:
+    build:
+      context: ./moweb_front
+    container_name: moweb_front
+    ports:
+      - 8000:80

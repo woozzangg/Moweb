@@ -3,15 +3,29 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "vue-cli-service serve --port 8081",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@mediapipe/camera_utils": "^0.3.1640029074",
+    "@mediapipe/selfie_segmentation": "^0.1.1632777926",
+    "axios": "^0.27.2",
     "core-js": "^3.8.3",
+    "html2canvas": "^1.4.1",
+    "openvidu-browser": "^2.22.0",
+    "peerjs": "^1.4.6",
+    "sockjs-client": "^1.6.1",
     "vue": "^2.6.14",
+    "vue-chat-scroll": "^1.4.0",
+    "vue-html2canvas": "^0.0.4",
+    "vue-kakao-sdk": "^0.2.5",
     "vue-router": "^3.5.1",
-    "vuex": "^3.6.2"
+    "vuedraggable": "^2.24.3",
+    "vuetify": "^2.6.0",
+    "vuetify-dialog": "^2.0.17",
+    "vuex": "^3.6.2",
+    "webstomp-client": "^1.2.6"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
@@ -26,7 +40,11 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^8.0.3",
     "prettier": "^2.4.1",
-    "vue-template-compiler": "^2.6.14"
+    "sass": "~1.32.0",
+    "sass-loader": "^10.0.0",
+    "vue-cli-plugin-vuetify": "~2.5.1",
+    "vue-template-compiler": "^2.6.14",
+    "vuetify-loader": "^1.7.0"
   },
   "eslintConfig": {
     "root": true,
@@ -41,7 +59,15 @@
     "parserOptions": {
       "parser": "@babel/eslint-parser"
     },
-    "rules": {}
+    "rules": {
+      "prettier/prettier": [
+        "error",
+        {
+          "endOfLine": "auto"
+        }
+      ],
+      "no-unused-vars": "off"
+    }
   },
   "browserslist": [
     "> 1%",
