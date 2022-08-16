@@ -82,6 +82,7 @@ export default {
   },
   methods: {
     async createRoom() {
+      if (!(await this.cameraActive())) return;
       if (!this.alertDialog) return;
       if (!this.nameCheck()) return;
       if (this.btnClicked) return;
@@ -113,7 +114,8 @@ export default {
           console.error(err);
         });
     },
-    joinRoom() {
+    async joinRoom() {
+      if (!(await this.cameraActive())) return;
       if (!this.alertDialog) return;
       if (!this.nameCheck()) return;
       if (this.btnClicked) return;
@@ -151,7 +153,6 @@ export default {
                 persistent: true,
               })
               .then(() => {
-                console.log(this);
                 this.alertDialog = true;
                 this.btnClicked = false;
               });
@@ -243,6 +244,21 @@ export default {
       } else {
         this.createRoom();
       }
+    },
+    async cameraActive() {
+      let flag = false;
+      await navigator.mediaDevices
+        .getUserMedia({ video: true })
+        .then(() => {
+          flag = true;
+        })
+        .catch(() => {
+          this.$dialog.error({
+            text: "카메라와 마이크 연결을 확인해 주세요.",
+            persistent: true,
+          });
+        });
+      return flag;
     },
   },
 };
