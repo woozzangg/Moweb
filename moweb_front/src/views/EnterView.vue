@@ -1,6 +1,6 @@
 <template>
   <div class="enter-container" style="padding: 0 0 30px">
-    <help-modal></help-modal>
+    <help-modal page="enter"></help-modal>
     <v-container class="enter-head">
       <v-row>
         <v-col align="center">
