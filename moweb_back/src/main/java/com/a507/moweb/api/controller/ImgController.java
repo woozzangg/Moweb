@@ -75,7 +75,7 @@ public class ImgController {
 
         try(FileOutputStream fos = new FileOutputStream(imgPath + imgName)) {
             fos.write(img.getBytes());
-            logger.info("방번호 : {} 번째 개인 사진 업로드 성공", room_no, shot_cnt);
+            logger.info("방번호 : {} | {} 번째 개인 사진 업로드 성공", room_no, shot_cnt);
             if(roomService.makePic(Integer.parseInt(room_no), Integer.parseInt(shot_cnt), bg_code, imgPath)) {
                 logger.info("방번호 : {} | {} 번째 전체 사진 업로드 완료", room_no, shot_cnt);
                 if(Integer.parseInt(shot_cnt)>=4){
