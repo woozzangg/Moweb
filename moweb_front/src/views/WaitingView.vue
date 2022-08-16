@@ -99,7 +99,8 @@
             <div
               id="main-container"
               class="container"
-              v-if="session && page !== 'result'"
+              v-if="session"
+              v-show="page != 'result'"
             >
               <div id="session">
                 <v-container>
@@ -379,7 +380,7 @@ import Html2canvas from "html2canvas";
 import Kakaosdk from "vue-kakao-sdk";
 
 import shutterSoundSource from "@/assets/sounds/camera_click_sound.wav";
-import beepSoundSource from "@/assets/sounds/beep_sound.wav";
+import dingSoundSource from "@/assets/sounds/ding_sound.wav";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
@@ -432,7 +433,7 @@ export default {
       shot_cnt: 0,
       resultImg: [],
       shutterSound: new Audio(shutterSoundSource),
-      countdownSound: new Audio(beepSoundSource),
+      countdownSound: new Audio(dingSoundSource),
     };
   },
   components: {
