@@ -1,7 +1,7 @@
 <template>
   <div class="layer_container">
-    <h3 v-if="page == 'waiting'" class="layer_title">참가자 목록</h3>
-    <h3 v-else class="layer_title">레이어 순서</h3>
+    <h2 v-if="page == 'waiting'" class="layer_title">참가자 목록</h2>
+    <h2 v-else class="layer_title">레이어 순서</h2>
     <draggable
       class="layer_list"
       :list="dragLayerSequence"
@@ -68,7 +68,7 @@ export default {
 
 <style>
 .layer_container {
-  padding: 20px;
+  padding: 8px 15px 0px 12px;
 }
 .layer_item {
   padding: 4px;

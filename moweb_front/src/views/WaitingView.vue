@@ -1,6 +1,6 @@
 <template>
   <!-- 컨테이너 시작 -->
-  <v-container class="app-container" style="padding: 0 0 30px">
+  <v-container class="app-container" style="padding: 0 0px 30px 0px">
     <help-modal></help-modal>
     <v-container class="app_head">
       <v-row>
@@ -29,16 +29,18 @@
         :width="width"
         :height="height"
       ></canvas>
-      <v-row d-flex fluid justify-space-around style="margin: 0px">
+      <v-row
+        class="fullcon"
+        d-flex
+        justify-space-around
+        style="margin: 5px auto"
+      >
         <!-- 왼쪽 영역 -->
-        <div
-          no-gutters
-          style="width: 71%; margin: 5px auto 0px auto; min-height: 751px"
-        >
-          <v-container class="webrtc" style="min-height: 85%; margin: 0px">
+        <div no-gutters style="width: 71%; margin: 0px auto; min-height: 750px">
+          <v-container class="webrtc" style="min-height: 89%; margin: 0px">
             <div
               style="
-                margin: 20px auto;
+                margin: 15px auto;
                 width: 100%;
                 height: 100%;
                 display: flex;
@@ -193,11 +195,12 @@
 
           <v-container
             no-gutters
+            fluid
             class="btnzip"
-            style="height: 8%; margin: 4px; padding:2px; justify-content-center"
+            style="height: 8%; margin: 10px auto; padding:0px; justify-content-center"
           >
             <v-row style="margin: auto">
-              <v-col>
+              <v-col class="colpadding" style="padding: auto 0px">
                 <v-btn @click="cameraBtnHandler" v-if="page != 'result'" large>
                   <v-icon v-if="cameraOn" x-large>mdi-video</v-icon>
                   <v-icon v-if="!cameraOn" x-large>mdi-video-off</v-icon>
@@ -266,7 +269,7 @@
                   </layered-video>
                 </shot-modal>
               </div>
-              <v-col align="right">
+              <v-col class="colpadding">
                 <exit-modal
                   :is_admin="is_admin"
                   @leaveSession="leaveSession"
@@ -278,7 +281,7 @@
           </v-container>
         </div>
         <!-- 오른쪽 영역 시작 -->
-        <div style="width: 26%; margin: 5px auto px auto">
+        <div style="width: 26%; margin: 0px auto">
           <!-- 참여 멤버 -->
           <div no-gutters class="members" style="height: 33%; margin: auto">
             <!-- 이거 링크 버튼임 -->
@@ -1241,5 +1244,8 @@ svg:hover {
 
 .share_btn:hover {
   background: #008b99;
+}
+.colpadding {
+  padding: 12px 0px;
 }
 </style>
