@@ -441,6 +441,7 @@ export default {
       micBtnTxt: "mic off",
       videoSetting: false,
       canvasStream: undefined,
+      resultUploaded: false,
 
       backGroundImg: "#3D939E",
       bg_code: "#3D939E",
@@ -614,6 +615,7 @@ export default {
             this.resultImg.push(res.request.responseURL);
           });
       }
+      await this.uploadResult();
     },
 
     // ----------------------------- 화면 전환 end --------------------------------
@@ -662,8 +664,7 @@ export default {
       link.click();
     },
     async sharePhoto() {
-      this.uploadResult();
-
+      if (!this.resultUploaded) return;
       const fileName = "canvas_img_" + this.room_no + "_result.png";
       const fileUrl = API_URL + "/display?imgName=" + fileName;
 
@@ -712,11 +713,13 @@ export default {
         let formData = new FormData();
         formData.append("image", blob, name);
 
-        axios.post(API_URL + "/upload", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        axios
+          .post(API_URL + "/upload", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then(() => (this.resultUploaded = true));
       });
     },
     linkBtn() {
