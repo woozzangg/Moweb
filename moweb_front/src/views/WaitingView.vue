@@ -440,6 +440,7 @@ export default {
       resultImg: [],
       shutterSound: new Audio(shutterSoundSource),
       countdownSound: new Audio(dingSoundSource),
+      shotBtnActive: true,
     };
   },
   components: {
