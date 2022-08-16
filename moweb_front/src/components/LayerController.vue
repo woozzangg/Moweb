@@ -90,5 +90,7 @@ export default {
 .user_name {
   display: flex;
   justify-content: space-between;
+  font-size: 1rem;
+  font-weight: bold;
 }
 </style>

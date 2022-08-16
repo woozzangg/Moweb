@@ -2,7 +2,14 @@
   <v-row justify="center">
     <v-dialog v-model="dialog" persistent max-width="500">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn color="#3A3C40" large dark v-bind="attrs" v-on="on">
+        <v-btn
+          color="#3A3C40"
+          large
+          dark
+          v-bind="attrs"
+          v-on="on"
+          style="font-weight: 7; letter-spacing: 2px; font-size: 1rem"
+        >
           나가기
         </v-btn>
       </template>
