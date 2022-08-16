@@ -30,7 +30,7 @@ public class RoomController {
     public ResponseEntity<String> createRoom(@RequestBody String req) {
         //DB에 방 생성후 저장 정보를 리턴
         RoomInfo roomInfo = roomService.createRoom(req);
-        JSONObject res = new JSONObject();          //응답 JSON 객체 생성
+        JSONObject res = new JSONObject(req);          //응답 JSON 객체 생성
         res.put("room_no", roomInfo.getRoom_no());  //방번호 저장
         res.put("url", roomInfo.getUrl());          //url 저장
         return new ResponseEntity<>(res.toString(),HttpStatus.OK);
@@ -47,7 +47,7 @@ public class RoomController {
     @PostMapping("/join")
     public ResponseEntity<String> joinRoom(@RequestBody String req) {
         int room_no = roomService.joinRoom(req);    //방번호를 불러온다()
-        JSONObject res = new JSONObject();
+        JSONObject res = new JSONObject(req);
         res.put("room_no", room_no);
         return new ResponseEntity<>(res.toString(), HttpStatus.OK);
     }
