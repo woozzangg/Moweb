@@ -38,9 +38,12 @@
       >
         <!-- 왼쪽 영역 -->
         <div no-gutters style="width: 71%; margin: 0px auto; min-height: 750px">
-          <v-container class="webrtc" style="min-height: 89%; margin: 0px">
+          <v-container
+            class="webrtc"
+            style="min-height: 89%; margin: 0px; display: flex"
+          >
             <div
-              style="margin: auto; width: 100%; height: 100%; display: flex"
+              style="margin: auto; width: 100%; height: 100%"
               v-if="page == 'result'"
             >
               <table
@@ -84,7 +87,12 @@
                       color: white;
                     "
                   >
-                    {{ new Date().toLocaleDateString() }}
+                    {{
+                      new Date()
+                        .toISOString()
+                        .split("T")[0]
+                        .replaceAll("-", ".")
+                    }}
                   </td>
                 </tr>
               </table>
@@ -247,10 +255,8 @@
                   :dialogProp="shotDialog"
                   :count="count"
                   :isAdmin="is_admin"
-                  :shotBtnActive="shotBtnActive"
                   @sendShotCountdown="sendShotCountdown"
                   @sendDialogChange="sendDialogChange"
-                  @shotBtndisActive="shotBtnActive = false"
                 >
                   <layered-video
                     width="960"
@@ -419,7 +425,6 @@ export default {
       micBtnTxt: "mic off",
       videoSetting: false,
       canvasStream: undefined,
-      audioActive: true,
 
       backGroundImg: "#3D939E",
       bg_code: "#3D939E",
@@ -431,7 +436,6 @@ export default {
       resultImg: [],
       shutterSound: new Audio(shutterSoundSource),
       countdownSound: new Audio(dingSoundSource),
-      shotBtnActive: true,
     };
   },
   components: {
@@ -463,12 +467,11 @@ export default {
     this.url = this.$route.params.url;
     this.is_admin = this.$route.params.is_admin;
   },
-  async mounted() {
+  mounted() {
     if (this.room_no == "undefined") {
       this.$router.replace("/");
     } else {
       stompApi.connect(this.room_no, this.user_name, this.onSocketReceive);
-      await this.audioCheck();
       this.joinSession();
       this.picturectx = document
         .getElementById("personal_canvas")
@@ -482,16 +485,6 @@ export default {
     });
   },
   methods: {
-    async audioCheck() {
-      await navigator.mediaDevices
-        .getUserMedia({ audio: true })
-        .then(() => {
-          this.audioActive = true;
-        })
-        .catch(() => {
-          this.audioActive = false;
-        });
-    },
     async onSocketReceive(result) {
       const content = JSON.parse(result.body);
       switch (content.action) {
@@ -529,7 +522,9 @@ export default {
         case 7:
           this.shot_cnt = content.shot_cnt;
           await this.takepic();
-          this.shotBtnActive = true;
+          // if (this.shot_cnt === 4) {
+          //   this.page2Result();
+          // }
           break;
         // 방장이 나감
         case 8:
@@ -795,7 +790,6 @@ export default {
       });
     },
     sendDialogChange(dialog) {
-      this.shotBtnActive = true;
       // 여기서 동기화를 위해 다이얼로그 전송
       stompApi.shotMode({
         room_no: this.room_no,
@@ -841,7 +835,7 @@ export default {
             this.canvasStream = canvas.captureStream(30);
             let videoTracks = this.canvasStream.getVideoTracks();
             let publisher = this.OV.initPublisher(undefined, {
-              audioSource: this.audioActive ? undefined : false, // The source of audio. If undefined default microphone
+              audioSource: undefined, // The source of audio. If undefined default microphone
               videoSource: videoTracks[0], // The source of video. If undefined default webcam
               publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
               publishVideo: true, // Whether you want to start publishing with your video enabled or not
@@ -1067,6 +1061,8 @@ export default {
     async takepic() {
       await this.pictureBackground(); // 각자의 사진으로 할때
       let canvas = this.$refs["personal_canvas"]; // 각자의 사진으로 할때
+      // if (!this.is_admin) return; // 공유화면에서 사진찍을 때
+      // const canvas = this.$refs.layeredVideo.$refs.layeredOutputCanvas;
       const imgBase64 = canvas.toDataURL("image/png");
       const decodImg = atob(imgBase64.split(",")[1]);
 
