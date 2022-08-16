@@ -12,6 +12,6 @@ RUN ./gradlew clean build
 FROM openjdk:17
 COPY --from=builder /app/build/libs/*.jar app.jar
 RUN mkdir /images
-VOLUME ["/images/"]
+VOLUME /images
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar" ]

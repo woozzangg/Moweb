@@ -7,7 +7,7 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - ./images:/images
+      - ./images:/images:rw
     environment:
       - db.url=${db_url}
       - db.username=${db_username}
