@@ -151,14 +151,17 @@ public class RoomServiceImpl implements RoomService {
         int num = ++rooms.get(room_no).getShot_cnts()[shot_cnt-1];
         if(num == rooms.get(room_no).getUsers().size()) {
             String imgName = "canvas_img_"+room_no + "_" + shot_cnt;
-            BufferedImage img = ImageIO.read(new File(imgPath+imgName+"_1.png"));
-            BufferedImage result = new BufferedImage(img.getWidth(), img.getHeight(), img.getType());
+            BufferedImage result = new BufferedImage(960, 720, 6);
             Graphics2D g = result.createGraphics();
             g.setColor(Color.decode(bg_code));
-            g.fillRect(0, 0, img.getWidth(), img.getHeight());
-            for(int i = 1; i <= num; i++) {
-                img = ImageIO.read(new File(imgPath+imgName + "_" + i + ".png"));
-                g.drawImage(img,0, 0, null);
+            g.fillRect(0, 0, result.getWidth(), result.getHeight());
+            BufferedImage img;
+            for(int i = 1; i <= 6; i++) {
+                Path path = Paths.get(imgPath+imgName + "_" + i + ".png");
+                if (Files.exists(path)) {
+                    img = ImageIO.read(new File(imgPath+imgName + "_" + i + ".png"));
+                    g.drawImage(img,0, 0, null);
+                }
             }
             File file = new File(imgPath+imgName+".png");
             ImageIO.write(result,"png",file);
