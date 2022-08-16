@@ -40,22 +40,24 @@
         <span class="stepSecond">STEP 2</span>
         <span class="usageSecond"
           >모든 준비가 끝나면,<br />
-          버튼을 눌러 촬영을 시작하세요!
+          카메라 버튼을 눌러 사진을 찍으세요!
         </span>
         <div class="containerThird"></div>
         <span class="stepThird">STEP 3</span>
         <div class="pictureThird"></div>
         <span class="usageThird"
-          >촬영한 사진을 저장하고,<br />
-          SNS에 자랑해 보세요!
+          >촬영한 사진을 컴퓨터에 저장하고,<br />
+          공유하기로 카카오톡에 자랑하세요!
         </span>
-        <div class="containerLast"></div>
+        <!-- <div class="containerLast"></div> -->
+        <span class="titleLast">우리가 만들었어요</span>
+        <div class="pictureLast"></div>
       </div>
       <div class="arrow" onclick="window.scrollTo(0,0);">
         <v-icon x-large color="white"> mdi-chevron-double-up </v-icon>
       </div>
     </body>
-    <footer></footer>
+    <footer><h4>© 2022. Moweb Co. all rights reserved.</h4></footer>
   </div>
 </template>
 <script>
@@ -80,7 +82,7 @@ body {
 }
 .frame {
   width: 100%;
-  height: 4500px;
+  height: 4600px;
   background: #e8f0ff;
   opacity: 1;
   position: relative;
@@ -110,7 +112,7 @@ body {
   background-size: cover;
   opacity: 1;
   position: absolute;
-  top: 3%;
+  top: 2%;
   left: 68%;
   overflow: hidden;
 }
@@ -122,7 +124,7 @@ body {
   background-size: cover;
   opacity: 1;
   position: relative;
-  top: 3%;
+  top: 2.5%;
   left: 20%;
   overflow: hidden;
 }
@@ -130,7 +132,7 @@ body {
   min-width: 777rem;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 3%;
+  top: 2.5%;
   left: 0px;
   font-family: SCDream;
   font-weight: 5;
@@ -142,7 +144,7 @@ body {
   width: 106rem;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 2%;
+  top: 1.5%;
   left: 9px;
   font-family: NanumGgeu;
   font-size: 3rem;
@@ -158,8 +160,8 @@ body {
   background-size: cover;
   opacity: 1;
   position: absolute;
-  top: 17rem;
-  left: 15rem;
+  top: 16rem;
+  left: 14rem;
   overflow: hidden;
   text-align: center;
   color: white;
@@ -190,7 +192,7 @@ body {
   background-size: cover;
   opacity: 85%;
   position: absolute;
-  top: 18%;
+  top: 16%;
   left: 16%;
   overflow: hidden;
 }
@@ -198,7 +200,7 @@ body {
   width: 100%;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 20%;
+  top: 18%;
   left: 58%;
   font-family: SCDream;
   font-weight: 3;
@@ -215,7 +217,7 @@ body {
   background-size: cover;
   opacity: 1;
   position: absolute;
-  top: 30%;
+  top: 28%;
   left: 58%;
   overflow: hidden;
 }
@@ -223,7 +225,7 @@ body {
   width: 100%;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 31%;
+  top: 29%;
   left: 14.5%;
   font-family: SCDream;
   font-weight: 3;
@@ -233,34 +235,34 @@ body {
 }
 .containerFirst {
   width: 80%;
-  height: 10%;
+  height: 8.5%;
   background: rgba(236, 236, 236, 1);
   opacity: 1;
   position: absolute;
-  top: 43%;
+  top: 40%;
   left: 10%;
   border-radius: 15px;
   box-shadow: 0 2px 4px 0 rgba(14, 14, 14, 0.5);
   overflow: hidden;
 }
 .pictureFirst {
-  width: 560px;
-  height: 315px;
+  width: 670px;
+  height: 330px;
   background: url("@/assets/images/pictureFirst.png");
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
   opacity: 1;
   position: absolute;
-  top: 44.5%;
-  left: 15%;
+  top: 40.8%;
+  left: 12%;
   overflow: hidden;
 }
 .stepFirst {
   width: 130px;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 46.5%;
+  top: 42.5%;
   left: 60%;
   font-family: SCDream;
   font-weight: 5;
@@ -272,7 +274,7 @@ body {
   width: 450px;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 47.5%;
+  top: 43.5%;
   left: 60%;
   font-family: SCDream;
   font-weight: 3;
@@ -282,35 +284,35 @@ body {
 }
 .containerSecond {
   width: 80%;
-  height: 10%;
+  height: 8.5%;
   background: rgba(236, 236, 236, 1);
   opacity: 1;
   position: absolute;
-  top: 58%;
+  top: 55%;
   left: 10%;
   border-radius: 15px;
   box-shadow: 0 2px 4px 0 rgba(14, 14, 14, 0.5);
   overflow: hidden;
 }
 .pictureSecond {
-  width: 350px;
-  height: 350px;
+  width: 670px;
+  height: 330px;
   background: url("@/assets/images/pictureSecond.png");
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
   opacity: 1;
   position: absolute;
-  top: 59%;
-  left: 21%;
+  top: 55.8%;
+  left: 12%;
   overflow: hidden;
 }
 .stepSecond {
   width: 130px;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 61.5%;
-  left: 54%;
+  top: 58%;
+  left: 60%;
   font-family: SCDream;
   font-weight: 5;
   font-size: 27px;
@@ -318,11 +320,11 @@ body {
   text-align: left;
 }
 .usageSecond {
-  width: 450px;
+  width: 460px;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 62.5%;
-  left: 54%;
+  top: 59%;
+  left: 60%;
   font-family: SCDream;
   font-weight: 3;
   font-size: 27px;
@@ -331,35 +333,35 @@ body {
 }
 .containerThird {
   width: 80%;
-  height: 10%;
+  height: 8%;
   background: rgba(236, 236, 236, 1);
   opacity: 1;
   position: absolute;
-  top: 73%;
+  top: 70%;
   left: 10%;
   border-radius: 15px;
   box-shadow: 0 2px 4px 0 rgba(14, 14, 14, 0.5);
   overflow: hidden;
 }
 .pictureThird {
-  width: 560px;
-  height: 315px;
+  width: 670px;
+  height: 330px;
   background: url("@/assets/images/pictureThird.png");
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
   opacity: 1;
   position: absolute;
-  top: 74.5%;
-  left: 15%;
+  top: 70.5%;
+  left: 12%;
   overflow: hidden;
 }
 .stepThird {
   width: 130px;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 76.5%;
-  left: 62%;
+  top: 72.5%;
+  left: 60%;
   font-family: SCDream;
   font-weight: 5;
   font-size: 27px;
@@ -370,22 +372,36 @@ body {
   width: 450px;
   color: rgba(0, 0, 0, 1);
   position: absolute;
-  top: 77.5%;
-  left: 62%;
+  top: 73.5%;
+  left: 60%;
   font-family: SCDream;
   font-weight: 3;
   font-size: 27px;
   opacity: 1;
   text-align: left;
 }
-.containerLast {
-  width: 80%;
-  height: 8%;
-  background: rgb(255, 179, 179);
+.titleLast {
+  width: 100%;
+  color: rgba(0, 0, 0, 1);
+  position: absolute;
+  top: 86%;
+  font-family: SCDream;
+  font-weight: 6;
+  font-size: 32px;
+  opacity: 1;
+  text-align: center;
+}
+.pictureLast {
+  width: 1277px;
+  height: 186px;
+  background: url("@/assets/images/pictureLast.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
   opacity: 1;
   position: absolute;
-  top: 88%;
   left: 10%;
+  top: 88%;
   overflow: hidden;
 }
 </style>
