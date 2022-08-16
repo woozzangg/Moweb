@@ -68,6 +68,7 @@ export default {
       user_name: "",
       alertDialog: true,
       url: "",
+      btnClicked: false,
     };
   },
   computed: {
@@ -80,18 +81,11 @@ export default {
     this.url = this.$route.params.url;
   },
   methods: {
-    btnOn() {
-      const btn = document.getElementById("createRoomBtn");
-      btn.disabled = false;
-    },
-    async btnOff() {
-      const btn = document.getElementById("createRoomBtn");
-      btn.disabled = true;
-    },
     async createRoom() {
       if (!this.alertDialog) return;
       if (!this.nameCheck()) return;
-      await this.btnOff();
+      if (this.btnClicked) return;
+      this.btnClicked = true;
       axios
         .post(
           API_URL + "/room/create",
@@ -106,13 +100,13 @@ export default {
               name: "waiting",
               params: {
                 is_admin: true,
-                user_name: this.user_name,
+                user_name: data.user_name,
                 room_no: data.room_no,
                 url: ROOT_URL + data.url,
               },
             });
           } else {
-            this.btnOn();
+            this.btnClicked = false;
           }
         })
         .catch((err) => {
@@ -122,6 +116,8 @@ export default {
     joinRoom() {
       if (!this.alertDialog) return;
       if (!this.nameCheck()) return;
+      if (this.btnClicked) return;
+      this.btnClicked = true;
       axios
         .post(
           API_URL + "/room/join",
@@ -146,7 +142,7 @@ export default {
               })
               .then(() => {
                 this.alertDialog = true;
-                this.btnOn();
+                this.btnClicked = false;
               });
           } else if (data.room_no == 0) {
             this.$dialog
@@ -157,7 +153,7 @@ export default {
               .then(() => {
                 console.log(this);
                 this.alertDialog = true;
-                this.btnOn();
+                this.btnClicked = false;
               });
           }
           if (data.room_no > 0) {
@@ -166,7 +162,7 @@ export default {
               name: "waiting",
               params: {
                 is_admin: false,
-                user_name: this.user_name,
+                user_name: data.user_name,
                 room_no: data.room_no,
                 url: ROOT_URL + this.url,
               },
