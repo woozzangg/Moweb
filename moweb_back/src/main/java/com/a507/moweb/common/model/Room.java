@@ -2,7 +2,6 @@ package com.a507.moweb.common.model;
 
 import lombok.Data;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 

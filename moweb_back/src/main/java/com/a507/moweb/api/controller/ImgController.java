@@ -12,8 +12,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
@@ -26,14 +30,13 @@ public class ImgController {
     private static final Logger logger = LoggerFactory.getLogger(ImgController.class);
     @Autowired
     private RoomService roomService;
-
+    private final String imgPath = Paths.get("").toAbsolutePath()+File.separator+"images"+File.separator;
 
     private final SimpMessageSendingOperations sendingOperations;
 
     @PostMapping("/upload")
     public ResponseEntity<String> uploadImg(@RequestParam("image") MultipartFile img) {
         String imgName = img.getOriginalFilename();
-        String imgPath = Paths.get("").toAbsolutePath()+File.separator+"images"+File.separator;
 
         logger.info("파일이름: {}", imgName);
         logger.info("파일경로: {}", imgPath);
@@ -50,7 +53,6 @@ public class ImgController {
 
     @GetMapping(value = "/display")
     public ResponseEntity<Resource> displayImg(@RequestParam("imgName") String imgName){
-        String imgPath = Paths.get("").toAbsolutePath()+File.separator+"images"+File.separator;
 
         Resource resource = new FileSystemResource(imgPath+imgName);
         if (!resource.exists())
@@ -71,7 +73,6 @@ public class ImgController {
     @PostMapping("/upload2")
     public ResponseEntity<String> uploadImg2(@RequestParam("image") MultipartFile img, @RequestParam("shot_cnt") String shot_cnt, @RequestParam("room_no") String room_no, @RequestParam("bg_code") String bg_code) {
         String imgName = img.getOriginalFilename();
-        String imgPath = Paths.get("").toAbsolutePath()+File.separator+"images"+File.separator;
 
         logger.info("파일이름: {}", imgName);
         logger.info("파일경로: {}", imgPath);
