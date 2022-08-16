@@ -217,7 +217,12 @@
                   v-if="is_admin && page == 'waiting'"
                   v-bind:disabled="!allReady"
                   @click="startBtn"
-                  style="width: 100%"
+                  style="
+                    width: 100%;
+                    font-weight: 7;
+                    letter-spacing: 2px;
+                    font-size: 1rem;
+                  "
                 >
                   시작하기
                 </v-btn>
@@ -227,7 +232,12 @@
                   color="#30a4b0"
                   v-if="!is_admin && page == 'waiting'"
                   @click="readyBtn"
-                  style="width: 100%"
+                  style="
+                    width: 100%;
+                    font-weight: 7;
+                    letter-spacing: 2px;
+                    font-size: 1rem;
+                  "
                 >
                   준비하기
                 </v-btn>
@@ -312,7 +322,7 @@
               v-for="(chat, idx) in chatList"
               :key="idx"
             >
-              <h4>{{ chat }}</h4>
+              {{ chat }}
             </div>
           </div>
           <!-- 채팅입력 -->
@@ -1134,6 +1144,8 @@ video {
   background-color: #d1ebe5;
   border-radius: 15px 15px 0px 0px;
   padding: 1.4rem;
+  font-size: 0.9rem;
+  font-weight: 6;
 }
 
 .chat_message {

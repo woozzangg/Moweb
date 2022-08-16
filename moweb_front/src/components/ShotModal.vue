@@ -12,7 +12,12 @@
         large
         v-bind="attrs"
         v-on="on"
-        style="width: 100%"
+        style="
+          width: 100%;
+          font-weight: 7;
+          letter-spacing: 2px;
+          font-size: 1rem;
+        "
       >
         촬영하기
       </v-btn>
