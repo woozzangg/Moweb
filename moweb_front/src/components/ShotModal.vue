@@ -14,7 +14,7 @@
         v-on="on"
         style="width: 100%"
       >
-        활영하기
+        촬영하기
       </v-btn>
     </template>
     <div class="shot-container">
