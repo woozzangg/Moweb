@@ -81,7 +81,7 @@ public class ImgController {
             logger.info("파일 업로드 성공");
             if(roomService.makePic(Integer.parseInt(room_no), Integer.parseInt(shot_cnt), bg_code, imgPath)) {
                 logger.info("방번호 : " + room_no + " " + shot_cnt + "번째 사진 업로드 완료");
-                if(Integer.parseInt(shot_cnt)==4){
+                if(Integer.parseInt(shot_cnt)>=4){
                     WebSocketMessage message = new WebSocketMessage();
                     message.setAction(11);
                     sendingOperations.convertAndSend("/topic/moweb/room/"+room_no,message);
