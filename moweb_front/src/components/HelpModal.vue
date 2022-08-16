@@ -287,4 +287,7 @@ p {
   right: 2%;
   z-index: 1;
 }
+.v-btn:hover:before {
+  background-color: black;
+}
 </style>
