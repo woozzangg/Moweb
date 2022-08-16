@@ -322,7 +322,6 @@ img {
 .nickname_submit {
   padding: 0.4rem 1.5rem 0.4rem 1.5rem;
   font-size: 21px;
-  letter-spacing: 1px;
   display: flex;
   align-items: center;
   cursor: pointer;
