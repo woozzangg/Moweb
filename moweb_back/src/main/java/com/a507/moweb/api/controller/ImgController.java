@@ -31,22 +31,18 @@ public class ImgController {
     @Autowired
     private RoomService roomService;
     private final String imgPath = Paths.get("").toAbsolutePath()+File.separator+"images"+File.separator;
-
     private final SimpMessageSendingOperations sendingOperations;
 
     @PostMapping("/upload")
     public ResponseEntity<String> uploadImg(@RequestParam("image") MultipartFile img) {
         String imgName = img.getOriginalFilename();
 
-        logger.info("파일이름: {}", imgName);
-        logger.info("파일경로: {}", imgPath);
-
         try(FileOutputStream fos = new FileOutputStream(imgPath + imgName)) {
             fos.write(img.getBytes());
-            logger.info("파일 업로드 성공");
+            logger.info("{} 파일 업로드 성공", imgName);
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (Exception e) {
-            logger.info("파일 업로드 실패");
+            logger.info("{} 파일 업로드 실패", imgName);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -79,9 +75,9 @@ public class ImgController {
 
         try(FileOutputStream fos = new FileOutputStream(imgPath + imgName)) {
             fos.write(img.getBytes());
-            logger.info("방번호 : " + room_no + " " + shot_cnt +"번째 개인 사진 업로드 성공");
+            logger.info("방번호 : {} 번째 개인 사진 업로드 성공", room_no, shot_cnt);
             if(roomService.makePic(Integer.parseInt(room_no), Integer.parseInt(shot_cnt), bg_code, imgPath)) {
-                logger.info("방번호 : " + room_no + " " + shot_cnt + " 번째 전체 사진 업로드 완료");
+                logger.info("방번호 : {} | {} 번째 전체 사진 업로드 완료", room_no, shot_cnt);
                 if(Integer.parseInt(shot_cnt)>=4){
                     WebSocketMessage message = new WebSocketMessage();
                     message.setAction(11);
