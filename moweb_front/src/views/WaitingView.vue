@@ -793,6 +793,7 @@ export default {
       });
     },
     sendDialogChange(dialog) {
+      this.shotBtnActive = true;
       // 여기서 동기화를 위해 다이얼로그 전송
       stompApi.shotMode({
         room_no: this.room_no,
