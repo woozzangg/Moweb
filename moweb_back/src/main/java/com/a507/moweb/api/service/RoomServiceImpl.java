@@ -156,7 +156,7 @@ public class RoomServiceImpl implements RoomService {
             g.setColor(Color.decode(bg_code));
             g.fillRect(0, 0, result.getWidth(), result.getHeight());
             BufferedImage img;
-            for(int i = 1; i <= num; i++) {
+            for(int i = 1; i <= 6; i++) {
                 Path path = Paths.get(imgPath+imgName + "_" + i + ".png");
                 if (Files.exists(path)) {
                     img = ImageIO.read(new File(imgPath+imgName + "_" + i + ".png"));
