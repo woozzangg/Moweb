@@ -397,8 +397,9 @@ body {
   background-size: cover;
   opacity: 1;
   position: absolute;
-  top: 88%;
-  left: 10%;
+  top: 90%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   overflow: hidden;
 }
 </style>
