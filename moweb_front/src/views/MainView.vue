@@ -57,7 +57,9 @@
         <v-icon x-large color="white"> mdi-chevron-double-up </v-icon>
       </div>
     </body>
-    <footer><h4>© 2022. Moweb Co. all rights reserved.</h4></footer>
+    <footer>
+      <h3 style="margin: 12px">© 2022. Moweb Co. all rights reserved.</h3>
+    </footer>
   </div>
 </template>
 <script>
