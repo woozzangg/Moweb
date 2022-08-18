@@ -54,6 +54,7 @@ import axios from "axios";
 import HelpModal from "@/components/HelpModal.vue";
 
 const API_URL = process.env.VUE_MOWEB_API_URL;
+const ROOT_URL = process.env.VUE_ROOT_URL;
 
 export default {
   name: "EnterView",
@@ -102,7 +103,7 @@ export default {
                 is_admin: true,
                 user_name: data.user_name,
                 room_no: data.room_no,
-                url: data.url,
+                url: ROOT_URL + data.url,
               },
             });
           } else {
@@ -124,7 +125,7 @@ export default {
           API_URL + "/room/join",
           JSON.stringify({
             user_name: this.user_name,
-            url: this.url,
+            url: ROOT_URL + this.url,
           })
         )
         .then(({ data }) => {
@@ -164,7 +165,7 @@ export default {
                 is_admin: false,
                 user_name: data.user_name,
                 room_no: data.room_no,
-                url: this.url,
+                url: ROOT_URL + this.url,
               },
             });
           }
