@@ -402,7 +402,7 @@ import dingSoundSource from "@/assets/sounds/ding_sound.wav";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
-const OPENVIDU_SERVER_URL = "https://i7a507.p.ssafy.io:8443";
+const OPENVIDU_SERVER_URL = process.env.VUE_APP_OPENVIDU_SERVER_URL;
 const OPENVIDU_SERVER_SECRET = "MY_SECRET";
 const API_URL = "https://i7a507.p.ssafy.io/moweb-api";
 const apiKey = "59074e20c9d80e6e5200a4bd60122af7";
