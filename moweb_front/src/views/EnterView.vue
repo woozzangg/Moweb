@@ -53,8 +53,8 @@ import axios from "axios";
 
 import HelpModal from "@/components/HelpModal.vue";
 
-const ROOT_URL = "https://i7a507.p.ssafy.io";
-const API_URL = "https://i7a507.p.ssafy.io/moweb-api";
+const API_URL = process.env.VUE_APP_MOWEB_API_URL;
+const ROOT_URL = process.env.VUE_APP_ROOT_URL;
 
 export default {
   name: "EnterView",
@@ -98,7 +98,7 @@ export default {
           this.camera.stop();
           if (data.room_no > 0) {
             this.$router.replace({
-              name: "waiting",
+              name: "service",
               params: {
                 is_admin: true,
                 user_name: data.user_name,
@@ -125,7 +125,7 @@ export default {
           API_URL + "/room/join",
           JSON.stringify({
             user_name: this.user_name,
-            url: this.url,
+            url: ROOT_URL + this.url,
           })
         )
         .then(({ data }) => {
@@ -160,7 +160,7 @@ export default {
           if (data.room_no > 0) {
             this.camera.stop();
             this.$router.replace({
-              name: "waiting",
+              name: "service",
               params: {
                 is_admin: false,
                 user_name: data.user_name,

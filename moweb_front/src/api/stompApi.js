@@ -1,7 +1,7 @@
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
 
-const STOPM_SERVER_URL = "https://i7a507.p.ssafy.io/moweb-api/ws/moweb";
+const STOPM_SERVER_URL = process.env.VUE_APP_STOPM_SERVER_URL;
 
 const stompApi = {
   socket: null,
