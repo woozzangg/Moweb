@@ -523,7 +523,9 @@ export default {
         case 0:
           this.chatList.push("[알림] " + content.chat_msg);
           this.users = content.users;
-          this.hash = content.hash;
+          if (content.hash != null) {
+            this.hash = content.hash;
+          }
           this.readyJoin(content.users);
           break;
         // 채팅
