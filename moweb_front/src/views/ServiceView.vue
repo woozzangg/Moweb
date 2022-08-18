@@ -402,8 +402,7 @@ import dingSoundSource from "@/assets/sounds/ding_sound.wav";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
-// const OPENVIDU_SERVER_URL = process.env.VUE_APP_OPENVIDU_SERVER_URL;
-const OPENVIDU_SERVER_URL = "https://i7a507.p.ssafy.io:8443";
+const OPENVIDU_SERVER_URL = process.env.VUE_APP_OPENVIDU_SERVER_URL;
 const OPENVIDU_SERVER_SECRET = process.env.VUE_APP_OPENVIDU_SERVER_SECRET;
 const API_URL = process.env.VUE_APP_MOWEB_API_URL;
 const apiKey = process.env.VUE_APP_KAKAO_API_KEY;
@@ -1110,13 +1109,7 @@ export default {
         }
       });
       const fileName =
-        "canvas_img_" +
-        this.room_no +
-        "_" +
-        this.shot_cnt +
-        "_" +
-        layer +
-        ".png";
+        "canvas_img_" + this.hash + "_" + this.shot_cnt + "_" + layer + ".png";
       let formData = new FormData();
       formData.append("image", file, fileName);
       formData.append("shot_cnt", this.shot_cnt);
