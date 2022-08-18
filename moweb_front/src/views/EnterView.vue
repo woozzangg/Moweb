@@ -125,7 +125,7 @@ export default {
           API_URL + "/room/join",
           JSON.stringify({
             user_name: this.user_name,
-            url: ROOT_URL + this.url,
+            url: this.url,
           })
         )
         .then(({ data }) => {
