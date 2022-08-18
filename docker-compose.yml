@@ -21,7 +21,7 @@ services:
     container_name: moweb_front
     ports:
       - 8000:80
-    environment:
+    args:
       - VUE_APP_MOWEB_API_URL=${VUE_APP_MOWEB_API_URL}
       - VUE_APP_ROOT_URL=${VUE_APP_ROOT_URL}
       - VUE_APP_OPENVIDU_SERVER_SECRET=${VUE_APP_OPENVIDU_SERVER_SECRET}
