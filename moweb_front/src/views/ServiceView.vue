@@ -406,7 +406,6 @@ const OPENVIDU_SERVER_URL = process.env.VUE_OPENVIDU_SERVER_URL;
 const OPENVIDU_SERVER_SECRET = process.env.VUE_OPENVIDU_SERVER_SECRET;
 const API_URL = process.env.VUE_MOWEB_API_URL;
 const apiKey = process.env.VUE_KAKAO_API_KEY;
-const ROOT_URL = process.env.VUE_ROOT_URL;
 
 Vue.use(Kakaosdk, { apiKey });
 
@@ -421,6 +420,7 @@ export default {
       room_no: "",
       users: [],
       chatList: [],
+      hash: "",
 
       myStatus: false,
       readyStatus: {},
@@ -523,6 +523,7 @@ export default {
         case 0:
           this.chatList.push("[알림] " + content.chat_msg);
           this.users = content.users;
+          this.hash = content.hash;
           this.readyJoin(content.users);
           break;
         // 채팅
@@ -608,7 +609,7 @@ export default {
           .get(
             API_URL +
               "/display?imgName=canvas_img_" +
-              this.url +
+              this.hash +
               "_" +
               i +
               ".png"
@@ -667,7 +668,7 @@ export default {
     },
     async sharePhoto() {
       if (!this.resultUploaded) return;
-      const fileName = "canvas_img_" + this.url + ".png";
+      const fileName = "canvas_img_" + this.hash + ".png";
       const fileUrl = API_URL + "/display?imgName=" + fileName;
 
       this.$kakao.Link.sendDefault({
@@ -701,7 +702,7 @@ export default {
         logging: true,
       }).then((canvas) => {
         let image = canvas.toDataURL("image/png");
-        let name = "canvas_img_" + this.url + ".png";
+        let name = "canvas_img_" + this.hash + ".png";
 
         let byteString = atob(image.split(",")[1]);
         let ab = new ArrayBuffer(byteString.length);
@@ -726,14 +727,14 @@ export default {
     },
     linkBtn() {
       if (!navigator.clipboard) {
-        navigator.clipboard.writeText(ROOT_URL + this.url).then(() => {
-          this.$dialog.message.info(ROOT_URL + this.url, {
+        navigator.clipboard.writeText(this.url).then(() => {
+          this.$dialog.message.info(this.url, {
             position: "top",
           });
         });
         return;
       }
-      navigator.clipboard.writeText(ROOT_URL + this.url).then(() => {
+      navigator.clipboard.writeText(this.url).then(() => {
         this.$dialog.message.info("주소 복사 완료!", {
           position: "top",
         });
