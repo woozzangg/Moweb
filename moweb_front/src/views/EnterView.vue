@@ -53,8 +53,8 @@ import axios from "axios";
 
 import HelpModal from "@/components/HelpModal.vue";
 
-const API_URL = process.env.VUE_MOWEB_API_URL;
-const ROOT_URL = process.env.VUE_ROOT_URL;
+const API_URL = process.env.VUE_APP_MOWEB_API_URL;
+const ROOT_URL = process.env.VUE_APP_ROOT_URL;
 
 export default {
   name: "EnterView",
