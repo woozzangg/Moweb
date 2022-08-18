@@ -150,7 +150,7 @@ public class RoomServiceImpl implements RoomService {
     public boolean makePic(int room_no, int shot_cnt, String bg_code, String imgPath) throws IOException {
         int num = ++rooms.get(room_no).getShot_cnts()[shot_cnt-1];
         if(num == rooms.get(room_no).getUsers().size()) {
-            String imgName = "canvas_img_"+room_no + "_" + shot_cnt;
+            String imgName = "canvas_img_"+rooms.get(room_no).getUrl().substring(6) + "_" + shot_cnt;
             BufferedImage result = new BufferedImage(960, 720, 6);
             Graphics2D g = result.createGraphics();
             g.setColor(Color.decode(bg_code));
@@ -175,11 +175,16 @@ public class RoomServiceImpl implements RoomService {
     public void deletePic(int room_no) throws IOException {
         for (int shot_cnt = 1; shot_cnt <= 4; shot_cnt++) {
             for (int i = 1; i <= 6; i++) {
-                String imgName = "canvas_img_"+room_no + "_" + shot_cnt;
+                String imgName = "canvas_img_"+rooms.get(room_no).getUrl().substring(6) + "_" + shot_cnt;
                 String imgPath = Paths.get("").toAbsolutePath()+File.separator+"images"+File.separator;
                 Path filePath = Paths.get(imgPath + imgName + "_" + i + ".png");
                 Files.deleteIfExists(filePath);
             }
         }
+    }
+
+    @Override
+    public String getHash(int room_no) {
+        return rooms.get(room_no).getUrl().substring(6);
     }
 }
