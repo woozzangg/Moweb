@@ -403,9 +403,10 @@ import dingSoundSource from "@/assets/sounds/ding_sound.wav";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 const OPENVIDU_SERVER_URL = process.env.VUE_APP_OPENVIDU_SERVER_URL;
-const OPENVIDU_SERVER_SECRET = "MY_SECRET";
-const API_URL = "https://i7a507.p.ssafy.io/moweb-api";
-const apiKey = "59074e20c9d80e6e5200a4bd60122af7";
+const OPENVIDU_SERVER_SECRET = process.env.VUE_APP_OPENVIDU_SERVER_SECRET;
+const API_URL = process.env.VUE_APP_MOWEB_API_URL;
+const apiKey = process.env.VUE_APP_KAKAO_API_KEY;
+
 Vue.use(Kakaosdk, { apiKey });
 
 Vue.use(VueChatScroll);
@@ -419,6 +420,7 @@ export default {
       room_no: "",
       users: [],
       chatList: [],
+      hash: "",
 
       myStatus: false,
       readyStatus: {},
@@ -521,6 +523,7 @@ export default {
         case 0:
           this.chatList.push("[알림] " + content.chat_msg);
           this.users = content.users;
+          this.hash = content.hash;
           this.readyJoin(content.users);
           break;
         // 채팅
@@ -606,7 +609,7 @@ export default {
           .get(
             API_URL +
               "/display?imgName=canvas_img_" +
-              this.room_no +
+              this.hash +
               "_" +
               i +
               ".png"
@@ -665,7 +668,7 @@ export default {
     },
     async sharePhoto() {
       if (!this.resultUploaded) return;
-      const fileName = "canvas_img_" + this.room_no + "_result.png";
+      const fileName = "canvas_img_" + this.hash + ".png";
       const fileUrl = API_URL + "/display?imgName=" + fileName;
 
       this.$kakao.Link.sendDefault({
@@ -699,7 +702,7 @@ export default {
         logging: true,
       }).then((canvas) => {
         let image = canvas.toDataURL("image/png");
-        let name = "canvas_img_" + this.room_no + "_result.png";
+        let name = "canvas_img_" + this.hash + ".png";
 
         let byteString = atob(image.split(",")[1]);
         let ab = new ArrayBuffer(byteString.length);
@@ -1106,13 +1109,7 @@ export default {
         }
       });
       const fileName =
-        "canvas_img_" +
-        this.room_no +
-        "_" +
-        this.shot_cnt +
-        "_" +
-        layer +
-        ".png";
+        "canvas_img_" + this.hash + "_" + this.shot_cnt + "_" + layer + ".png";
       let formData = new FormData();
       formData.append("image", file, fileName);
       formData.append("shot_cnt", this.shot_cnt);

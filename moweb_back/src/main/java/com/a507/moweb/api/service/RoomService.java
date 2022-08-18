@@ -17,4 +17,5 @@ public interface RoomService {
     void cantJoin(int room_no);
     boolean makePic(int room_no, int shot_cnt, String bg_code, String imgPath) throws IOException;
     void deletePic(int room_no) throws  IOException;
+    String getHash(int room_no);
 }
