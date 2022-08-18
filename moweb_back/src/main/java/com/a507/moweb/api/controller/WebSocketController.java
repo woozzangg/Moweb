@@ -35,23 +35,24 @@ public class WebSocketController extends NullPointerException {
     @MessageMapping("/enter")
     public void enter(WebSocketMessage message, SimpMessageHeaderAccessor headerAccessor) {
         message.setAction(0);
-        if(message.getUser_name() != null && message.getRoom_no() != 0) {
+        int room_no = message.getRoom_no();
+        if(message.getUser_name() != null && room_no != 0) {
             try {
                 if(headerAccessor.getSessionAttributes() != null) {
                     //보내는 사람 가져와서 웹소켓 세션에 user_name으로 저장
                     headerAccessor.getSessionAttributes().put("user_name", message.getUser_name());
                     //방번호 가져와서 웹소켓 세션에 room_no로 저장
-                    headerAccessor.getSessionAttributes().put("room_no", message.getRoom_no());
+                    headerAccessor.getSessionAttributes().put("room_no", room_no);
                 }
             }catch (Exception e) {
                 logger.info(e.toString());
             }
             //입장 메세지 채팅메세지에 추가
             message.setChat_msg(message.getUser_name()+ "님이 입장하였습니다.");
-            message.setUsers(roomService.userList(message.getRoom_no()));
-
+            message.setUsers(roomService.userList(room_no));
+            message.setHash(roomService.getHash(room_no));
             logger.info("User connected : {}" ,message.getUser_name());
-            sendingOperations.convertAndSend(ROOTURL+message.getRoom_no(),message);
+            sendingOperations.convertAndSend(ROOTURL+room_no,message);
         }
     }
 

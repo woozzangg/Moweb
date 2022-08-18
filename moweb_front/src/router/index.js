@@ -3,7 +3,7 @@ import VueRouter from "vue-router";
 
 import MainView from "../views/MainView.vue";
 import EnterView from "@/views/EnterView";
-import WaitingView from "@/views/WaitingView";
+import ServiceView from "@/views/ServiceView";
 import JoinView from "@/views/JoinView.vue";
 Vue.use(VueRouter);
 
@@ -19,9 +19,9 @@ const routes = [
     component: EnterView,
   },
   {
-    path: "/waiting",
-    name: "waiting",
-    component: WaitingView,
+    path: "/service",
+    name: "service",
+    component: ServiceView,
   },
   {
     path: "/room/*",
