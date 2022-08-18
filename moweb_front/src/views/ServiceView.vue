@@ -402,10 +402,12 @@ import dingSoundSource from "@/assets/sounds/ding_sound.wav";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
-const OPENVIDU_SERVER_URL = "https://i7a507.p.ssafy.io:8443";
-const OPENVIDU_SERVER_SECRET = "MY_SECRET";
-const API_URL = "https://i7a507.p.ssafy.io/moweb-api";
-const apiKey = "59074e20c9d80e6e5200a4bd60122af7";
+const OPENVIDU_SERVER_URL = process.env.VUE_OPENVIDU_SERVER_URL;
+const OPENVIDU_SERVER_SECRET = process.env.VUE_OPENVIDU_SERVER_SECRET;
+const API_URL = process.env.VUE_MOWEB_API_URL;
+const apiKey = process.env.VUE_KAKAO_API_KEY;
+const ROOT_URL = process.env.VUE_ROOT_URL;
+
 Vue.use(Kakaosdk, { apiKey });
 
 Vue.use(VueChatScroll);
@@ -606,7 +608,7 @@ export default {
           .get(
             API_URL +
               "/display?imgName=canvas_img_" +
-              this.room_no +
+              this.url +
               "_" +
               i +
               ".png"
@@ -665,7 +667,7 @@ export default {
     },
     async sharePhoto() {
       if (!this.resultUploaded) return;
-      const fileName = "canvas_img_" + this.room_no + "_result.png";
+      const fileName = "canvas_img_" + this.url + ".png";
       const fileUrl = API_URL + "/display?imgName=" + fileName;
 
       this.$kakao.Link.sendDefault({
@@ -699,7 +701,7 @@ export default {
         logging: true,
       }).then((canvas) => {
         let image = canvas.toDataURL("image/png");
-        let name = "canvas_img_" + this.room_no + "_result.png";
+        let name = "canvas_img_" + this.url + ".png";
 
         let byteString = atob(image.split(",")[1]);
         let ab = new ArrayBuffer(byteString.length);
@@ -724,14 +726,14 @@ export default {
     },
     linkBtn() {
       if (!navigator.clipboard) {
-        navigator.clipboard.writeText(this.url).then(() => {
-          this.$dialog.message.info(this.url, {
+        navigator.clipboard.writeText(ROOT_URL + this.url).then(() => {
+          this.$dialog.message.info(ROOT_URL + this.url, {
             position: "top",
           });
         });
         return;
       }
-      navigator.clipboard.writeText(this.url).then(() => {
+      navigator.clipboard.writeText(ROOT_URL + this.url).then(() => {
         this.$dialog.message.info("주소 복사 완료!", {
           position: "top",
         });
