@@ -1,6 +1,8 @@
 # 모여봐요 웹캠으로
 
-UCC 예정
+<video width="100%" height="100%" controls="controls">
+    <soutce src="/exec/공통PJT_서울_5반_A507_UCC경진대회.mp4" type="video/mp4">
+</video>
 
 ## 직접 만나지 않고도 서로 다른 장소에서 같은 공간에 함께 있는 것처럼 사진을 촬영할 수 있는 서비스
 
