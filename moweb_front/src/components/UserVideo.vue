@@ -3,6 +3,11 @@
     <p style="position: absolute; margin: 3px 0px 0px 10px; font-size: 1.5rem">
       {{ clientData }}
     </p>
+    <v-icon
+      v-if="!streamManager.stream.audioActive"
+      style="position: absolute; color: red; right: 0; margin: 10px 5px"
+      >mdi-microphone-off</v-icon
+    >
     <ov-video
       :stream-manager="streamManager"
       :client="clientData"
