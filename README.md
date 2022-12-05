@@ -35,24 +35,24 @@
 ## 핵심 기능
 
 - 개인 카메라 배경 지우기
-  ![image](https://user-images.githubusercontent.com/97646054/205663330-9f16551d-3fba-4eb1-b045-72d4f757e8e4.png)
+  ![배경_제거](https://user-images.githubusercontent.com/97646054/205663626-016f3d06-148e-4455-97d9-ff72a2951798.gif)
 - 링크로 방 입장
+- ![초대하기](https://user-images.githubusercontent.com/97646054/205663647-a252eaa1-0d36-41e5-b45f-27d1df608dc6.gif)
 
-  ![초대하기](/uploads/4b5ee735ebf244b75a123e5293e9e895/초대하기.gif)
-  ![링크로입장](/uploads/fc357bc269de4694dfcb64d0dfcae64c/링크로입장.gif)
+![링크로입장](https://user-images.githubusercontent.com/97646054/205663687-8b6e4a56-b090-4278-95f6-0e21c7407950.gif)
 
 - 실시간으로 함께 사진 찍기
 
-  ![촬영](/uploads/39896c97fd8d7fd09bc0c5ce95f59f32/촬영.gif)
+  ![image](https://user-images.githubusercontent.com/97646054/205664284-c60af128-b7eb-4ff7-a388-e3f6defbd09f.png)
 
 - 레이어순서 변경
-  ![레이어](/uploads/c18921740a8add9f09becbf60ab0fdb7/레이어.gif)
+  ![레이어](https://user-images.githubusercontent.com/97646054/205663850-2f41dc7a-d7f7-4e0d-a323-101af7f6d2c6.gif)
 - 가상 배경 색상 선택 가능
-  ![배경선택](/uploads/69bd254b0d9f9d6367567c201902ea4e/배경선택.gif)
+  ![배경선택](https://user-images.githubusercontent.com/97646054/205663869-65df1b06-7cb9-4395-bcaf-5fc898f63c67.gif)
 - 사진 저장/공유
-  ![사진저장](/uploads/5101fa5740fe36b2de0cb1e91a9f92de/사진저장.gif)
-  ![공유하기](/uploads/92594423511e9bf48bbfd597e743155c/공유하기.gif)
-  ![공유하기2](/uploads/9072cf28f15707fb6e460e400ae14a43/공유하기2.gif)
+  ![사진저장](https://user-images.githubusercontent.com/97646054/205663882-3de564a2-426a-4fd4-a79d-92317a09ef0e.gif)
+  ![공유하기](https://user-images.githubusercontent.com/97646054/205663892-96a6eda3-1a7b-45e5-9003-7b4030706758.gif)
+  ![공유하기2](https://user-images.githubusercontent.com/97646054/205663903-bfc887f0-0516-4419-89a7-a8c4697b23b1.gif)
 
 ## 커밋 규칙
 
@@ -74,33 +74,11 @@ Help: 도움 요청
 
 ## 개발 환경 및 기술 스택
 
-<img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
+<img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"><img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"><img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white"><img src="https://img.shields.io/badge/vue.js-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white"><img src="https://img.shields.io/badge/vuetify-1867C0?tyle=for-the-badge&logo=Vuetify&logoColor=white"><img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"><img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white">
 
-<img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white">
+<img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white"><img src="https://img.shields.io/badge/amazonaws-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white"><img src="https://img.shields.io/badge/apache tomcat-F8DC75?style=for-the-badge&logo=apachetomcat&logoColor=white"><img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
 
-<img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white">
-
-<img src="https://img.shields.io/badge/vue.js-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white">
-
-<img src="https://img.shields.io/badge/vuetify-1867C0?tyle=for-the-badge&logo=Vuetify&logoColor=white">
-
-<img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
-
-<img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white">
-
-<img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white">
-
-<img src="https://img.shields.io/badge/amazonaws-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white">
-
-<img src="https://img.shields.io/badge/apache tomcat-F8DC75?style=for-the-badge&logo=apachetomcat&logoColor=white">
-
-<img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
-
-<img src="https://img.shields.io/badge/NGINX-009639?style=for-the-badge&logo=NGINX&logoColor=white">
-
-<img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=Docker&logoColor=white">
-
-<img src="https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=Jenkins&logoColor=white">
+<img src="https://img.shields.io/badge/NGINX-009639?style=for-the-badge&logo=NGINX&logoColor=white"><img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=Docker&logoColor=white"><img src="https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=Jenkins&logoColor=white">
 
 ### 백엔드
 
